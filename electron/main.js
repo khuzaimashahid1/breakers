@@ -6,7 +6,7 @@ const url = require("url");
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 global.win=null
-
+//Comment
 function createWindow(){
     win = new BrowserWindow({
         webPreferences: {
