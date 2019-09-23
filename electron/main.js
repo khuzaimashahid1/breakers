@@ -6,7 +6,7 @@ const url = require("url");
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 global.win=null
-//Najam 
+//Najam abc
 function createWindow(){
     win = new BrowserWindow({
         webPreferences: {
