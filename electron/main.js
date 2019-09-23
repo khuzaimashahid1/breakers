@@ -6,7 +6,14 @@ const url = require("url");
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 global.win=null
-//Comment
+
+
+//Database Manipulations
+const connections=require("./DatabaseOperations/connections.js");
+
+
+
+
 function createWindow(){
     win = new BrowserWindow({
         webPreferences: {
