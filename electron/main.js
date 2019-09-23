@@ -6,17 +6,7 @@ const url = require("url");
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 global.win=null
-
-<<<<<<< HEAD
-=======
-
-//Database Manipulations
-const connections=require("./DatabaseOperations/connections.js");
-
-
-
-
->>>>>>> 34e1b2a0f7f598b750ffe03aae050918e6e02e6c
+//Najam 
 function createWindow(){
     win = new BrowserWindow({
         webPreferences: {
