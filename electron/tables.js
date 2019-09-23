@@ -8,10 +8,14 @@ const dialog = electron.dialog;
 let s1 = document.getElementById("s1")
 global.winTab01=null
 
+let w = remote.getCurrentWindow()
+
 const tab1 = document.getElementById('tab1');
 tab1.addEventListener('click',function(event){
     if(s1.innerHTML==='Vacant'){
         let winTab01= new BrowserWindow({
+            parent:w,
+            title:'Add New Game Now',
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true,
@@ -25,6 +29,7 @@ tab1.addEventListener('click',function(event){
     }
     else{
         let winTab11= new BrowserWindow({
+            parent:w,
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true,
