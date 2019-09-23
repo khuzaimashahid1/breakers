@@ -3,10 +3,14 @@
     "version": "1.0.0",
     "main": "main.js",
     "devDependencies": {
-        "electron": "^6.0.7"
+        "electron": "^6.0.7",
+        "electron-rebuild": "^1.8.6"
     },
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "rebuild": "electron-rebuild -f -w sqlite3"
     },
-    "dependencies": {}
+    "dependencies": {
+        "sqlite3": "^4.1.0"
+    }
 }
