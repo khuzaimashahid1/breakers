@@ -29,31 +29,37 @@
     div {
       border-radius: 5px;
       background-color: #f2f2f2;
-      padding: 20px;
+      padding: 70px;
+      margin: 14%
     }
     h1{
         font-family: Arial, Helvetica, sans-serif;
         font-style: italic
     }
+    .extras {
+      width: 30%;
+      align-content: center;
+      align-items: center;
+
+    }
+    label{
+      text-align: left;
+      height: 40px;
+      width: 60%;
+    }
     </style>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
-    <div id="d1">
-        <select id="selectBox" onchange="table1()" name="Game Type">
-            <option id="a" value="Choose">Game Category</option>
-            <option id="s" value="single">Single</option>
-            <option id="d" value="double">Double</option>
-            <option id="c" value="century">Century</option>
-        </select>
-        
-    </div>
+<body onload="hello()">
     <div id="body">
-        
+      <label id="p1" value="p1">Start Time:</label><button class="extras" id="extrasP1">Add</button><input type="radio"/><br/>
+      <label id="p2" value="p2">Start Time:</label><button class="extras" id="extrasP2">Add</button><input type="radio"/><<br/>
+      <label id="final" value="final">Start Time:</label><br/>
+      <label id="startTime" value="startTime">Start Time:</label><br/>
+      <button id="endGame">Next Frame</button>
+      <button id="endGame">End Game</button>
     </div>
-
-    </div>
-    <script src="tab1.js"></script>
+    <script src="../tab1.js"></script>
 </body>
 </html>

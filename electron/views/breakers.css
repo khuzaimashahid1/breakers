@@ -41,8 +41,42 @@ button {
     width: 39%; /* Set a width if needed */
     display: ruby;
   }
-  
-  
+  /* CODE FOR CENTRALIZATION*/
+  .central {
+    margin-right: auto;/*centres in compliant browsers*/
+    margin-left: auto;/* "	" */
+    width: 755px;
+    text-align: center;
+    color: slategrey
+    }
+  /*CSS FOR ADD BILL-KITCHEN*/
+  #form {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 0px;
+    text-align:center;
+}
+label {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 18px;
+    color: #333;
+    height: 20px;
+    width: 200px;
+    margin-top: 10px;
+    /* margin-left: 10px; */
+    text-align: left;
+    margin-right:15px;
+    float: center;;
+}
+input {
+    height: 20px;
+    width: 200px;
+    border: 1px solid #000;
+    margin-top: 10px;
+}
   /* Add a background color on hover */
 button:hover {
     background-color: #19411a;
