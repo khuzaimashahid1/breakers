@@ -10,7 +10,8 @@ global.win=null
 
 //Database Manipulations
 const connections=require("./DatabaseOperations/connections.js");
-
+connections.createTables();
+// connections.runDuplicateInsertQuery();
 
 
 
