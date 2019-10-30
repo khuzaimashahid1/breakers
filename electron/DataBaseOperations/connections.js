@@ -1,5 +1,5 @@
 var sqlite3 = require('sqlite3').verbose();
-
+var util=require('util')
  
 // db.serialize(function() {
 //   db.run("CREATE TABLE lorem (info TEXT)");
@@ -50,14 +50,12 @@ module.exports.openConnectionReadWrite= (db) =>
   });
 }
 
-module.exports.selectStatementMultipleRowsTogether= (db,sql,params) =>
+function selectStatementMultipleRowsTogether (db,sql)
 {
-  db.all(sql, params, (err, rows) => {
-    if (err) {
-      throw err;
-    }
-    rows.forEach((row) => {
-      console.log(row);
+  return new Promise(function(resolve, reject) {
+    db.all(sql, (err, rows) => {
+        if (err !== null) reject(err);
+        else resolve(rows);
     });
   });
 }
@@ -77,6 +75,7 @@ module.exports.selectStatementSignleRow= (db,sql,params) =>
 
 module.exports.selectStatementMultipleRowsSeperately= (db,sql,params) =>
 {
+  
   db.each(sql, params, (err, row) => {
     if (err) {
       throw err;
@@ -95,7 +94,6 @@ module.exports.createTables = () =>
     console.log('Connected to the breakers database.');
   });
   
-<<<<<<< HEAD
   db.serialize(() => {
     // Queries scheduled here will be serialized.
     db.run('CREATE TABLE IF NOT EXISTS Customer(customerId INTEGER PRIMARY KEY AUTOINCREMENT,customerName text NOT NULL, customerPhone text, customerAddress text, createDate text NOT NULL,updateDate text)')
@@ -122,6 +120,35 @@ module.exports.createTables = () =>
   });
 }
 
+
+module.exports.getCustomers =  async() =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select * from Customer';
+  
+  
+  let rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
 //Unique Constraint Failed (errno:19)
 module.exports.runDuplicateInsertQuery = () =>
 {
@@ -139,191 +166,6 @@ module.exports.runDuplicateInsertQuery = () =>
     console.log("Record with this name Already Exists")
   });
   
-=======
-  // db.serialize(() => {
-  //   // Queries scheduled here will be serialized.
-  //   db.run(`CREATE TABLE Table1 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table2 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table3 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table4 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table5 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table6 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table7 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table8 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table9 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Table10 s
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           gameType TEXT,
-  //           status TEXT,
-  //           name TEXT,
-  //           Date TEXT,
-  //           startTime TEXT,
-  //           endTime TEXT,
-  //           amount Integer,
-  //           paid TEXT
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Kitchen 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           name TEXT,
-  //           itemName TEXT,
-  //           date TEXT,
-  //           time TEXT,
-  //           amount Integer,
-  //           paid TEXT,
-  //           tableNo INTEGER
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Drinks 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           name TEXT,
-  //           drink TEXT,
-  //           quantity TEXT,
-  //           date TEXT,
-  //           time TEXT,
-  //           amount Integer,
-  //           paid TEXT,
-  //           tableNo INTEGER
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Expense 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           name TEXT,
-  //           type TEXT,
-  //           date TEXT,
-  //           time TEXT,
-  //           amount Integer,
-  //           paid TEXT,
-  //           tableNo INTEGER
-  //         )`
-  //         )
-  //     .run(`CREATE TABLE Credit 
-  //         (
-  //           id INTEGER PRIMARY KEY,
-  //           name TEXT,
-  //           amount Integer
-  //         )`
-  //         )
-  // });
-  let info=db.exec('PRAGMA db.table_info(Credit);', function(error)  {
-    if (error){
-        console.error("Pragma statement didn't work.")
-    } 
-    console.log(info)
-});
->>>>>>> 086964f7133bdec2491d65af1d0e4fc60b36d727
 
   db.close((err) => {
     if (err) {

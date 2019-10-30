@@ -5,18 +5,8 @@ const path = require("path");
 const url = require("url");
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
-<<<<<<< HEAD
-global.win=null
-
-
-//Database Manipulations
-const connections=require("./DatabaseOperations/connections.js");
-connections.createTables();
-// connections.runDuplicateInsertQuery();
-=======
 
 global.win=null;
->>>>>>> 086964f7133bdec2491d65af1d0e4fc60b36d727
 
 global.sharedObj = {
     tableNumber:null,
@@ -28,12 +18,19 @@ global.sharedObj = {
     start: null,
     status1:'Vacant',
     kitchen:null,
-    kitchenAmount:null
+    kitchenAmount:null,
+    players:null
 }
+
 
 const connections=require("./DataBaseOperations/connections.js");
 connections.createTables();
-
+connections.getCustomers().then(rows=>
+    {
+        global.sharedObj.players =rows;
+        console.log("Players added")
+        // console.log(rows) ;
+    });
 // let winTab11 = remote.getGlobal('winTab11')
 function createWindow(){
     win = new BrowserWindow({
@@ -56,6 +53,8 @@ function createWindow(){
 }
 
 ipc.on('start-game-single',function(event, table, p1, p2, fin, startTime, status){
+    
+    
     global.sharedObj = {
         tableNumber:table,
         game:'single',

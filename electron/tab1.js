@@ -3,6 +3,23 @@ const electron= require('electron');
 let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
 
+function selectGame()
+{
+    let tableNumber = remote.getGlobal('sharedObj').tableNumber
+    let status = remote.getGlobal('sharedObj').status1
+    
+    var selectBox = document.getElementById("selectBox");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    if(selectedValue=='single'){
+    var body=document.getElementById("body").innerHTML=`<webview id="foo" src="single-game.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
+    } else  if(selectedValue=='double'){
+        var body=document.getElementById("body").innerHTML=`<webview id="foo" src="double-game.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
+        }
+        else  if(selectedValue=='century'){
+            var body=document.getElementById("body").innerHTML=`<webview id="foo" src="century.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
+            }
+}
+
 
 function table1() {
     
@@ -48,7 +65,12 @@ function table1() {
         newbody.appendChild(finalLabel)
         newbody.appendChild(final)
         newbody.appendChild(brak);
+        
+        
         newbody.appendChild(playerOne);
+        newbody.appendChild(suggestion);
+        newbody.appendChild(suggestionItem);
+        
         newbody.appendChild(vsTextSpn);
         newbody.appendChild(playerTwo);
         newbody.appendChild(brak2);
@@ -65,7 +87,6 @@ function table1() {
         num.setAttribute("step",2)
         final.insertAdjacentElement('afterend',num)
         num.value=0
-
         // console.log(final.checked)
         final.addEventListener('change',function(event){
             if(final.checked == true){
