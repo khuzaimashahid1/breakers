@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Google Web Designer 7.0.1.1008">
+  <meta name="template" content="Banner 3.0.0">
+  <meta name="environment" content="gwd-dv360">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="gwdpage_style.css" rel="stylesheet" data-version="12" data-exports-type="gwd-page">
+  <link href="gwdpagedeck_style.css" rel="stylesheet" data-version="12" data-exports-type="gwd-pagedeck">
+  <link href="gwdgooglead_style.css" rel="stylesheet" data-version="6" data-exports-type="gwd-google-ad">
+  <style type="text/css" id="gwd-lightbox-style">
+    .gwd-lightbox {
+      overflow: hidden;
+    }
+  </style>
+  <style type="text/css" id="gwd-text-style">
+    p {
+      margin: 0px;
+    }
+    h1 {
+      margin: 0px;
+    }
+    h2 {
+      margin: 0px;
+    }
+    h3 {
+      margin: 0px;
+    }
+  </style>
+  <style type="text/css">
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+    }
+    .gwd-page-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .gwd-page-content {
+      background-color: transparent;
+      transform: perspective(1400px) matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+      transform-style: preserve-3d;
+      position: absolute;
+    }
+    .gwd-page-wrapper {
+      background-color: rgb(255, 255, 255);
+      position: absolute;
+      transform: translateZ(0px);
+    }
+    .gwd-page-size {
+      width: 300px;
+      height: 250px;
+    }
+    .gwd-input-od4b {
+      position: absolute;
+      width: 100px;
+      height: 20px;
+      left: 104.8px;
+      top: 28px;
+    }
+    .gwd-button-1kmu {
+      position: absolute;
+      width: 100px;
+      height: 24px;
+      left: 104.8px;
+      top: 75px;
+    }
+    .gwd-label-1j92 {
+      position: absolute;
+      width: 100px;
+      height: 20px;
+      left: 104.8px;
+      top: 119px;
+    }
+    .gwd-button-yta5 {
+      position: absolute;
+      width: 100px;
+      height: 24px;
+      left: 104.8px;
+      top: 139px;
+    }
+  </style>
+  <script data-source="googbase_min.js" data-version="4" data-exports-type="googbase" src="googbase_min.js"></script>
+  <script data-source="gwd_webcomponents_min.js" data-version="6" data-exports-type="gwd_webcomponents" src="gwd_webcomponents_min.js"></script>
+  <script data-source="gwdpage_min.js" data-version="12" data-exports-type="gwd-page" src="gwdpage_min.js"></script>
+  <script data-source="gwdpagedeck_min.js" data-version="12" data-exports-type="gwd-pagedeck" src="gwdpagedeck_min.js"></script>
+  <script data-source="https://s0.2mdn.net/ads/studio/Enabler.js" data-exports-type="gwd-google-ad" src="https://s0.2mdn.net/ads/studio/Enabler.js"></script>
+  <script data-source="gwdgooglead_min.js" data-version="6" data-exports-type="gwd-google-ad" src="gwdgooglead_min.js"></script>
+</head>
+
+<body>
+  <gwd-google-ad id="gwd-ad" polite-load="">
+    <gwd-metric-configuration></gwd-metric-configuration>
+    <gwd-pagedeck class="gwd-page-container" id="pagedeck">
+      <gwd-page id="page1" class="gwd-page-wrapper gwd-page-size gwd-lightbox" data-gwd-width="300px" data-gwd-height="250px">
+        <div class="gwd-page-content gwd-page-size">
+          <!-- <input type="text" id="tfPlayerName" class="gwd-input-od4b" data-gwd-name="tfPlayerName" placeholder="Player 1"> -->
+          <div class='player' id='player_1'>
+            <input type='text' placeholder='Player Name' id='playerName_1' >&nbsp;<button class='addPlayer'>Add Player</span>
+           </div>
+          <button id="button_1" class="gwd-button-1kmu" data-gwd-name="btnAddPlayer">Add Player</button>
+          <label id="label_1" class="gwd-label-1j92">Start Time:</label>
+          <button id="button_2" class="gwd-button-yta5" data-gwd-name="btnStartGame">Start Game</button>
+        </div>
+      </gwd-page>
+    </gwd-pagedeck>
+  </gwd-google-ad>
+  <script  >
+    $(document).ready(function(){
+// Add new element
+$("addPlayer").click(function(){
+
+ // Finding total number of elements added
+ var total_element = $(".player").length;
+
+ // last <div> with element class id
+ var lastid = $(".player:last").attr("id");
+ var split_id = lastid.split("_");
+ var nextindex = Number(split_id[1]) + 1;
+
+ var max = 5;
+ // Check total number elements
+ if(total_element < max ){
+  // Adding new div container after last occurance of element class
+  $(".player:last").after("<div class='player' id='player_"+ nextindex +"'></div>");
+
+  // Adding element to <div>
+  $("#div_" + nextindex).append("<input type='text' placeholder='Player"+ nextindex +" Name' id='playerName_"+ nextindex +"'>&nbsp;<span id='remove_" + nextindex + "' class='remove'>X</span>");
+
+ }
+
+});
+
+// Remove element
+$('.container').on('click','.remove',function(){
+
+ var id = this.id;
+ var split_id = id.split("_");
+ var deleteindex = split_id[1];
+
+ // Remove <div> with id
+ $("#div_" + deleteindex).remove();
+
+}); 
+});
+  </script>
+</body>
+
+</html>

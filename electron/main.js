@@ -16,12 +16,21 @@ global.sharedObj = {
     player2: null,
     final: null,
     start: null,
-    status1:'Vacant'
+    status1:'Vacant',
+    kitchen:null,
+    kitchenAmount:null,
+    players:null
 }
+
 
 const connections=require("./DataBaseOperations/connections.js");
 connections.createTables();
-
+connections.getCustomers().then(rows=>
+    {
+        global.sharedObj.players =rows;
+        console.log("Players added")
+        // console.log(rows) ;
+    });
 // let winTab11 = remote.getGlobal('winTab11')
 function createWindow(){
     win = new BrowserWindow({
@@ -44,6 +53,8 @@ function createWindow(){
 }
 
 ipc.on('start-game-single',function(event, table, p1, p2, fin, startTime, status){
+    
+    
     global.sharedObj = {
         tableNumber:table,
         game:'single',
@@ -54,6 +65,29 @@ ipc.on('start-game-single',function(event, table, p1, p2, fin, startTime, status
         status1:status
     }
     console.log(table)
+})
+
+ipc.on('add-order',function(event,kitchenVal,kitchenAmt,p1,p2,startTime, final,type, table){
+    console.log(global.sharedObj.player1)
+    console.log(global.sharedObj.player2)
+    console.log(global.sharedObj.tableNumber)
+    console.log(global.sharedObj.game)
+    global.sharedObj = {
+        kitchen: kitchenVal,
+        kitchenAmount: kitchenAmt,
+        player1:p1,
+        player2:p2,
+        start: startTime,
+        final: final,
+        game:type,
+        tableNumber: table
+    }
+    console.log(kitchenVal)
+    console.log(kitchenAmt)
+    console.log(global.sharedObj.player1)
+    console.log(global.sharedObj.player2)
+    console.log(global.sharedObj.tableNumber)
+    console.log(global.sharedObj.game)
 })
 
 ipc.on('start-game-double',function(event, table, p1, p2, p3, p4, fin, startTime, status){

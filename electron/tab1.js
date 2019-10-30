@@ -3,6 +3,23 @@ const electron= require('electron');
 let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
 
+function selectGame()
+{
+    let tableNumber = remote.getGlobal('sharedObj').tableNumber
+    let status = remote.getGlobal('sharedObj').status1
+    
+    var selectBox = document.getElementById("selectBox");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    if(selectedValue=='single'){
+    var body=document.getElementById("body").innerHTML=`<webview id="foo" src="single-game.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
+    } else  if(selectedValue=='double'){
+        var body=document.getElementById("body").innerHTML=`<webview id="foo" src="double-game.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
+        }
+        else  if(selectedValue=='century'){
+            var body=document.getElementById("body").innerHTML=`<webview id="foo" src="century.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
+            }
+}
+
 
 function table1() {
     
@@ -48,7 +65,12 @@ function table1() {
         newbody.appendChild(finalLabel)
         newbody.appendChild(final)
         newbody.appendChild(brak);
+        
+        
         newbody.appendChild(playerOne);
+        newbody.appendChild(suggestion);
+        newbody.appendChild(suggestionItem);
+        
         newbody.appendChild(vsTextSpn);
         newbody.appendChild(playerTwo);
         newbody.appendChild(brak2);
@@ -65,7 +87,6 @@ function table1() {
         num.setAttribute("step",2)
         final.insertAdjacentElement('afterend',num)
         num.value=0
-
         // console.log(final.checked)
         final.addEventListener('change',function(event){
             if(final.checked == true){
@@ -330,3 +351,99 @@ function table1() {
     body.replaceWith(newbody)
    }
 }
+
+AddExtrasPlayer1 = document.getElementById("extrasP1")
+AddExtrasPlayer1.addEventListener('click',function(event){
+    var body=document.getElementById("body");
+    var tableTypeText=document.createElement("h1")
+    tableTypeText.innerHTML="Player Name: "+remote.getGlobal('sharedObj').player1
+    var br0 =document.createElement("br");
+   var teamHead= document.createElement("p");
+   var Cigarettes=document.createTextNode("Cigarettes");
+    teamHead.appendChild(Cigarettes);
+    var addCig=document.createElement("button");
+    addCig.innerHTML = 'Add'
+
+    var br1 =document.createElement("br");
+    var vsTextSpn=document.createElement("span");
+    var vsText=document.createTextNode(" Teamed up with ");
+    vsTextSpn.appendChild(vsText);
+    //TEAM TWO
+    var br2=document.createElement("br");
+    var teamTwoHead= document.createElement("p");
+     var teamTwoText=document.createTextNode("Kitchen");
+     teamTwoHead.appendChild(teamTwoText);
+     var addKitchen=document.createElement("button");
+     addKitchen.innerHTML = 'Add'
+    var br3 =document.createElement("br");
+    var vs1TextSpn=document.createElement("span");
+    var vs1Text=document.createTextNode(" Teamed up with ");
+    vs1TextSpn.appendChild(vs1Text);
+    brak1 =document.createElement("br");
+    var brak3 =document.createElement("br");
+     var Final=document.createTextNode("Miscalleniuos");
+    var btnClose=document.createElement("button");
+    btnClose.setAttribute('content', 'Add Extras');
+    btnClose.innerHTML = 'Add Extras'
+    var newbody = document.createElement("div");
+    newbody.id="body";
+    newbody.appendChild(tableTypeText)
+    newbody.appendChild(br0);
+    newbody.appendChild(teamHead);
+    newbody.appendChild(addCig);
+    newbody.appendChild(br1);
+    newbody.appendChild(br2);
+    newbody.appendChild(teamTwoHead);
+    newbody.appendChild(addKitchen);
+    newbody.appendChild(br3);
+    newbody.appendChild(brak1);
+    newbody.appendChild(Final);
+    newbody.appendChild(brak3)
+    newbody.appendChild(btnClose)
+    body.replaceWith(newbody)
+
+    let cig = [];
+    let kitchen = [];
+    kitchenAmount = []
+    let kitchenCount= 0;
+    let count= 0;
+
+    let game = remote.getGlobal('sharedObj').game
+    let player1 = remote.getGlobal('sharedObj').player1
+    let player2 = remote.getGlobal('sharedObj').player2
+    let tableNumber = remote.getGlobal('sharedObj').tableNumber
+    let final = remote.getGlobal('sharedObj').final
+    let startTime = remote.getGlobal('sharedObj').start
+
+
+        addCig.addEventListener('click',function(event){
+            cig=document.createElement("input");
+            cig.placeholder="Cigarette "+count;
+            addCig.insertAdjacentElement('beforebegin',cig)
+            count=count+1;
+        })
+
+        addKitchen.addEventListener('click',function(event){
+            kitchen[kitchenCount]=document.createElement("input");
+            kitchen[kitchenCount].placeholder="Kitchen "+kitchenCount;
+
+            kitchenAmount[kitchenCount]=document.createElement("input");
+            kitchenAmount[kitchenCount].placeholder="Amount";
+            addKitchen.insertAdjacentElement('beforebegin',kitchen[kitchenCount])
+            addKitchen.insertAdjacentElement('beforebegin',kitchenAmount[kitchenCount])
+            kitchenCount=kitchenCount+1;
+        })
+        
+        btnClose.addEventListener('click',function(event){
+            console.log(remote.getGlobal('sharedObj').player1)
+            console.log(remote.getGlobal('sharedObj').player2)
+            console.log(remote.getGlobal('sharedObj').tableNumber)
+            console.log(remote.getGlobal('sharedObj').game)
+            for(var i=0;i<kitchenCount;i++)
+            {
+                ipc.send('add-order',kitchen[i].value,kitchenAmount[i].value,player1,player2,startTime, final, game, tableNumber)
+            }
+            remote.getCurrentWindow().reload()
+
+        })
+})
