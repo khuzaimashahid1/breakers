@@ -2,7 +2,8 @@ const { remote } =require('electron');
 const electron= require('electron');
 let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
-
+const players= remote.getGlobal('sharedObj').players;
+console.log(players);
 function selectGame()
 {
     let tableNumber = remote.getGlobal('sharedObj').tableNumber
@@ -23,6 +24,28 @@ function selectGame()
             century.style.display = "none"
         }
         single.style.display = "block";
+        window.$ = window.jQuery = require('jquery');
+        // $(document).ready(function(){
+        //    $("#singlePlayers").append('<li><a href="#">New list item</a></li>');
+        // });
+        $('#singlePlayer1').on('input',function(e){
+            $('ul').empty()
+            const searchString=$(this).val().toLowerCase();
+            for(let i=0;i<players.length;i++)
+            {
+                const actualName=players[i].customerName.toLowerCase();
+                if(actualName.includes(searchString))
+                {
+                    $("#singlePlayers").append('<li><a href="#">'+players[i].customerName+'</a></li>');
+                    $("#singlePlayers li").click(function() {
+                        alert('Clicked list.'+$(this).text());
+                       });
+                }
+                
+            }
+            // $("#singlePlayers").append('<li><a href="#">'+$(this).val()+'</a></li>');
+        });
+        
     } 
     else  if(selectedValue=='double')
     {

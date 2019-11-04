@@ -55,13 +55,13 @@
 
   </div>
   <div id="single">
-    <button id="buttonSingle">Start Game</button>
     <input type="text" id="singlePlayer1" placeholder="Player 1">
-    <ul id="1">
+    <ul id="singlePlayers" >
     </ul>
     <label id="label_1">vs</label>
     <input type="text" id="singlePlayer2" placeholder="Player 2">
-    <label id="label_2">Start Time:</label>
+    <label id="startTime">Start Time:</label>
+    <button id="buttonSingle">Start Game</button>
   </div>
 
   <div id="double">
@@ -70,8 +70,9 @@
       <label id="label_1" >vs</label>
       <input type="text" id="doublePlayer3"  placeholder="Player 1">
       <input type="text" id="doublePlayer4"  placeholder="Player 2">
-      <button id="button_1"  >Start Game</button>
-      <label id="label_2" >Start Time:</label>
+      <label id="startTime" >Start Time :</label>
+      <button id="buttonDouble"  >Start Game</button>
+      
     </div>
 
 
@@ -80,8 +81,8 @@
           <input type='text' placeholder='Player Name' id='centuryPlayer1' >&nbsp;
           <button class='addPlayer'>Add Player</span>
          </div>
-        <label id="label_1" >Start Time:</label>
-        <button id="btnStartGame" >Start Game</button>
+        <label id="startTime" >Start Time :</label>
+        <button id="buttonCentury" >Start Game</button>
       </div>
 
 
@@ -93,8 +94,10 @@
   double.style.display = "none";
   const century=document.getElementById("century");
   century.style.display = "none";
-  window.$ = window.jQuery = require('jquery');
-  
+  const today = new Date();
+  const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  startTime=document.getElementById("startTime");
+  startTime.innerHTML=startTime.innerHTML+"  "+time;
   </script>
 </body>
 
