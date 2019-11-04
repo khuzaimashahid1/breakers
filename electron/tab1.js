@@ -7,17 +7,47 @@ function selectGame()
 {
     let tableNumber = remote.getGlobal('sharedObj').tableNumber
     let status = remote.getGlobal('sharedObj').status1
-    
-    var selectBox = document.getElementById("selectBox");
+    const selectBox = document.getElementById("selectBox");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if(selectedValue=='single'){
-    var body=document.getElementById("body").innerHTML=`<webview id="foo" src="single-game.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
-    } else  if(selectedValue=='double'){
-        var body=document.getElementById("body").innerHTML=`<webview id="foo" src="double-game.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
+    const single=document.getElementById("single");
+    const double=document.getElementById("double");
+    const century=document.getElementById("century");
+    if(selectedValue=='single')
+    {
+        if(double.style.display = "block")
+        {
+            double.style.display = "none"
         }
-        else  if(selectedValue=='century'){
-            var body=document.getElementById("body").innerHTML=`<webview id="foo" src="century.html" style="display:inline-flex; width:640px; height:480px"></webview>`;
-            }
+        if(century.style.display = "block")
+        {
+            century.style.display = "none"
+        }
+        single.style.display = "block";
+    } 
+    else  if(selectedValue=='double')
+    {
+        if(single.style.display = "block")
+        {
+            single.style.display = "none"
+        }
+        if(century.style.display = "block")
+        {
+            century.style.display = "none"
+        }
+        double.style.display = "block";
+    }
+    else  if(selectedValue=='century')
+    {
+        if(single.style.display = "block")
+        {
+            single.style.display = "none"
+        }
+        if(double.style.display = "block")
+        {
+            double.style.display = "none"
+        }
+        century.style.display = "block";
+    }
 }
 
 

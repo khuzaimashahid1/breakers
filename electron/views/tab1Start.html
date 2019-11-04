@@ -1,60 +1,101 @@
 <!DOCTYPE html>
 <html>
-    <style>
-    
-    input, select {
-      width: 100%;
-      padding: 12px 20px;
-      margin: 8px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    
-    button {
-      width: 100%;
-      background-color: #4CAF50;
-      color: white;
-      padding: 14px 20px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    input[type=submit]:hover {
-      background-color: #45a049;
-    }
-    
-    div {
-      border-radius: 5px;
-      background-color: #f2f2f2;
-      padding: 20px;
-    }
-    h1{
-        font-family: Arial, Helvetica, sans-serif;
-        font-style: italic
-    }
-    </style>
+
+<style>
+  input,
+  select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  button {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+
+  div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+
+  h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic
+  }
+</style>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
-    <div id="d1">
-        <select id="selectBox" onchange="selectGame()" name="Game Type">
-            <option id="a" value="Choose">Game Category</option>
-            <option id="s" value="single">Single</option>
-            <option id="d" value="double">Double</option>
-            <option id="c" value="century">Century</option>
-        </select>
-        
-    </div>
-    <div id="body">
-        
+  <div id="d1">
+    <select id="selectBox" onchange="selectGame()" name="Game Type">
+      <option id="a" value="Choose">Game Category</option>
+      <option id="s" value="single">Single</option>
+      <option id="d" value="double">Double</option>
+      <option id="c" value="century">Century</option>
+    </select>
+
+  </div>
+  <div id="single">
+    <button id="buttonSingle">Start Game</button>
+    <input type="text" id="singlePlayer1" placeholder="Player 1">
+    <ul id="1">
+    </ul>
+    <label id="label_1">vs</label>
+    <input type="text" id="singlePlayer2" placeholder="Player 2">
+    <label id="label_2">Start Time:</label>
+  </div>
+
+  <div id="double">
+      <input type="text" id="doublePlayer1"  placeholder="Player 1">
+      <input type="text" id="doublePlayer2"  placeholder="Player 2">
+      <label id="label_1" >vs</label>
+      <input type="text" id="doublePlayer3"  placeholder="Player 1">
+      <input type="text" id="doublePlayer4"  placeholder="Player 2">
+      <button id="button_1"  >Start Game</button>
+      <label id="label_2" >Start Time:</label>
     </div>
 
-    </div>
-    <script src="../tab1.js"></script>
+
+    <div id="century">
+        <div id='players' >
+          <input type='text' placeholder='Player Name' id='centuryPlayer1' >&nbsp;
+          <button class='addPlayer'>Add Player</span>
+         </div>
+        <label id="label_1" >Start Time:</label>
+        <button id="btnStartGame" >Start Game</button>
+      </div>
+
+
+  <script src="../tab1.js"></script>
+  <script >
+  const single=document.getElementById("single");
+  single.style.display = "none";
+  const double=document.getElementById("double");
+  double.style.display = "none";
+  const century=document.getElementById("century");
+  century.style.display = "none";
+  window.$ = window.jQuery = require('jquery');
+  
+  </script>
 </body>
+
 </html>
