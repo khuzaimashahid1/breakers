@@ -13,6 +13,7 @@ function selectGame()
     const single=document.getElementById("single");
     const double=document.getElementById("double");
     const century=document.getElementById("century");
+    window.$ = window.jQuery = require('jquery');
     if(selectedValue=='single')
     {
         if(double.style.display = "block")
@@ -24,10 +25,6 @@ function selectGame()
             century.style.display = "none"
         }
         single.style.display = "block";
-        window.$ = window.jQuery = require('jquery');
-        // $(document).ready(function(){
-        //    $("#singlePlayers").append('<li><a href="#">New list item</a></li>');
-        // });
         $('#singlePlayer1').on('input',function(e){
             $('ul').empty()
             const searchString=$(this).val().toLowerCase();
@@ -36,9 +33,11 @@ function selectGame()
                 const actualName=players[i].customerName.toLowerCase();
                 if(actualName.includes(searchString))
                 {
-                    $("#singlePlayers").append('<li><a href="#">'+players[i].customerName+'</a></li>');
+                    $("#singlePlayers").append('<li class=\'suggestion\'>'+players[i].customerName+'</li>');
                     $("#singlePlayers li").click(function() {
-                        alert('Clicked list.'+$(this).text());
+                        const value=$(this).text();
+                        console.log(value);
+                        $('#singlePlayer1').val(value);
                        });
                 }
                 
