@@ -70,6 +70,25 @@ function selectGame()
             double.style.display = "none"
         }
         century.style.display = "block";
+        //JQUARY FOR ADD PLAYER ON BUTTON CLICK
+        window.$ = window.jQuery = require('jquery');
+        var max_fields= 10; //maximum input boxes allowed
+        var wrapper= $(".players_fields_wrap"); //Fields wrapper
+        var x = 1; //initlal text box count
+        $('.addPlayer_field_button').on('click',function(e)
+        {
+            e.preventDefault();
+           
+                if(x < max_fields){ //max input box allowed
+                    x++; //text box increment
+                    $(wrapper).append('<div><input type="text" id="Player_'+x+'" name="Player_'+x+'" placeholder="Player '+x+' Name"/>'); 
+                }       
+         
+        });
+        
+            
+            
+      
     }
 }
 
