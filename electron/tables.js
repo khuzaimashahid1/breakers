@@ -24,8 +24,7 @@ tab1.addEventListener('click',function(event){
             maximizable:false,
             webPreferences: {
                 nativeWindowOpen: true,
-                nodeIntegration: true,
-                webviewTag: true
+                nodeIntegration: true
                 
             }
         });

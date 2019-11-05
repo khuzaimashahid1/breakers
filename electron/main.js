@@ -73,13 +73,15 @@ ipc.on('error-dialog',function(event,message){
 
 
 
-ipc.on('start-game-single',function(event, tableNumber, status, gameType, id1, id2, startTime){
+ipc.on('start-game-single',function(event, tableNumber, status, gameType, id1, id2, startTime,createDate){
     console.log(tableNumber)
     console.log(status)
     console.log(gameType)
     console.log(id1)
     console.log(id2)
     console.log(startTime)
+    console.log(createDate)
+    connections.startGame(tableNumber, status, gameType, id1, id2, startTime,createDate);
 })
 
 ipc.on('add-order',function(event,kitchenVal,kitchenAmt,p1,p2,startTime, final,type, table){

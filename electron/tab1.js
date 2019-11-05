@@ -5,7 +5,6 @@ let win = remote.getGlobal('win')
 const players= remote.getGlobal('sharedObj').players;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
-let status = remote.getGlobal('sharedObj').status1
 function selectGame ()
 {
     const selectBox = document.getElementById("selectBox");
@@ -13,6 +12,9 @@ function selectGame ()
     const single=document.getElementById("single");
     const double=document.getElementById("double");
     const century=document.getElementById("century");
+    const btnStartSingle=document.getElementById("btnStartSingle");
+    const btnStartDouble=document.getElementById("btnStartDouble");
+    const btnStartCentury=document.getElementById("btnStartCentury");
     setStartTime();
     if(selectedValue=='single')
     {
@@ -23,6 +25,51 @@ function selectGame ()
         const singleListID2='#singlePlayers2';
         renderSuggestions(singleFieldID1,singleListID1);
         renderSuggestions(singleFieldID2,singleListID2);
+        
+        
+        btnStartSingle.addEventListener('click',function(event){
+            if($(singleFieldID1).val().length !== 0 && $(singleFieldID2).val().length !== 0)
+            {
+                const singlePlayer1=players.filter(player => (player.customerName === ($(singleFieldID1).val())));
+                const singlePlayer2=players.filter(player => (player.customerName === ($(singleFieldID2).val())));
+                if(singlePlayer1.length<1)
+                {
+                    ipc.send('error-dialog',"Player1 Not in Database");
+                    $(singleFieldID1).focus();
+                }
+                else if(singlePlayer2.length<1)
+                {
+                    ipc.send('error-dialog',"Player2 Not in Database");
+                    $(singleFieldID2).focus();
+                }
+                else if(singlePlayer1[0]===singlePlayer2[0])
+                {
+                    ipc.send('error-dialog',"You Have Selected Same Players in Both Fields");
+                }
+                const status="ongoing";
+                const gameType="single";
+                const singlePlayer1Id=singlePlayer1[0].customerId;
+                const singlePlayer2Id=singlePlayer2[0].customerId;
+                const today = new Date();
+                const startTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                createDate = yyyy + '-' + mm + '-' + dd;
+                ipc.send('start-game-single',tableNumber,status,gameType,singlePlayer1Id,singlePlayer2Id,startTime,createDate)
+                remote.getCurrentWindow().close()
+            }
+            else if($(singleFieldID1).val().length === 0 )
+            {
+                ipc.send('error-dialog',"Please Enter Player 1");
+                $(singleFieldID1).focus();
+            }
+            else if($(singleFieldID2).val().length === 0)
+            {
+                ipc.send('error-dialog',"Please Enter Player 2");
+                $(singleFieldID2).focus();
+            }
+        })
         
     } 
     else  if(selectedValue=='double')
@@ -139,6 +186,7 @@ function renderSuggestions(fieldID,listID)
                         $(listID).empty()
                         const value=$(this).text();
                         $(fieldID).val(value);
+
                     });
                 }
             }
