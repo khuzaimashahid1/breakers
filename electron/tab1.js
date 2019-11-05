@@ -3,72 +3,47 @@ const electron= require('electron');
 let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
 const players= remote.getGlobal('sharedObj').players;
-console.log(players);
-function selectGame()
+window.$ = window.jQuery = require('jquery');
+let tableNumber = remote.getGlobal('sharedObj').tableNumber
+let status = remote.getGlobal('sharedObj').status1
+function selectGame ()
 {
-    let tableNumber = remote.getGlobal('sharedObj').tableNumber
-    let status = remote.getGlobal('sharedObj').status1
     const selectBox = document.getElementById("selectBox");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
     const single=document.getElementById("single");
     const double=document.getElementById("double");
     const century=document.getElementById("century");
-    window.$ = window.jQuery = require('jquery');
+    setStartTime();
     if(selectedValue=='single')
     {
-        if(double.style.display = "block")
-        {
-            double.style.display = "none"
-        }
-        if(century.style.display = "block")
-        {
-            century.style.display = "none"
-        }
-        single.style.display = "block";
-        $('#singlePlayer1').on('input',function(e){
-            $('ul').empty()
-            const searchString=$(this).val().toLowerCase();
-            for(let i=0;i<players.length;i++)
-            {
-                const actualName=players[i].customerName.toLowerCase();
-                if(actualName.includes(searchString))
-                {
-                    $("#singlePlayers").append('<li class=\'suggestion\'>'+players[i].customerName+'</li>');
-                    $("#singlePlayers li").click(function() {
-                        const value=$(this).text();
-                        console.log(value);
-                        $('#singlePlayer1').val(value);
-                       });
-                }
-                
-            }
-            // $("#singlePlayers").append('<li><a href="#">'+$(this).val()+'</a></li>');
-        });
+        displayFirstDivOnly(single,double,century);
+        const singleFieldID1='#singlePlayer1';
+        const singleListID1='#singlePlayers1';
+        const singleFieldID2='#singlePlayer2';
+        const singleListID2='#singlePlayers2';
+        renderSuggestions(singleFieldID1,singleListID1);
+        renderSuggestions(singleFieldID2,singleListID2);
         
     } 
     else  if(selectedValue=='double')
     {
-        if(single.style.display = "block")
-        {
-            single.style.display = "none"
-        }
-        if(century.style.display = "block")
-        {
-            century.style.display = "none"
-        }
-        double.style.display = "block";
+        displayFirstDivOnly(double,century,single);
+        const doubleFieldID1='#doublePlayer1';
+        const doubleListID1='#doublePlayers1';
+        const doubleFieldID2='#doublePlayer2';
+        const doubleListID2='#doublePlayers2';
+        const doubleFieldID3='#doublePlayer3';
+        const doubleListID3='#doublePlayers3';
+        const doubleFieldID4='#doublePlayer4';
+        const doubleListID4='#doublePlayers4';
+        renderSuggestions(doubleFieldID1,doubleListID1);
+        renderSuggestions(doubleFieldID2,doubleListID2);
+        renderSuggestions(doubleFieldID3,doubleListID3);
+        renderSuggestions(doubleFieldID4,doubleListID4);
     }
     else  if(selectedValue=='century')
     {
-        if(single.style.display = "block")
-        {
-            single.style.display = "none"
-        }
-        if(double.style.display = "block")
-        {
-            double.style.display = "none"
-        }
-        century.style.display = "block";
+        displayFirstDivOnly(century,single,double);
         //JQUARY FOR ADD PLAYER ON BUTTON CLICK
         window.$ = window.jQuery = require('jquery');
         var max_fields= 10; //maximum input boxes allowed
@@ -107,6 +82,85 @@ function selectGame()
       
     }
 }
+
+// Set Start Time of Game
+function setStartTime()
+{
+    const today = new Date();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const startTimeSingle=document.getElementById("startTimeSingle");
+    startTimeSingle.innerHTML="Start Time:  "+time;
+    const startTimeDouble=document.getElementById("startTimeDouble");
+    startTimeDouble.innerHTML="Start Time:  "+time;
+    const startTimeCentury=document.getElementById("startTimeCentury");
+    startTimeCentury.innerHTML="Start Time:  "+time;
+}
+
+// Display Only Required HTML of first Div
+function displayFirstDivOnly(first,second,third)
+{
+    first.style.display = "block";
+    if(second.style.display = "block")
+        {
+            second.style.display = "none"
+        }
+    if(third.style.display = "block")
+        {
+            third.style.display = "none"
+        }
+    
+}
+
+//Render Suggestions for Required Field
+function renderSuggestions(fieldID,listID)
+{
+    
+    $(fieldID).on('input',function(e){
+        if($(fieldID).val().length === 0)
+        {
+            $(listID).empty();
+        }
+        else
+        {
+            $(listID).empty()
+            const searchString=$(this).val().toLowerCase();
+            for(let i=0;i<players.length;i++)
+            {
+                const actualName=players[i].customerName.toLowerCase();
+                if(actualName.includes(searchString))
+                {
+                    $(listID).append('<li class=\'suggestion\'>'+players[i].customerName+'</li>');
+                    $(listID+" li").click(function() 
+                    {
+                        $(listID).empty()
+                        const value=$(this).text();
+                        $(fieldID).val(value);
+                    });
+                }
+            }
+        }
+        
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function table1() {

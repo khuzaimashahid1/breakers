@@ -69,21 +69,31 @@ ul
   </div>
   <div id="single">
     <input type="text" id="singlePlayer1" placeholder="Player 1">
-    <ul id="singlePlayers" >
+    <ul id="singlePlayers1" >
     </ul>
     <label id="label_1">vs</label>
     <input type="text" id="singlePlayer2" placeholder="Player 2">
-    <label id="startTime">Start Time:</label>
+    <ul id="singlePlayers2" >
+    </ul>
+    <label id="startTimeSingle">Start Time:</label>
     <button id="buttonSingle">Start Game</button>
   </div>
 
   <div id="double">
       <input type="text" id="doublePlayer1"  placeholder="Player 1">
+      <ul id="doublePlayers1" >
+      </ul>
       <input type="text" id="doublePlayer2"  placeholder="Player 2">
+      <ul id="doublePlayers2" >
+      </ul>
       <label id="label_1" >vs</label>
       <input type="text" id="doublePlayer3"  placeholder="Player 1">
+      <ul id="doublePlayers3" >
+      </ul>
       <input type="text" id="doublePlayer4"  placeholder="Player 2">
-      <label id="startTime" >Start Time :</label>
+      <ul id="doublePlayers4" >
+      </ul>
+      <label id="startTimeDouble" >Start Time :</label>
       <button id="buttonDouble"  >Start Game</button>
       
     </div>
@@ -97,9 +107,9 @@ ul
               <a href="#" class="removeField">Remove</a>
             </div>    
          </div>
-        <button class="btnAddPlayerField">Add Player</button> 
-        <label id="startTime" >Start Time :</label>
-        <button id="btnCentury" >Start Game</button>
+        <button class="addPlayer_field_button">Add Player</button> 
+        <label id="startTimeCentury" >Start Time :</label>
+        <button id="buttonCentury" >Start Game</button>
       </div>
 
 
@@ -111,10 +121,7 @@ ul
   double.style.display = "none";
   const century=document.getElementById("century");
   century.style.display = "none";
-  const today = new Date();
-  const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  startTime=document.getElementById("startTime");
-  startTime.innerHTML=startTime.innerHTML+"  "+time;
+  
   </script>
 </body>
 
