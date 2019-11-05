@@ -59,9 +59,15 @@ ipc.on('place-kitchen-order',function(event,customerName,orderItem,price){
     console.log(price)
 })
 
+//Place Drink Order
+ipc.on('place-drink-order',function(event,customerName,orderItem,price){
+    console.log(customerName)
+    console.log(orderItem)
+    console.log(price)
+})
 //Empty Fields Dialouge Box Pop-up
-ipc.on('empty-fields',function(event){
-    dialog.showErrorBox("OOPS!",'Empty fields')
+ipc.on('error-dialog',function(event,message){
+    dialog.showErrorBox("ERROR",message)
 })
 
 

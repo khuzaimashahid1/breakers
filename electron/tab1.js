@@ -441,6 +441,13 @@ function table1() {
 
    }
    
+
+
+
+
+
+
+   
    function hello(){
    if(remote.getGlobal('sharedObj').game==='single'){
      document.getElementById('p1').innerHTML="Player 1: "+remote.getGlobal('sharedObj').player1
