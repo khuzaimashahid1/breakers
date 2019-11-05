@@ -1,11 +1,22 @@
-function PlaceOrder(){
-    var form = document.querySelector('form')
-    form.addEventListener('change',function(){
-        var name = document.getElementById("name")
-        var item = document.getElementById("orderItem")
-        var price = document.getElementById("price")
-        console.log(name.value)
-        console.log(item.value)
-        console.log(price.value)
-    })
+const { remote } =require('electron');
+const electron= require('electron');
+let ipc = electron.ipcRenderer;
+let win = remote.getGlobal('win')
+
+function placeOrder(){
+
+    //Button click event capture
+        var name = document.getElementById("name").value
+        var item = document.getElementById("orderItem").value
+        var price = document.getElementById("price").value
+        console.log(name)
+        console.log(item)
+        console.log(price)
+        if(name!=''&&item!=''&&price!=''){
+            ipc.send('place-kitchen-order',name,item,price)
+            remote.getCurrentWindow().reload()
+        }
+        else{
+            ipc.send('empty-fields')
+        }
 }

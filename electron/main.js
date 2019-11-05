@@ -31,7 +31,7 @@ connections.getCustomers().then(rows=>
         console.log("Players added")
         // console.log(rows) ;
     });
-// let winTab11 = remote.getGlobal('winTab11')
+
 function createWindow(){
     win = new BrowserWindow({
         webPreferences: {
@@ -51,6 +51,20 @@ function createWindow(){
 
     })
 }
+
+//Place Kitchen Order
+ipc.on('place-kitchen-order',function(event,customerName,orderItem,price){
+    console.log(customerName)
+    console.log(orderItem)
+    console.log(price)
+})
+
+//Empty Fields Dialouge Box Pop-up
+ipc.on('empty-fields',function(event){
+    dialog.showErrorBox("OOPS!",'Empty fields')
+})
+
+
 
 ipc.on('start-game-single',function(event, table, p1, p2, fin, startTime, status){
     
@@ -118,9 +132,6 @@ ipc.on('start-game-century',function(event, table, p1, p2, fin, startTime, statu
     console.log(table)
 })
 
-ipc.on('empty-single-game',function(event){
-    dialog.showErrorBox("OOPS!",'Empty fields')
-})
 
 app.on('ready', createWindow);
 
