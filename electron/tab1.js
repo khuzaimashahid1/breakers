@@ -58,9 +58,11 @@ function selectGame ()
                     x++; //text box increment
                     $(wrapper).append('<div>'+
                                          '<input type="text" id="Player_'+x+'" name="Player_'+x+'" placeholder="Player '+x+' Name"/>'+
-                                         '<a href="#" class="removeField">Remove</a>'+
-                                     '</div>'); 
+                                    '</div>'); 
                 }  
+                //APPENDING REMOVE BUTTON TO LAST CHILD OF THE WRAPPER CLASS
+                $('.removeField').remove();
+                $('.playersFieldsWrap div:last-child').append('<a href="#" class="removeField">Remove</a>');
                 if(x==max_fields){
                     $('.btnAddPlayerField').attr("disabled", true);
                     $('.btnAddPlayerField').html("Maximum numbers of players added!");
@@ -69,11 +71,13 @@ function selectGame ()
          
         });
         //  REMOVING A FIELD BY JQUERY
-        $(wrapper).on("click",".removeField", function(e){ //user click on remove text
+        $(wrapper).on("click",".removeField", function(e){ 
+            //user click on remove text
             e.preventDefault(); $(this).parent('div').remove(); x--;
             $('.btnAddPlayerField').attr("disabled", false);
             $('.btnAddPlayerField').html("Add Player");
             $('.btnAddPlayerField').css("background-color","#4CAF50");
+            $('.playersFieldsWrap div:last-child').append('<a href="#" class="removeField">Remove</a>');
         });
    
         
