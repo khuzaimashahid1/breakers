@@ -9,16 +9,14 @@ const dialog = electron.dialog;
 global.win=null;
 
 global.sharedObj = {
-    tableNumber:null,
-    type:null,
-    game:null,
-    player1: null,
-    player2: null,
-    final: null,
-    start: null,
-    status1:'Vacant',
-    kitchen:null,
-    kitchenAmount:null,
+    status1:null,
+    status2:null,
+    status3:null,
+    status4:null,
+    status5:null,
+    status6:null,
+    status7:null,
+    status8:null,
     players:null
 }
 
@@ -31,7 +29,50 @@ connections.getCustomers().then(rows=>
         console.log("Players added")
         // console.log(rows) ;
     });
+connections.getOngoingGames().then(result=>
+    {
+        //First Table Has ongoing game
+        if(result[0].length>0)
+        {
+            global.sharedObj.status1 ='Ongoing - '+result[0][0].gameType;
+            
+        }
+        //Table 2 Has ongoing game
+        if(result[1].length>0)
+        {
 
+        }
+        //Table 3 Has ongoing game
+        if(result[2].length>0)
+        {
+
+        }
+        //Table 4 Has ongoing game
+        if(result[3].length>0)
+        {
+
+        }
+        //Table 5 Has ongoing game
+        if(result[4].length>0)
+        {
+
+        }
+        //Table 6 Has ongoing game
+        if(result[5].length>0)
+        {
+
+        }
+        //Table 7 Has ongoing game
+        if(result[6].length>0)
+        {
+
+        }
+        //Table 8 Has ongoing game
+        if(result[7].length>0)
+        {
+
+        }
+    })
 function createWindow(){
     win = new BrowserWindow({
         webPreferences: {

@@ -120,7 +120,7 @@ module.exports.createTables = () =>
   });
 }
 
-
+//Get Customers
 module.exports.getCustomers =  async() =>
 {
   let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -150,7 +150,7 @@ module.exports.getCustomers =  async() =>
 }
 
 
-
+//Start Game
 module.exports.startGame=(tableNumber, status, gameType, id1, id2, startTime,createDate)=>
 {
   let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -175,6 +175,72 @@ module.exports.startGame=(tableNumber, status, gameType, id1, id2, startTime,cre
   });
 
 }
+
+
+//Check Ongoing Games on All Tables
+module.exports.getOngoingGames =  async() =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql1='SELECT * FROM Game WHERE tableNo=1 AND status=\'ongoing\'';
+  sql2='SELECT * FROM Game WHERE tableNo=2 AND status=\'ongoing\'';
+  sql3='SELECT * FROM Game WHERE tableNo=3 AND status=\'ongoing\'';
+  sql4='SELECT * FROM Game WHERE tableNo=4 AND status=\'ongoing\'';
+  sql5='SELECT * FROM Game WHERE tableNo=5 AND status=\'ongoing\'';
+  sql6='SELECT * FROM Game WHERE tableNo=6 AND status=\'ongoing\'';
+  sql7='SELECT * FROM Game WHERE tableNo=7 AND status=\'ongoing\'';
+  sql8='SELECT * FROM Game WHERE tableNo=8 AND status=\'ongoing\'';
+  let tab1=await selectStatementMultipleRowsTogether(db,sql1).then(rows=>
+      {
+        return rows;
+      })
+  let tab2=await selectStatementMultipleRowsTogether(db,sql2).then(rows=>
+      {
+        return rows;
+      })
+  let tab3=await selectStatementMultipleRowsTogether(db,sql3).then(rows=>
+      {
+        return rows;
+      })
+  let tab4=await selectStatementMultipleRowsTogether(db,sql4).then(rows=>
+      {
+        return rows;
+      })
+  let tab5=await selectStatementMultipleRowsTogether(db,sql5).then(rows=>
+      {
+        return rows;
+      })
+  let tab6=await selectStatementMultipleRowsTogether(db,sql6).then(rows=>
+      {
+        return rows;
+      })
+  let tab7=await selectStatementMultipleRowsTogether(db,sql7).then(rows=>
+      {
+        return rows;
+      })
+  let tab8=await selectStatementMultipleRowsTogether(db,sql8).then(rows=>
+      {
+        return rows;
+      })
+      
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  // return new Promise(function(resolve, reject) {
+  //   resolve(rows);
+  //  });
+  return Promise.all([tab1, tab2, tab3,tab4, tab5, tab6,tab7, tab8]);
+}
+
+
 
 //Unique Constraint Failed (errno:19)
 module.exports.runDuplicateInsertQuery = () =>
