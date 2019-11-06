@@ -71,9 +71,8 @@ ipc.on('error-dialog',function(event,message){
     dialog.showErrorBox("ERROR",message)
 })
 
-
-
-ipc.on('start-game-single',function(event, tableNumber, status, gameType, id1, id2, startTime,createDate){
+//Starting Single Game
+ipc.on('start-game-single',function(event, tableNumber, status, gameType, id1, id2, startTime){
     console.log(tableNumber)
     console.log(status)
     console.log(gameType)
@@ -83,6 +82,12 @@ ipc.on('start-game-single',function(event, tableNumber, status, gameType, id1, i
     console.log(createDate)
     connections.startGame(tableNumber, status, gameType, id1, id2, startTime,createDate);
 })
+
+
+
+
+
+
 
 ipc.on('add-order',function(event,kitchenVal,kitchenAmt,p1,p2,startTime, final,type, table){
     console.log(global.sharedObj.player1)
