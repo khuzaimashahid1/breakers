@@ -16,7 +16,7 @@
     <a href="SummeryTab.html">Summary</a>
 </div>
 <div class="topnav central">
-    <a class="active" href="DirnksTab.html">Place Order</a>
+    <a class="active" href="DrinksTab.html">Place Order</a>
     <a href="AddStockTabDinks.html">Add Stock</a>
     <a href="DrinksStockItem.html">New Drink Stock Item</a>
     <a href="DrinksSummey.html">Summary</a>
@@ -27,7 +27,7 @@
         <fieldset>
             <div class="form-group">
                 <label for="Name">Name:</label>
-                <input Name="name" id="Student" />
+                <input Name="name" id="name" />
             </div>
             <div class="form-group">
                 <label for="Order Item">Order Item</label>
@@ -35,13 +35,13 @@
             </div>
             <div class="form-group">
                 <label for="price">Price:</label>
-                <input name="price" id="price" />
+                <input type="number" name="price" id="price" />
             </div>
             
-            <input name="btnAddBill" type="button" class="button" value="Add Bill" />
+            <input onclick="placeOrder()" name="btnAddBill" type="button" class="button" value="Add Bill" />
         </fieldset>
     </form>
 </div>
-
+<script src="../drinks.js"></script>
 </body>
 </html>

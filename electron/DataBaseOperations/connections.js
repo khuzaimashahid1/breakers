@@ -149,6 +149,33 @@ module.exports.getCustomers =  async() =>
    });
 }
 
+
+
+module.exports.startGame=(tableNumber, status, gameType, id1, id2, startTime,createDate)=>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  db.run('Insert into game ( tableNo, status ,  gameType , customerId1  , customerId2   , startTime , createDate ) values (?,?,?,?,?,?,?)', [tableNumber, status, gameType, id1, id2, startTime,createDate], (err) => {
+    if(err) {
+      return console.log(err.message); 
+    }
+    console.log('Game Started');
+  })
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+
+}
+
 //Unique Constraint Failed (errno:19)
 module.exports.runDuplicateInsertQuery = () =>
 {

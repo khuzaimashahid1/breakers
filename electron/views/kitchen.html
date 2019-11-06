@@ -9,7 +9,7 @@
     <div class="topnav">
         <a href="tables.html">Tables</a>
         <a class="active" href="kitchen.html">Kitchen</a>
-        <a href="DirnksTab.html">Drinks</a>
+        <a href="DrinksTab.html">Drinks</a>
         <a href="CigeratteTab.html">Cigarettes</a>
         <a >Expense</a>
         <a href="SummeryTab.html">Summary</a>
@@ -20,7 +20,7 @@
       </div>
 
 <div id="form">
-    <form action="" onchange="PlaceOrder()" method="post" name="registration" class="register">
+    <form action="" method="post" name="registration" class="register">
         <fieldset>
             <div class="form-group">
                 <label for="Name">Name:</label>
@@ -32,10 +32,10 @@
             </div>
             <div class="form-group">
                 <label for="price">Price:</label>
-                <input name="price" id="price" />
+                <input type="number" name="price" id="price" />
             </div>
             
-            <input name="btnAddBill" type="button" class="button" value="Add Bill" />
+            <input onclick="placeOrder()" name="btnAddBill" id="addOrder" type="button" class="button" value="Add Bill" />
         </fieldset>
     </form>
 </div>

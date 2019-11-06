@@ -24,8 +24,7 @@ tab1.addEventListener('click',function(event){
             maximizable:false,
             webPreferences: {
                 nativeWindowOpen: true,
-                nodeIntegration: true,
-                webviewTag: true
+                nodeIntegration: true
                 
             }
         });
@@ -35,7 +34,7 @@ tab1.addEventListener('click',function(event){
             slashes: "true",
             
         }))
-        remote.getGlobal('sharedObj').tableNumber = "Table1"
+        remote.getGlobal('sharedObj').tableNumber = 1;
         // winTab01.on('close',function(event){
         //     tab1.setAttribute('disabled',false)
         // })

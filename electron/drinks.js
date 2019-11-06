@@ -13,10 +13,10 @@ function placeOrder(){
         console.log(item)
         console.log(price)
         if(name!=''&&item!=''&&price!=''){
-            ipc.send('place-kitchen-order',name,item,price)
+            ipc.send('place-drink-order',name,item,price)
             remote.getCurrentWindow().reload()
         }
         else{
-            ipc.send('error-dialog',"Empty Fields")
+            ipc.send('error-dialog',"Empty fields")
         }
 }

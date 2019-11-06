@@ -31,7 +31,7 @@ connections.getCustomers().then(rows=>
         console.log("Players added")
         // console.log(rows) ;
     });
-// let winTab11 = remote.getGlobal('winTab11')
+
 function createWindow(){
     win = new BrowserWindow({
         webPreferences: {
@@ -52,19 +52,36 @@ function createWindow(){
     })
 }
 
-ipc.on('start-game-single',function(event, table, p1, p2, fin, startTime, status){
-    
-    
-    global.sharedObj = {
-        tableNumber:table,
-        game:'single',
-        player1: p1,
-        player2: p2,
-        final: fin,
-        start: startTime,
-        status1:status
-    }
-    console.log(table)
+//Place Kitchen Order
+ipc.on('place-kitchen-order',function(event,customerName,orderItem,price){
+    console.log(customerName)
+    console.log(orderItem)
+    console.log(price)
+})
+
+//Place Drink Order
+ipc.on('place-drink-order',function(event,customerName,orderItem,price){
+    console.log(customerName)
+    console.log(orderItem)
+    console.log(price)
+})
+
+//Error Dialouge Box Pop-up
+ipc.on('error-dialog',function(event,message){
+    dialog.showErrorBox("ERROR",message)
+})
+
+
+
+ipc.on('start-game-single',function(event, tableNumber, status, gameType, id1, id2, startTime,createDate){
+    console.log(tableNumber)
+    console.log(status)
+    console.log(gameType)
+    console.log(id1)
+    console.log(id2)
+    console.log(startTime)
+    console.log(createDate)
+    connections.startGame(tableNumber, status, gameType, id1, id2, startTime,createDate);
 })
 
 ipc.on('add-order',function(event,kitchenVal,kitchenAmt,p1,p2,startTime, final,type, table){
@@ -118,9 +135,6 @@ ipc.on('start-game-century',function(event, table, p1, p2, fin, startTime, statu
     console.log(table)
 })
 
-ipc.on('empty-single-game',function(event){
-    dialog.showErrorBox("OOPS!",'Empty fields')
-})
 
 app.on('ready', createWindow);
 
