@@ -2,11 +2,42 @@
 <html>
 
 <style>
-  input,
+ 
+  .singleGame {
+    justify-content: center;
+    border: 1px #000000 solid;
+    justify-content: center;
+    align-content: center;
+    padding: 30px;
+  }
+
+  .selectBoxContainer {
+    border: 1px rgb(0, 0, 0) solid;
+    text-align: center;
+    padding: 30px;
+  }
+
   select {
     width: 100%;
     padding: 12px 20px;
-    margin: 8px 0;
+    /* margin: 8px 0; */
+    display: inline-block;
+    text-align: center;
+    text-align-last: center;
+    font-size: 18px;
+    font-style: bold;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+
+  input {
+    width: 40%;
+    margin-left: 28%;
+    padding: 12px 20px;
+    text-align: center;
+    align-self: center;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -14,11 +45,13 @@
   }
 
   button {
-    width: 100%;
+    width: 20%;
     background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
-    margin: 8px 0;
+    margin-left:38%;
+    margin-bottom: 10px;
+    margin-top: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -26,31 +59,54 @@
 
   input[type=submit]:hover {
     background-color: #45a049;
-  }
 
+  }
+  .label{
+    margin-left:40%;
+    
+    margin-bottom: 3px;
+  }
+  
   div {
     border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
+    background-color: #5066af;
+    justify-content: center;
+
   }
+  
 
   h1 {
     font-family: Arial, Helvetica, sans-serif;
     font-style: italic
   }
-  .suggestion{
-    color:black;
+
+  .removeField{
+    width: 30px;
+    height: 30px;
+    text-align: center !important;
+    margin-left: 45%;
+    float: center;
+    background-color: red;
+  }
+  .centuryPlayers{
+    margin-left: 40%;
+
+  }
+  .suggestion {
+    color: black;
     font-weight: 600;
-}
-.suggestion:hover{
-    color:blue;
+  }
+
+  .suggestion:hover {
+    color: blue;
     font-weight: 600;
     text-decoration: underline;
-}
-ul
-{
-  list-style-type: none;
-}
+  }
+
+  ul {
+    list-style-type: circle;
+    margin-left: 30%;
+  }
 </style>
 
 <head>
@@ -58,7 +114,7 @@ ul
 </head>
 
 <body>
-  <div id="d1">
+  <div id="d1" class='selectBoxContainer'>
     <select id="selectBox" onchange="selectGame()" name="Game Type">
       <option id="a" value="Choose">Game Category</option>
       <option id="s" value="single">Single</option>
@@ -67,61 +123,72 @@ ul
     </select>
 
   </div>
-  <div id="single">
-    <input type="text" id="singlePlayer1" placeholder="Player 1">
-    <ul id="singlePlayers1" >
+  <div id="single" class='singleGame'>
+    <input type="text" id="singlePlayer1" placeholder="Player 1"/>
+    <ul id="singlePlayers1">
     </ul>
-    <label id="label_1">vs</label>
-    <input type="text" id="singlePlayer2" placeholder="Player 2">
-    <ul id="singlePlayers2" >
+    <label id="label_1" style="margin: 45%;">vs</label>
+    <br />
+    <input type="text" id="singlePlayer2" placeholder="Player 2"/>
+    <ul id="singlePlayers2">
     </ul>
-    <label id="startTimeSingle">Start Time:</label>
+    <label id="startTimeSingle" class="label">Start Time:</label>
+    <br/>
     <button id="buttonSingle">Start Game</button>
   </div>
 
-  <div id="double">
-      <input type="text" id="doublePlayer1"  placeholder="Player 1">
-      <ul id="doublePlayers1" >
-      </ul>
-      <input type="text" id="doublePlayer2"  placeholder="Player 2">
-      <ul id="doublePlayers2" >
-      </ul>
-      <label id="label_1" >vs</label>
-      <input type="text" id="doublePlayer3"  placeholder="Player 1">
-      <ul id="doublePlayers3" >
-      </ul>
-      <input type="text" id="doublePlayer4"  placeholder="Player 2">
-      <ul id="doublePlayers4" >
-      </ul>
-      <label id="startTimeDouble" >Start Time :</label>
-      <button id="buttonDouble"  >Start Game</button>
+  <div id="double" class='doubleGame'>
+    <input type="text" id="doublePlayer1" placeholder="Player 1"/>
+    <ul id="doublePlayers1">
+    </ul>
+    <input type="text" id="doublePlayer2" placeholder="Player 2"/>
+    <ul id="doublePlayers2">
+    </ul>
+    <label id="label_1" class='label' style="margin: 45%;">vs</label>
+    <br/>
+    <input type="text" id="doublePlayer3" placeholder="Player 1"/>
+    <ul id="doublePlayers3">
+    </ul>
+    <input type="text" id="doublePlayer4" placeholder="Player 2"/>
+    <ul id="doublePlayers4">
+    </ul>
+    <label id="startTimeDouble" class="label">Start Time :</label>
+    <br/>
+    <button id="buttonDouble">Start Game</button>
+
+  </div>
+
+
+  <div id="century" class='centuryGame'>
+    <div id='players'>
+      <div class="playersFieldsWrap">
+        <div>
+          <input type="text" id="centuryPlayer1" name="centuryPlayer1" placeholder="Player 1 Name" />
+          <ul id="centuryPlayers1" >
+          </ul>
+        </div>
+      </div>
+      <button class="btnAddPlayerField">Add Player</button>
+    
+      
+      <label id="startTimeCentury" class='label'>Start Time :</label>
+      <br/>
+      <button id="buttonCentury">Start Game</button>
+      
       
     </div>
 
 
-    <div id="century">
-        <div id='players' >
-         <div class="playersFieldsWrap">
-            <div>
-              <input type="text" id="player_1" name="player_1" placeholder="Player 1 Name">
-            </div>    
-         </div>
-        <button class="btnAddPlayerField">Add Player</button> 
-        <label id="startTimeCentury" >Start Time :</label>
-        <button id="buttonCentury" >Start Game</button>
-      </div>
+    <script src="../tab1.js"></script>
+    <script>
+      const single = document.getElementById("single");
+      single.style.display = "none";
+      const double = document.getElementById("double");
+      double.style.display = "none";
+      const century = document.getElementById("century");
+      century.style.display = "none";
 
-
-  <script src="../tab1.js"></script>
-  <script >
-  const single=document.getElementById("single");
-  single.style.display = "none";
-  const double=document.getElementById("double");
-  double.style.display = "none";
-  const century=document.getElementById("century");
-  century.style.display = "none";
-  
-  </script>
+    </script>
 </body>
 
 </html>
