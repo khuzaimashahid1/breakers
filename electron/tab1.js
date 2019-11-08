@@ -112,12 +112,11 @@ function selectGame()
         renderSuggestions('#centuryPlayer1', '#centuryPlayers1');
         addPlayerCentury();
         removePlayerCentury();
-
-
-
-
-
-
+    }
+    else if( selectedValue == 'Choose'){
+      single.style.display = "none";
+      double.style.display = "none";
+      century.style.display = "none";
     }
 }
 
