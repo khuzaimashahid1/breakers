@@ -9,6 +9,7 @@ const dialog = electron.dialog;
 global.win=null;
 
 global.sharedObj = {
+    tableNumber:null,
     status1:null,
     status2:null,
     status3:null,
