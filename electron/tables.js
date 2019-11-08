@@ -70,6 +70,7 @@ tab8.addEventListener('click',function(event){
 
 //Open 'add game' or 'edit game' window
 function openGameWindow(tableNum,status){
+    remote.getGlobal('sharedObj').tableNumber = tableNum;
     console.log(remote.getGlobal('sharedObj').players)
     if(status.innerHTML==="Vacant"){
         let winTab01= new BrowserWindow({
@@ -90,7 +91,6 @@ function openGameWindow(tableNum,status){
             slashes: "true",
             
         }))
-        remote.getGlobal('sharedObj').tableNumber = tableNum;
     }
     else{
         let winTab11= new BrowserWindow({
