@@ -21,7 +21,8 @@ tab1.addEventListener('click',function(event){
         let winTab01= new BrowserWindow({
             parent:parentWindow,
             title:'Add New Game Now',
-            maximizable:false,
+            fullscreen:true,
+            maximizable:true,
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true,
