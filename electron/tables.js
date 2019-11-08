@@ -76,8 +76,8 @@ function openGameWindow(tableNum,status){
         let winTab01= new BrowserWindow({
             parent:parentWindow,
             title:'Add New Game Now',
-            fullscreen:true,
-            maximizable:true,
+            fullscreen:false,
+            maximizable:false,
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true,
