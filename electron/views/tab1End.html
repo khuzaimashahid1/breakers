@@ -54,21 +54,19 @@
 <body onload="hello()">
 
     <div id="singleEdit">
-      <label id="label_1" class="gwd-label-t43q gwd-label-jm6u">Player 1:</label>
-      <button id="button_4" class="gwd-button-jwif gwd-button-1eg3">Add Extras</button>
-      <label id="label_4" class="gwd-label-t43q gwd-label-anqa gwd-label-w93x">Player 2:</label>
-      <button id="button_2" class="gwd-button-jwif gwd-button-1i0a">Add Extras</button>
-      <label id="label_5" class="gwd-label-15fq">Player 1</label>
-      <input type="radio" id="radio_1" class="gwd-input-16bz gwd-input-2sby">
-      <label id="label_6" class="gwd-label-15fq gwd-label-10dw">Player 2</label>
-      <input type="radio" id="radio_2" class="gwd-input-16bz gwd-input-12ri">
-      <button id="button_5" class="gwd-button-1daa gwd-button-1kkq gwd-button-owz5">Next Game</button>
-      <button id="button_6" class="gwd-button-1daa gwd-button-i5ux">End Game</button>
-      <label id="label_7" class="gwd-label-15fq gwd-label-1dcr">Amount:</label>
-      <input type="number" id="number_1" min="0" step="10" class="gwd-input-1amj" data-gwd-name="Amount">
-      <input type="checkbox" id="checkbox_1" class="gwd-input-1w08">
-      <label id="label_8" class="gwd-label-1cmh">Final:</label>
-      <input type="number" id="number_2" value="3" min="3" max="111" step="2" class="gwd-input-7p4p">
+      <label id="label_1" >Player 1:</label>
+      <input type="radio" id="radio_1" name="loser">
+      <button id="button_4">Add Extras</button>
+      <label id="label_4" >Player 2:</label>
+      <input type="radio" id="radio_1" name="loser">
+      <button id="button_2" >Add Extras</button>
+      <label id="label_7" >Amount:</label>
+      <input disabled="true" type="number" id="number_1" min="0" step="10">
+      <input type="checkbox">
+      <label id="label_8">Final:</label>
+      <input type="number" id="number_2" value='0' disabled="true">
+      <button id="button_5">Next Game</button>
+      <button id="button_6">End Game</button>
     </div>
  
     <div id="doubleEdit">

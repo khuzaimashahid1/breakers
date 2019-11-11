@@ -35,8 +35,8 @@ connections.getOngoingGames().then(result=>
         //First Table Has ongoing game
         if(result[0].length>0)
         {
-            // global.sharedObj.status1 ='Ongoing - '+result[0][0].gameType;
-            global.sharedObj.status1 ='Vacant';
+            global.sharedObj.status1 ='Ongoing - '+result[0][0].gameType;
+            // global.sharedObj.status1 ='Vacant';
             
         }
         else{
