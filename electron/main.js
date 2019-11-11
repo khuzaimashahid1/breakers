@@ -101,6 +101,7 @@ connections.getOngoingGames().then(result=>
     })
 function createWindow(){
     win = new BrowserWindow({
+        fullscreen:true,
         webPreferences: {
             nativeWindowOpen: true,
             nodeIntegration: true,
