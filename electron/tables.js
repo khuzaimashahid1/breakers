@@ -116,14 +116,5 @@ function openGameWindow(tableNum,status){
 
 
 
-ipc.on('start-single-game', (event, playerOne, playerTwo,num, startTime, message) => {
-        console.log(message)
-        console.log(playerOne)
-        console.log(playerTwo)
-        console.log(num)
-        console.log(startTime)
-        s1.innerHTML=remote.getGlobal('sharedObj').status1
-        // remote.getGlobal('sharedObj').status1 = "Occupied"
-        // console.log(tableNumber)
- });
+
 
