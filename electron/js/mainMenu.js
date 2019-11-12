@@ -9,24 +9,7 @@ let parentWindow = remote.getCurrentWindow() //parentWindow
 global.winTab01=null
 global.winTab11=null
 
-let s1 = document.getElementById("s1") //Status of table 1
-let s2 = document.getElementById("s2") //Status of table 2
-let s3 = document.getElementById("s3") //Status of table 3
-let s4 = document.getElementById("s4") //Status of table 4
-let s5 = document.getElementById("s5") //Status of table 5
-let s6 = document.getElementById("s6") //Status of table 6
-let s7 = document.getElementById("s7") //Status of table 7
-let s8 = document.getElementById("s8") //Status of table 8
-
-s1.innerHTML = remote.getGlobal('sharedObj').status[0]; //Update status of table 1
-s2.innerHTML = remote.getGlobal('sharedObj').status[1]; //Update status of table 2
-s3.innerHTML = remote.getGlobal('sharedObj').status[2]; //Update status of table 3
-s4.innerHTML = remote.getGlobal('sharedObj').status[3]; //Update status of table 4
-s5.innerHTML = remote.getGlobal('sharedObj').status[4]; //Update status of table 5
-s6.innerHTML = remote.getGlobal('sharedObj').status[5]; //Update status of table 6
-s7.innerHTML = remote.getGlobal('sharedObj').status[6]; //Update status of table 7
-s8.innerHTML = remote.getGlobal('sharedObj').status[7]; //Update status of table 8
-
+setStatus();
 const tab1 = document.getElementById('tab1');
 const tab2 = document.getElementById('tab2');
 const tab3 = document.getElementById('tab3');
@@ -109,7 +92,32 @@ function openGameWindow(tableNum,status){
     }
 }    
 
+//Set Status Of All Tables
+function setStatus()
+{
+    let statusFieldArray=[];
+    let s1 = document.getElementById("s1") //Status of table 1
+    let s2 = document.getElementById("s2") //Status of table 2
+    let s3 = document.getElementById("s3") //Status of table 3
+    let s4 = document.getElementById("s4") //Status of table 4
+    let s5 = document.getElementById("s5") //Status of table 5
+    let s6 = document.getElementById("s6") //Status of table 6
+    let s7 = document.getElementById("s7") //Status of table 7
+    let s8 = document.getElementById("s8") //Status of table 8
+    statusFieldArray.push(s1);
+    statusFieldArray.push(s2);
+    statusFieldArray.push(s3);
+    statusFieldArray.push(s4);
+    statusFieldArray.push(s5);
+    statusFieldArray.push(s6);
+    statusFieldArray.push(s7);
+    statusFieldArray.push(s8);
 
+    for(let i=0;i<statusFieldArray.length;i++)
+    {
+        statusFieldArray[i].innerHTML=remote.getGlobal('sharedObj').status[i];
+    }
+}
 
 
 
