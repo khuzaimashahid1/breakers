@@ -9,88 +9,65 @@ let status = remote.getGlobal('sharedObj').status1
 var centuryPlayersCount = 1;
 var centuryMaxPlayers = 10;
 
-function selectGame()
-{
+function selectGame() {
     const selectBox = document.getElementById("selectBox");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    const single=document.getElementById("single");
-    const double=document.getElementById("double");
-    const century=document.getElementById("century");
-    const btnStartSingle=document.getElementById("btnStartSingle");
-    const btnStartDouble=document.getElementById("btnStartDouble");
-    const btnStartCentury=document.getElementById("btnStartCentury");
+    const single = document.getElementById("single");
+    const double = document.getElementById("double");
+    const century = document.getElementById("century");
+    const btnStartSingle = document.getElementById("btnStartSingle");
+    const btnStartDouble = document.getElementById("btnStartDouble");
+    const btnStartCentury = document.getElementById("btnStartCentury");
     setStartTime();
-    if(selectedValue=='single')
-    {
-        displayFirstDivOnly(single,double,century);
-        const singleFieldID1='#singlePlayer1';
-        const singleListID1='#singlePlayers1';
-        const singleFieldID2='#singlePlayer2';
-        const singleListID2='#singlePlayers2';
-        renderSuggestions(singleFieldID1,singleListID1);
-        renderSuggestions(singleFieldID2,singleListID2);
-        
-        
-        btnStartSingle.addEventListener('click',function(event){
-            if($(singleFieldID1).val().length !== 0 && $(singleFieldID2).val().length !== 0)
-            {
-                const singlePlayer1=players.filter(player => (player.customerName === ($(singleFieldID1).val())));
-                const singlePlayer2=players.filter(player => (player.customerName === ($(singleFieldID2).val())));
-                if(singlePlayer1.length<1)
-                {
-                    ipc.send('error-dialog',"Player1 Not in Database");
+    if (selectedValue == 'single') {
+        displayFirstDivOnly(single, double, century);
+        const singleFieldID1 = '#singlePlayer1';
+        const singleListID1 = '#singlePlayers1';
+        const singleFieldID2 = '#singlePlayer2';
+        const singleListID2 = '#singlePlayers2';
+        autoComplete('singlePlayer1', players);
+        autoComplete('singlePlayer2', players);
+
+
+
+        btnStartSingle.addEventListener('click', function (event) {
+            if ($(singleFieldID1).val().length !== 0 && $(singleFieldID2).val().length !== 0) {
+                const singlePlayer1 = players.filter(player => (player.customerName === ($(singleFieldID1).val())));
+                const singlePlayer2 = players.filter(player => (player.customerName === ($(singleFieldID2).val())));
+                if (singlePlayer1.length < 1) {
+                    ipc.send('error-dialog', "Player1 Not in Database");
                     $(singleFieldID1).focus();
                 }
-                else if(singlePlayer2.length<1)
-                {
-                    ipc.send('error-dialog',"Player2 Not in Database");
+                else if (singlePlayer2.length < 1) {
+                    ipc.send('error-dialog', "Player2 Not in Database");
                     $(singleFieldID2).focus();
                 }
-                else if(singlePlayer1[0]===singlePlayer2[0])
-                {
-                    ipc.send('error-dialog',"You Have Selected Same Players in Both Fields");
+                else if (singlePlayer1[0] === singlePlayer2[0]) {
+                    ipc.send('error-dialog', "You Have Selected Same Players in Both Fields");
                 }
-                const status="ongoing";
-                const gameType="single";
-                const singlePlayer1Id=singlePlayer1[0].customerId;
-                const singlePlayer2Id=singlePlayer2[0].customerId;
+                const status = "ongoing";
+                const gameType = "single";
+                const singlePlayer1Id = singlePlayer1[0].customerId;
+                const singlePlayer2Id = singlePlayer2[0].customerId;
                 const today = new Date();
                 const startTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
                 createDate = yyyy + '-' + mm + '-' + dd;
-                ipc.send('start-game-single',tableNumber,status,gameType,singlePlayer1Id,singlePlayer2Id,startTime,createDate)
+                ipc.send('start-game-single', tableNumber, status, gameType, singlePlayer1Id, singlePlayer2Id, startTime, createDate)
                 remote.getCurrentWindow().close()
             }
-            else if($(singleFieldID1).val().length === 0 )
-            {
-                ipc.send('error-dialog',"Please Enter Player 1");
+            else if ($(singleFieldID1).val().length === 0) {
+                ipc.send('error-dialog', "Please Enter Player 1");
                 $(singleFieldID1).focus();
             }
-            else if($(singleFieldID2).val().length === 0)
-            {
-                ipc.send('error-dialog',"Please Enter Player 2");
+            else if ($(singleFieldID2).val().length === 0) {
+                ipc.send('error-dialog', "Please Enter Player 2");
                 $(singleFieldID2).focus();
             }
         })
-        
-    } 
-    else  if(selectedValue=='double')
-    {
-        displayFirstDivOnly(double,century,single);
-        const doubleFieldID1='#doublePlayer1';
-        const doubleListID1='#doublePlayers1';
-        const doubleFieldID2='#doublePlayer2';
-        const doubleListID2='#doublePlayers2';
-        const doubleFieldID3='#doublePlayer3';
-        const doubleListID3='#doublePlayers3';
-        const doubleFieldID4='#doublePlayer4';
-        const doubleListID4='#doublePlayers4';
-        renderSuggestions(doubleFieldID1,doubleListID1);
-        renderSuggestions(doubleFieldID2,doubleListID2);
-        renderSuggestions(doubleFieldID3,doubleListID3);
-        renderSuggestions(doubleFieldID4,doubleListID4);
+
     }
     else if (selectedValue == 'double') {
         displayFirstDivOnly(double, century, single);
@@ -102,21 +79,22 @@ function selectGame()
         const doubleListID3 = '#doublePlayers3';
         const doubleFieldID4 = '#doublePlayer4';
         const doubleListID4 = '#doublePlayers4';
-        renderSuggestions(doubleFieldID1, doubleListID1);
-        renderSuggestions(doubleFieldID2, doubleListID2);
-        renderSuggestions(doubleFieldID3, doubleListID3);
-        renderSuggestions(doubleFieldID4, doubleListID4);
+        autoComplete('doublePlayer1', players);
+        autoComplete('doublePlayer2', players);
+        autoComplete('doublePlayer3', players);
+        autoComplete('doublePlayer4', players);
+
     }
     else if (selectedValue == 'century') {
         displayFirstDivOnly(century, single, double);
-        renderSuggestions('#centuryPlayer1', '#centuryPlayers1');
+        autoComplete('centuryPlayer1', players);
         addPlayerCentury();
         removePlayerCentury();
     }
-    else if( selectedValue == 'Choose'){
-      single.style.display = "none";
-      double.style.display = "none";
-      century.style.display = "none";
+    else if (selectedValue == 'Choose') {
+        single.style.display = "none";
+        double.style.display = "none";
+        century.style.display = "none";
     }
 }
 
@@ -130,14 +108,16 @@ function addPlayerCentury() {
             centuryPlayersCount++;
             $(".playersFieldsWrap").append('<div>' +
                 '<input type="text" id="centuryPlayer' + centuryPlayersCount + '" name="centuryPlayer' + centuryPlayersCount + '" placeholder="Player ' + centuryPlayersCount + ' Name"/>' +
-                '<ul id="centuryPlayers'+centuryPlayersCount + '"></ul>' +
                 '</div>');
         }
-        renderSuggestions('#centuryPlayer' + centuryPlayersCount, '#centuryPlayers' + centuryPlayersCount)
-        console.log('#centuryPlayer' + centuryPlayersCount);
+        autoComplete('centuryPlayer' + centuryPlayersCount, players);
         //APPENDING REMOVE BUTTON TO LAST CHILD OF THE WRAPPER CLASS
-        $('.removeField').remove();
-        $('.playersFieldsWrap div:last-child ').append('<button class="removeField">X</button>');
+        // $('.removeField').remove();
+        // $('<div><button class="removeField">X</button></div>').insertAfter('.playersFieldsWrap');
+        if (centuryPlayersCount > 1) {
+            $('.removeField').show();
+        }
+        // $('.playersFieldsWrap div:last-child ').append('<div><button class="removeField">X</button></div>');
         if (centuryPlayersCount == centuryMaxPlayers) {
             $('.btnAddPlayerField').attr("disabled", true);
             $('.btnAddPlayerField').html("Maximum numbers of players added!");
@@ -149,34 +129,21 @@ function addPlayerCentury() {
 
 }
 
-//FUNTION FOR BINDING SUGGESTION RENDERE TO CENTURY PLAYERS
-function bindCenturyPlayersToRenderer() {
-    //BINDING CHILDs WITH SUGGESTION RENDERER
-    var count;
-    for (count = 2; count <= centuryPlayersCount; count++) {
-        renderSuggestions('#centuryPlayer' + count, '#centuryPlayers' + count);
-        console.log('#centuryPlayer' + count, '#centuryPlayers' + count);
-    }
-
-}
-
-
 // FUNCTION FOR REMOVING A PLAYER 
 function removePlayerCentury() {
     //  REMOVING A FIELD BY JQUERY
-    $(".playersFieldsWrap").on("click", ".removeField", function (e) {
+    $('.removeField').on("click", function (e) {
         //user click on remove text
         e.preventDefault();
         if (centuryPlayersCount > 1) {
-            
-            $(this).parent('div').remove(); centuryPlayersCount--;
+
+            $('.playersFieldsWrap div:last-child').remove(); centuryPlayersCount--;
             $('.btnAddPlayerField').attr("disabled", false);
             $('.btnAddPlayerField').html("Add Player");
             $('.btnAddPlayerField').css("background-color", "#4CAF50");
-            if(centuryPlayersCount==1){
-                $('.removeField').remove();
-            }else
-                $('.playersFieldsWrap div:last-child').append('<button class="removeField">X</button>');
+            if (centuryPlayersCount == 1) {
+                $('.removeField').hide();
+            }
         }
     });
 
@@ -229,6 +196,111 @@ function renderSuggestions(fieldID, listID) {
             }
         }
 
+    });
+}
+
+/*
+                AUTO-COMPLETE PLAYER NAME SUGGESTION BOX GENERATOR
+     This method takes input tag id without '#' and players list as parameters.
+          (This method is the alterantive of suggestionRenderer method)
+
+*/
+function autoComplete(input, players) {
+    var inp = document.getElementById(input);
+    console.log(inp)
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function (e) {
+        var listContainerDiv, elementContainerDiv, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false; }
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        listContainerDiv = document.createElement("DIV");
+        listContainerDiv.setAttribute("id", this.id + "autocomplete-list");
+        listContainerDiv.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(listContainerDiv);
+        /*for each item in the array...*/
+        for (i = 0; i < players.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            if (players[i].customerName.substr(0, val.length).toLowerCase() == val.toLowerCase()) {
+                /*create a DIV element for each matching element:*/
+                elementContainerDiv = document.createElement("DIV");
+                /*make the matching letters bold:*/
+                elementContainerDiv.innerHTML = "<strong>" + players[i].customerName.substr(0, val.length) + "</strong>";
+                elementContainerDiv.innerHTML += players[i].customerName.substr(val.length);
+                /*insert a input field that will hold the current array item's value:*/
+                elementContainerDiv.innerHTML += "<input type='hidden' value='" + players[i].customerName + "'>";
+                /*execute a function when someone clicks on the item value (DIV element):*/
+                elementContainerDiv.addEventListener("click", function (e) {
+                    /*insert the value for the autocomplete text field:*/
+                    inp.value = this.getElementsByTagName("input")[0].value;
+                    /*close the list of autocompleted values,
+                    (or any other open lists of autocompleted values:*/
+                    closeAllLists();
+                });
+                listContainerDiv.appendChild(elementContainerDiv);
+            }
+        }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function (e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+            decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+                /*and simulate a click on the "active" item:*/
+                if (x) x[currentFocus].click();
+            }
+        }
+    });
+    function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+            x[i].classList.remove("autocomplete-active");
+        }
+    }
+    function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
     });
 }
 
