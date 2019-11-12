@@ -18,14 +18,14 @@ let s6 = document.getElementById("s6") //Status of table 6
 let s7 = document.getElementById("s7") //Status of table 7
 let s8 = document.getElementById("s8") //Status of table 8
 
-s1.innerHTML = remote.getGlobal('sharedObj').status1; //Update status of table 1
-s2.innerHTML = remote.getGlobal('sharedObj').status2; //Update status of table 2
-s3.innerHTML = remote.getGlobal('sharedObj').status3; //Update status of table 3
-s4.innerHTML = remote.getGlobal('sharedObj').status4; //Update status of table 4
-s5.innerHTML = remote.getGlobal('sharedObj').status5; //Update status of table 5
-s6.innerHTML = remote.getGlobal('sharedObj').status6; //Update status of table 6
-s7.innerHTML = remote.getGlobal('sharedObj').status7; //Update status of table 7
-s8.innerHTML = remote.getGlobal('sharedObj').status8; //Update status of table 8
+s1.innerHTML = remote.getGlobal('sharedObj').status[0]; //Update status of table 1
+s2.innerHTML = remote.getGlobal('sharedObj').status[1]; //Update status of table 2
+s3.innerHTML = remote.getGlobal('sharedObj').status[2]; //Update status of table 3
+s4.innerHTML = remote.getGlobal('sharedObj').status[3]; //Update status of table 4
+s5.innerHTML = remote.getGlobal('sharedObj').status[4]; //Update status of table 5
+s6.innerHTML = remote.getGlobal('sharedObj').status[5]; //Update status of table 6
+s7.innerHTML = remote.getGlobal('sharedObj').status[6]; //Update status of table 7
+s8.innerHTML = remote.getGlobal('sharedObj').status[7]; //Update status of table 8
 
 const tab1 = document.getElementById('tab1');
 const tab2 = document.getElementById('tab2');
@@ -80,13 +80,12 @@ function openGameWindow(tableNum,status){
             maximizable:false,
             webPreferences: {
                 nativeWindowOpen: true,
-                nodeIntegration: true,
-                webviewTag: true
+                nodeIntegration: true
                 
             }
         });
         winTab01.loadURL(url.format({
-            pathname : path.join(__dirname,"./tab1Start.html"),
+            pathname : path.join(__dirname,"./tableStart.html"),
             protocol: "file",
             slashes: "true",
             
@@ -103,7 +102,7 @@ function openGameWindow(tableNum,status){
             }
         });
         winTab11.loadURL(url.format({
-            pathname : path.join(__dirname,"./tab1End.html"),
+            pathname : path.join(__dirname,"./tableEnd.html"),
             protocol: "file",
             slashes: "true"
         }))

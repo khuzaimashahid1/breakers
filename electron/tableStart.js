@@ -5,7 +5,6 @@ let win = remote.getGlobal('win')
 const players = remote.getGlobal('sharedObj').players;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
-let status = remote.getGlobal('sharedObj').status1
 var centuryPlayersCount = 1;
 var centuryMaxPlayers = 10;
 
