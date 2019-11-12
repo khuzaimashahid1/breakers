@@ -19,71 +19,7 @@ function selectGame() {
     const btnStartDouble = document.getElementById("btnStartDouble");
     const btnStartCentury = document.getElementById("btnStartCentury");
     setStartTime();
-    if (selectedValue == 'single') {
-        displayFirstDivOnly(single, double, century);
-        const singleFieldID1 = '#singlePlayer1';
-        const singleListID1 = '#singlePlayers1';
-        const singleFieldID2 = '#singlePlayer2';
-        const singleListID2 = '#singlePlayers2';
-        autoComplete('singlePlayer1', players);
-        autoComplete('singlePlayer2', players);
-
-
-
-        btnStartSingle.addEventListener('click', function (event) {
-            if ($(singleFieldID1).val().length !== 0 && $(singleFieldID2).val().length !== 0) {
-                const singlePlayer1 = players.filter(player => (player.customerName === ($(singleFieldID1).val())));
-                const singlePlayer2 = players.filter(player => (player.customerName === ($(singleFieldID2).val())));
-                if (singlePlayer1.length < 1) {
-                    ipc.send('error-dialog', "Player1 Not in Database");
-                    $(singleFieldID1).focus();
-                }
-                else if (singlePlayer2.length < 1) {
-                    ipc.send('error-dialog', "Player2 Not in Database");
-                    $(singleFieldID2).focus();
-                }
-                else if (singlePlayer1[0] === singlePlayer2[0]) {
-                    ipc.send('error-dialog', "You Have Selected Same Players in Both Fields");
-                }
-                const status = "ongoing";
-                const gameType = "single";
-                const singlePlayer1Id = singlePlayer1[0].customerId;
-                const singlePlayer2Id = singlePlayer2[0].customerId;
-                const today = new Date();
-                const startTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                var yyyy = today.getFullYear();
-                createDate = yyyy + '-' + mm + '-' + dd;
-                ipc.send('start-game-single', tableNumber, status, gameType, singlePlayer1Id, singlePlayer2Id, startTime, createDate)
-                remote.getCurrentWindow().close()
-            }
-            else if ($(singleFieldID1).val().length === 0) {
-                ipc.send('error-dialog', "Please Enter Player 1");
-                $(singleFieldID1).focus();
-            }
-            else if ($(singleFieldID2).val().length === 0) {
-                ipc.send('error-dialog', "Please Enter Player 2");
-                $(singleFieldID2).focus();
-            }
-        })
-
-    }
-    else if (selectedValue == 'double') {
-        displayFirstDivOnly(double, century, single);
-        const doubleFieldID1 = '#doublePlayer1';
-        const doubleListID1 = '#doublePlayers1';
-        const doubleFieldID2 = '#doublePlayer2';
-        const doubleListID2 = '#doublePlayers2';
-        const doubleFieldID3 = '#doublePlayer3';
-        const doubleListID3 = '#doublePlayers3';
-        const doubleFieldID4 = '#doublePlayer4';
-        const doubleListID4 = '#doublePlayers4';
-        autoComplete('doublePlayer1', players);
-        autoComplete('doublePlayer2', players);
-        autoComplete('doublePlayer3', players);
-        autoComplete('doublePlayer4', players);
-
+    
     if(selectedValue=='single')
     {
         displayFirstDivOnly(single,double,century);
@@ -91,7 +27,8 @@ function selectGame() {
         let gameType="single";
         for (let i=1;i<=playersCount;i++)
         {
-            renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);    
+            // renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);
+            autoComplete(gameType+'Player'+i,players);    
         }
         btnStartSingle.addEventListener('click',function(event)
         {
@@ -106,7 +43,8 @@ function selectGame() {
         let gameType="double";
         for (let i=1;i<=playersCount;i++)
         {
-            renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);    
+            // renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);
+            autoComplete(gameType+'Player'+i,players);        
         }
         btnStartDouble.addEventListener('click',function(event)
         {
@@ -130,7 +68,7 @@ function selectGame() {
         double.style.display = "none";
         century.style.display = "none";
     }
-}
+
 
 // FUNCTION FOR ADDING PLAYER IN CENTURY
 function addPlayerCentury() {
