@@ -20,7 +20,7 @@ let s8 = document.getElementById("s8") //Status of table 8
 
 s1.innerHTML = remote.getGlobal('sharedObj').status1; //Update status of table 1
 s2.innerHTML = remote.getGlobal('sharedObj').status2; //Update status of table 2
-s3.innerHTML = remote.getGlobal('sharedObj').status4; //Update status of table 3
+s3.innerHTML = remote.getGlobal('sharedObj').status3; //Update status of table 3
 s4.innerHTML = remote.getGlobal('sharedObj').status4; //Update status of table 4
 s5.innerHTML = remote.getGlobal('sharedObj').status5; //Update status of table 5
 s6.innerHTML = remote.getGlobal('sharedObj').status6; //Update status of table 6

@@ -187,8 +187,6 @@ function getAllOngoingGames()
             if(result[0].length>0)
             {
                 global.sharedObj.status1 ='Ongoing - '+result[0][0].gameType;
-                // global.sharedObj.status1 ='Vacant';
-                
             }
             else{
                 global.sharedObj.status1 ='Vacant'
