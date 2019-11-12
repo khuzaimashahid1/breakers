@@ -5,6 +5,10 @@ const path = require("path");
 const url = require("url");
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
+const connections=require("./DataBaseOperations/connections.js");
+connections.createTables();
+getAllCustomers();
+getAllOngoingGames();
 
 global.win=null;
 
@@ -22,85 +26,9 @@ global.sharedObj = {
 }
 
 
-const connections=require("./DataBaseOperations/connections.js");
-connections.createTables();
-connections.getCustomers().then(rows=>
-    {
-        global.sharedObj.players =rows;
-        console.log("Players added")
-        // console.log(rows) ;
-    });
-connections.getOngoingGames().then(result=>
-    {
-        //First Table Has ongoing game
-        if(result[0].length>0)
-        {
-            // global.sharedObj.status1 ='Ongoing - '+result[0][0].gameType;
-            global.sharedObj.status1 ='Vacant';
-            
-        }
-        else{
-            global.sharedObj.status1 ='Vacant'
-        }
-        //Table 2 Has ongoing game
-        if(result[1].length>0)
-        {
-            global.sharedObj.status2 ='Ongoing - '+result[1][0].gameType;
-        }
-        else{
-            global.sharedObj.status2 ='Vacant'
-        }
-        //Table 3 Has ongoing game
-        if(result[2].length>0)
-        {
-            global.sharedObj.status3 ='Ongoing - '+result[2][0].gameType;
-        }
-        else{
-            global.sharedObj.status3 ='Vacant'
-        }
-        //Table 4 Has ongoing game
-        if(result[3].length>0)
-        {
-            global.sharedObj.status4 ='Ongoing - '+result[3][0].gameType;
-        }
-        else{
-            global.sharedObj.status4 ='Vacant'
-        }
-        //Table 5 Has ongoing game
-        if(result[4].length>0)
-        {
-            global.sharedObj.status5 ='Ongoing - '+result[4][0].gameType;
-        }
-        else{
-            global.sharedObj.status5 ='Vacant'
-        }
-        //Table 6 Has ongoing game
-        if(result[5].length>0)
-        {
-            global.sharedObj.status6 ='Ongoing - '+result[5][0].gameType;
-        }
-        else{
-            global.sharedObj.status6 ='Vacant'
-        }
-        //Table 7 Has ongoing game
-        if(result[6].length>0)
-        {
-            global.sharedObj.status7 ='Ongoing - '+result[6][0].gameType;
-        }
-        else{
-            global.sharedObj.status7 ='Vacant'
-        }
-        //Table 8 Has ongoing game
-        if(result[7].length>0)
-        {
-            global.sharedObj.status8 ='Ongoing - '+result[7][0].gameType;
-        }
-        else{
-            global.sharedObj.status8 ='Vacant'
-        }
-    })
 function createWindow(){
     win = new BrowserWindow({
+        fullscreen:true,
         webPreferences: {
             nativeWindowOpen: true,
             nodeIntegration: true,
@@ -138,19 +66,34 @@ ipc.on('error-dialog',function(event,message){
     dialog.showErrorBox("ERROR",message)
 })
 
-//Starting Single Game
-ipc.on('start-game-single',function(event, tableNumber, status, gameType, id1, id2, startTime){
+//Starting Game
+ipc.on('start-game',function(event, tableNumber, status, gameType, id1, id2,id3,id4,id5,id6,id7,id8,id9,id10, startTime,createDate){
     console.log(tableNumber)
     console.log(status)
     console.log(gameType)
     console.log(id1)
     console.log(id2)
+    console.log(id3)
+    console.log(id4)
+    console.log(id5)
+    console.log(id6)
+    console.log(id7)
+    console.log(id8)
+    console.log(id9)
+    console.log(id10)
     console.log(startTime)
     console.log(createDate)
-    connections.startGame(tableNumber, status, gameType, id1, id2, startTime,createDate);
+    connections.startGame(tableNumber, status, gameType,  id1, id2,id3,id4,id5,id6,id7,id8,id9,id10, startTime,createDate).then(result=>
+        {
+            if(result===true)
+            {
+                getAllOngoingGames();
+                win.reload();
+            }
+            
+        });
+    
 })
-
-
 
 
 
@@ -221,3 +164,90 @@ app.on('activate',()=>{
         createWindow()
     }
 })
+
+//Gets All Customers
+function getAllCustomers()
+{
+    connections.getCustomers().then(rows=>
+        {
+            
+            global.sharedObj.players =rows;
+            console.log("Players added")
+            // console.log(rows) ;
+        });
+}
+
+//Gets All ongoing Games on All Tables
+function getAllOngoingGames()
+{
+    connections.getOngoingGames().then(result=>
+        {
+            
+            //First Table Has ongoing game
+            if(result[0].length>0)
+            {
+                global.sharedObj.status1 ='Ongoing - '+result[0][0].gameType;
+                // global.sharedObj.status1 ='Vacant';
+                
+            }
+            else{
+                global.sharedObj.status1 ='Vacant'
+            }
+            //Table 2 Has ongoing game
+            if(result[1].length>0)
+            {
+                global.sharedObj.status2 ='Ongoing - '+result[1][0].gameType;
+            }
+            else{
+                global.sharedObj.status2 ='Vacant'
+            }
+            //Table 3 Has ongoing game
+            if(result[2].length>0)
+            {
+                global.sharedObj.status3 ='Ongoing - '+result[2][0].gameType;
+            }
+            else{
+                global.sharedObj.status3 ='Vacant'
+            }
+            //Table 4 Has ongoing game
+            if(result[3].length>0)
+            {
+                global.sharedObj.status4 ='Ongoing - '+result[3][0].gameType;
+            }
+            else{
+                global.sharedObj.status4 ='Vacant'
+            }
+            //Table 5 Has ongoing game
+            if(result[4].length>0)
+            {
+                global.sharedObj.status5 ='Ongoing - '+result[4][0].gameType;
+            }
+            else{
+                global.sharedObj.status5 ='Vacant'
+            }
+            //Table 6 Has ongoing game
+            if(result[5].length>0)
+            {
+                global.sharedObj.status6 ='Ongoing - '+result[5][0].gameType;
+            }
+            else{
+                global.sharedObj.status6 ='Vacant'
+            }
+            //Table 7 Has ongoing game
+            if(result[6].length>0)
+            {
+                global.sharedObj.status7 ='Ongoing - '+result[6][0].gameType;
+            }
+            else{
+                global.sharedObj.status7 ='Vacant'
+            }
+            //Table 8 Has ongoing game
+            if(result[7].length>0)
+            {
+                global.sharedObj.status8 ='Ongoing - '+result[7][0].gameType;
+            }
+            else{
+                global.sharedObj.status8 ='Vacant'
+            }
+        })
+}

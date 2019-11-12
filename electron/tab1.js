@@ -84,12 +84,46 @@ function selectGame() {
         autoComplete('doublePlayer3', players);
         autoComplete('doublePlayer4', players);
 
+    if(selectedValue=='single')
+    {
+        displayFirstDivOnly(single,double,century);
+        let playersCount=2;
+        let gameType="single";
+        for (let i=1;i<=playersCount;i++)
+        {
+            renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);    
+        }
+        btnStartSingle.addEventListener('click',function(event)
+        {
+            compareAndStartGame(gameType,playersCount);
+        })
+        
+    } 
+    else  if(selectedValue=='double')
+    {
+        displayFirstDivOnly(double,century,single);
+        let playersCount=4;
+        let gameType="double";
+        for (let i=1;i<=playersCount;i++)
+        {
+            renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);    
+        }
+        btnStartDouble.addEventListener('click',function(event)
+        {
+            compareAndStartGame(gameType,playersCount);
+        })
     }
+    
     else if (selectedValue == 'century') {
         displayFirstDivOnly(century, single, double);
         autoComplete('centuryPlayer1', players);
         addPlayerCentury();
         removePlayerCentury();
+        btnStartCentury.addEventListener('click',function(event)
+        {
+            compareAndStartGame("century",centuryPlayersCount);
+        
+        })
     }
     else if (selectedValue == 'Choose') {
         single.style.display = "none";
@@ -304,6 +338,60 @@ function autoComplete(input, players) {
     });
 }
 
+//Compare All Names in fields
+function compareAndStartGame(gameType,playersCount)
+{
+    playersArray=[]
+    for (let i=1;i<=playersCount;i++)
+    {
+        let field='#'+gameType+'Player'+i;
+        let fieldValue=$(field).val();
+        if(fieldValue.length=== 0)
+        {
+            $(field).focus();
+            ipc.send('error-dialog',"Please Enter Player "+i);
+            return;
+        }
+        else
+        {
+            const player=players.filter(player => (player.customerName === (fieldValue)));
+            if(player.length<1)
+            {
+                $(field).focus();
+                ipc.send('error-dialog',"Player "+i+" not in Database");
+                return;
+            }
+            else
+            {
+                if (playersArray.indexOf(player[0].customerId) !== -1) 
+                {
+                    $(field).focus();
+                    ipc.send('error-dialog',"Player "+i+" is the same as Player "+(playersArray.indexOf(player[0].customerId)+1));
+                    return;
+                }
+                else
+                {
+                    playersArray.push(player[0].customerId);
+                }
+                
+            }
+        }
+    }
+    for(let i=playersArray.length;i<=9;i++)
+    {
+        playersArray.push(null);
+    }
+    const status="ongoing";
+    const today = new Date();
+    const startTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const createDate = yyyy + '-' + mm + '-' + dd;
+    ipc.send('start-game',tableNumber,status,gameType,...playersArray,startTime,createDate)
+    remote.getCurrentWindow().close()
+                    
+}
 
 
 
@@ -749,4 +837,4 @@ function table1() {
 //             remote.getCurrentWindow().reload()
 
 //         })
-// })
+}

@@ -17,26 +17,6 @@ var util=require('util')
  
 
 
-module.exports.initDB= () =>
-{
-  let db = new sqlite3.Database('../db/breakers.db', (err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-    console.log('Connected to the Breakers SQlite database.');
-    
-  });
-}
-
-module.exports.closeDB= (db) =>
-{
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-    console.log('Close the database connection.');
-  });
-}
 
 
 module.exports.openConnectionReadWrite= (db) =>
@@ -50,15 +30,6 @@ module.exports.openConnectionReadWrite= (db) =>
   });
 }
 
-function selectStatementMultipleRowsTogether (db,sql)
-{
-  return new Promise(function(resolve, reject) {
-    db.all(sql, (err, rows) => {
-        if (err !== null) reject(err);
-        else resolve(rows);
-    });
-  });
-}
 
 module.exports.selectStatementSignleRow= (db,sql,params) =>
 {
@@ -85,6 +56,32 @@ module.exports.selectStatementMultipleRowsSeperately= (db,sql,params) =>
    
 }
 
+
+//open Database
+module.exports.openDB= () =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+    return db;
+  });
+}
+
+//Close Databse
+module.exports.closeDB= () =>
+{
+  let db = new sqlite3.Database('./db/breakers.db');
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+}
+
+//Create Tables
 module.exports.createTables = () =>
 {
   let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -120,6 +117,18 @@ module.exports.createTables = () =>
   });
 }
 
+//Select Multiple Rows Together with Promise Return
+function selectStatementMultipleRowsTogether (db,sql)
+{
+  return new Promise(function(resolve, reject) {
+    db.all(sql, (err, rows) => {
+        if (err !== null) reject(err);
+        else resolve(rows);
+    });
+  });
+}
+
+
 //Get Customers
 module.exports.getCustomers =  async() =>
 {
@@ -149,9 +158,8 @@ module.exports.getCustomers =  async() =>
    });
 }
 
-
 //Start Game
-module.exports.startGame=(tableNumber, status, gameType, id1, id2, startTime,createDate)=>
+module.exports.startGame=(tableNumber, status, gameType, id1, id2,id3,id4,id5,id6,id7,id8,id9,id10, startTime,createDate)=>
 {
   let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -159,21 +167,23 @@ module.exports.startGame=(tableNumber, status, gameType, id1, id2, startTime,cre
     }
     console.log('Connected to the breakers database.');
   });
-  
-  db.run('Insert into game ( tableNo, status ,  gameType , customerId1  , customerId2   , startTime , createDate ) values (?,?,?,?,?,?,?)', [tableNumber, status, gameType, id1, id2, startTime,createDate], (err) => {
-    if(err) {
-      return console.log(err.message); 
-    }
-    console.log('Game Started');
-  })
 
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-    console.log('Close the database connection.');
+  return new Promise(function(resolve, reject) {
+    db.run('Insert into game ( tableNo, status ,  gameType , customerId1  , customerId2  , customerId3  , customerId4 , customerId5  , customerId6  , customerId7  , customerId8 , customerId9  , customerId10 , startTime , createDate ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [tableNumber, status, gameType, id1, id2, id3,id4,id5,id6,id7,id8,id9,id10, startTime,createDate], (err) => {
+        if (err !== null) 
+        reject(err);
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
   });
-
 }
 
 

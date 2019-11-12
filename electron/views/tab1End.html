@@ -54,43 +54,44 @@
 <body onload="hello()">
 
     <div id="singleEdit">
-      <label id="label_1" class="gwd-label-t43q gwd-label-jm6u">Player 1:</label>
-      <button id="button_4" class="gwd-button-jwif gwd-button-1eg3">Add Extras</button>
-      <label id="label_4" class="gwd-label-t43q gwd-label-anqa gwd-label-w93x">Player 2:</label>
-      <button id="button_2" class="gwd-button-jwif gwd-button-1i0a">Add Extras</button>
-      <label id="label_5" class="gwd-label-15fq">Player 1</label>
-      <input type="radio" id="radio_1" class="gwd-input-16bz gwd-input-2sby">
-      <label id="label_6" class="gwd-label-15fq gwd-label-10dw">Player 2</label>
-      <input type="radio" id="radio_2" class="gwd-input-16bz gwd-input-12ri">
-      <button id="button_5" class="gwd-button-1daa gwd-button-1kkq gwd-button-owz5">Next Game</button>
-      <button id="button_6" class="gwd-button-1daa gwd-button-i5ux">End Game</button>
-      <label id="label_7" class="gwd-label-15fq gwd-label-1dcr">Amount:</label>
-      <input type="number" id="number_1" min="0" step="10" class="gwd-input-1amj" data-gwd-name="Amount">
-      <input type="checkbox" id="checkbox_1" class="gwd-input-1w08">
-      <label id="label_8" class="gwd-label-1cmh">Final:</label>
-      <input type="number" id="number_2" value="3" min="3" max="111" step="2" class="gwd-input-7p4p">
+      <label id="player1Single" >Player 1:</label>
+      <input type="radio" id="singlePlayer1" name="loser">
+      <button id="addSinglePlayerExtras1">Add Extras</button>
+      <label id="player2Single" >Player 2:</label>
+      <input type="radio" id="singlePlayer2" name="loser">
+      <button id="addSinglePlayerExtras2" >Add Extras</button>
+      <label id="amountLabelSingle" >Amount:</label>
+      <input name="amountSingle" disabled="true" type="number" id="amountSingle" min="0" step="10">
+      <input type="checkbox" name="finalSingleCheckbox" id="finalSingleCheckbox">
+      <label id="finalLabel">Final:</label>
+      <input type="finalSingle" id="finalSingle" value='0' step="2" disabled="true">
+      <button id="nextGameSingle">Next Game</button>
+      <button id="endGameSingle">End Game</button>
     </div>
  
     <div id="doubleEdit">
-      <label id="label_1" class="gwd-label-t43q gwd-label-jm6u">Player 1:</label>
-      <button id="button_1" class="gwd-button-jwif gwd-button-4f3s">Add Extras</button>
-      <label id="label_3" class="gwd-label-t43q gwd-label-nxeu">Player 1:</label>
-      <button id="button_3" class="gwd-button-jwif gwd-button-mclg">Add Extras</button>
-      <label id="label_2" class="gwd-label-t43q gwd-label-anqa gwd-label-52th">Player 2:</label>
-      <button id="button_4" class="gwd-button-jwif gwd-button-1eg3">Add Extras</button>
-      <label id="label_4" class="gwd-label-t43q gwd-label-anqa gwd-label-w93x">Player 2:</label>
-      <button id="button_2" class="gwd-button-jwif gwd-button-1i0a">Add Extras</button>
-      <button id="button_5" class="gwd-button-1daa gwd-button-1kkq">Next Game</button>
-      <button id="button_6" class="gwd-button-1daa gwd-button-i5ux">End Game</button>
-      <label id="label_5" class="gwd-label-15fq gwd-label-1n3i">Team 1</label>
-      <label id="label_7" class="gwd-label-15fq gwd-label-1dcr">Amount:</label>
-      <input type="radio" id="radio_1" class="gwd-input-16bz gwd-input-2sby">
-      <label id="label_6" class="gwd-label-15fq gwd-label-10dw">Team 2</label>
-      <input type="radio" id="radio_2" class="gwd-input-16bz gwd-input-12ri">
-      <input type="number" id="number_1" min="0" step="10" class="gwd-input-1amj" data-gwd-name="Amount">
-      <input type="checkbox" id="checkbox_1" class="gwd-input-1w08">
-      <label id="label_8" class="gwd-label-1cmh">Final:</label>
-      <input type="number" id="number_2" value="3" min="3" max="111" step="2" class="gwd-input-7p4p">
+      <hr/>
+      <h3>Team 1</h3>
+      <input type="radio" id="doubleTeam1" name="loser">
+      <label id="player1Double">Player 1:</label>
+      <button id="addDoublePlayerExtras1" >Add Extras</button>
+      <label id="player2Double" >Player 2:</label>
+      <button id="addDoublePlayerExtras2">Add Extras</button>
+      <hr/>
+      <h3>Team 2</h3>
+      <input type="radio" id="doubleTeam2" name="loser">
+      <label id="player3Double">Player 1:</label>
+      <button id="addDoublePlayerExtras3">Add Extras</button>
+      <label id="player4Double">Player 2:</label>
+      <button id="addDoublePlayerExtras4" >Add Extras</button>
+      <br/>
+      <label id="finalLabelDouble">Final:</label>
+      <input type="checkbox" id="finalDoubleCheckbox" name="finalDoubleCheckbox">
+      <input type="number" id="finalDouble" disabled="true" value="3" min="3" max="111" step="2">
+      <label id="amountLabelDouble">Amount:</label>
+      <input type="number" id="amountDouble" min="0" step="10" name="amountDouble">
+      <button id="nextGameDouble">Next Game</button>
+      <button id="endGameDouble">End Game</button>
     </div>
 
     <div id="centuryEdit">
