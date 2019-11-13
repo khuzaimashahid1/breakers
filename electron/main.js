@@ -116,11 +116,9 @@ app.on('activate',()=>{
 function getAllCustomers()
 {
     connections.getCustomers().then(rows=>
-        {
-            
+        {   
             global.sharedObj.players =rows;
             console.log("Players added")
-            // console.log(rows) ;
         });
 }
 
@@ -129,6 +127,7 @@ function getAllOngoingGames()
 {
     connections.getOngoingGames().then(result=>
         {
+            console.log(result);
             for(let i=0;i<result.length;i++)
             {
                 //Check if Each Table Has ongoing game

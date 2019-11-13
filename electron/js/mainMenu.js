@@ -55,7 +55,7 @@ function openEndGame(){
 }   
 
 
-//Set Status and Event Listeners Of All Tables
+//Set Status and Event Listeners Of All Tables 
 function setStatusAndEventListeners()
 {
     let totalTables=8;
