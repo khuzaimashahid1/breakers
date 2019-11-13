@@ -127,7 +127,6 @@ function getAllOngoingGames()
 {
     connections.getOngoingGames().then(result=>
         {
-            console.log(result);
             for(let i=0;i<result.length;i++)
             {
                 //Check if Each Table Has ongoing game
@@ -138,9 +137,9 @@ function getAllOngoingGames()
                 }
                 else
                 {
-                global.sharedObj.status[i] ='Vacant'
+                    global.sharedObj.status[i] ='Vacant'
+                    global.sharedObj.games[i]=null;
                 }
-            }
-            
+            }  
         })
 }

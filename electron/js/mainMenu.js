@@ -62,7 +62,6 @@ function setStatusAndEventListeners()
     for(let i=0;i<totalTables;i++)
     {
         let currentTable=i+1;
-        remote.getGlobal('sharedObj').tableNumber = currentTable;
         let statusField=document.getElementById("s"+currentTable);
         let tableButton=document.getElementById("tab"+currentTable);
         statusField.innerHTML=remote.getGlobal('sharedObj').status[i];
@@ -71,6 +70,7 @@ function setStatusAndEventListeners()
             tableButton.innerText='End Game';
             tableButton.addEventListener('click',function(event)
             {
+                remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openEndGame();
             })
         }
@@ -78,6 +78,7 @@ function setStatusAndEventListeners()
         {
             tableButton.addEventListener('click',function(event)
             {
+                remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openStartGame();
             })
         }
