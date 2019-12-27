@@ -16,7 +16,6 @@ function openStartGame(){
             parent:parentWindow,
             title:'Add New Game Now',
             fullscreen:false,
-            maximizable:false,
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true
@@ -38,7 +37,6 @@ function openEndGame(){
             parent:parentWindow,
             title:'Add New Game Now',
             fullscreen:false,
-            maximizable:false,
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true

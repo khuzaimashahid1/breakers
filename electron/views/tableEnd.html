@@ -1,118 +1,214 @@
 <!DOCTYPE html>
 <html>
-    <style>
-    input, select {
-      width: 100%;
-      padding: 12px 20px;
-      margin: 8px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    
-    button {
-      width: 100%;
-      background-color: #4CAF50;
-      color: white;
-      padding: 14px 20px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    input[type=submit]:hover {
-      background-color: #45a049;
-    }
-    
-    div {
-      border-radius: 5px;
-      background-color: #f2f2f2;
-      padding: 70px;
-      margin: 14%
-    }
-    h1{
-        font-family: Arial, Helvetica, sans-serif;
-        font-style: italic
-    }
-    .extras {
-      width: 30%;
-      align-content: center;
-      align-items: center;
+<style>
+  input,
+  select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
 
-    }
-    label{
-      text-align: left;
-      height: 40px;
-      width: 60%;
-    }
-    </style>
+  button {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+
+  div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 70px;
+    margin: 14%
+  }
+
+  h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic
+  }
+
+  .extras {
+    width: 30%;
+    align-content: center;
+    align-items: center;
+
+  }
+
+  label {
+    text-align: left;
+    height: 40px;
+    width: 60%;
+  }
+</style>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body >
 
-    <div id="editGame">
-        <div id="divPlayer1">
-          <label id="player1" >Player 1:</label>
-          <input type="radio" id="checkPlayer1" name="loser">
-          <button id="playerExtras1">Add Extras</button>
-        </div>
-        <div id="divPlayer2">
-            <label id="player2" >Player 2:</label>
-            <input type="radio" id="checkPlayer2" name="loser">
-            <button id="playerExtras2">Add Extras</button>
-          </div>
-        <div id="divPlayer3">
-            <label id="player3" >Player 3:</label>
-            <input type="radio" id="checkPlayer3" name="loser">
-            <button id="playerExtras3">Add Extras</button>
-        </div>
-        <div id="divPlayer4">
-            <label id="player4" >Player 4:</label>
-            <input type="radio" id="checkPlayer4" name="loser">
-            <button id="playerExtras4">Add Extras</button>
-        </div>
-        <div id="divPlayer5">
-            <label id="player5" >Player 5:</label>
-            <input type="radio" id="checkPlayer5" name="loser">
-            <button id="playerExtras5">Add Extras</button>
-        </div>
-        <div id="divPlayer6">
-            <label id="player6" >Player 6:</label>
-            <input type="radio" id="checkPlayer6" name="loser">
-            <button id="playerExtras6">Add Extras</button>
-        </div>
-        <div id="divPlayer7">
-            <label id="player7" >Player 7:</label>
-            <input type="radio" id="checkPlayer7" name="loser">
-            <button id="playerExtras7">Add Extras</button>
-        </div>
-        <div id="divPlayer8">
-            <label id="player8" >Player 8:</label>
-            <input type="radio" id="checkPlayer8" name="loser">
-            <button id="playerExtras8">Add Extras</button>
-        </div>
-        <div id="divPlayer9">
-            <label id="player9" >Player 9:</label>
-            <input type="radio" id="checkPlayer9" name="loser">
-            <button id="playerExtras9">Add Extras</button>
-        </div>
-        <div id="divPlayer10">
-            <label id="player10" >Player 10:</label>
-            <input type="radio" id="checkPlayer10" name="loser">
-            <button id="playerExtras10">Add Extras</button>
-        </div>
-        <label id="amount" >Amount:</label>
-        <input name="amount" disabled="true" type="number" id="amountSingle" min="0" step="10">
-        <input type="checkbox" name="finalCheckbox" id="finalCheckbox">
-        <label id="finalLabel">Final:</label>
-        <input type="final" id="final" value='0' step="2" disabled="true">
-        <button id="nextGame">Next Game</button>
-        <button id="endGame">End Game</button>
-      </div>
+<body>
 
-    <script src="../tab1.js"></script>
+  <div id="editGame">
+    <div id="divPlayer1">
+      <label id="player1">Player 1:</label>
+      <button id="playerExtras1">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer2">
+      <label id="player2">Player 2:</label>
+      <button id="playerExtras2">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer3">
+      <label id="player3">Player 3:</label>
+      <button id="playerExtras3">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer4">
+      <label id="player4">Player 4:</label>
+      <button id="playerExtras4">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer5">
+      <label id="player5">Player 5:</label>
+      <button id="playerExtras5">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer6">
+      <label id="player6">Player 6:</label>
+      <button id="playerExtras6">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer7">
+      <label id="player7">Player 7:</label>
+      <button id="playerExtras7">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer8">
+      <label id="player8">Player 8:</label>
+      <button id="playerExtras8">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer9">
+      <label id="player9">Player 9:</label>
+      <button id="playerExtras9">Add Extras</button>
+      <hr />
+    </div>
+    <div id="divPlayer10">
+      <label id="player10">Player 10:</label>
+      <button id="playerExtras10">Add Extras</button>
+      <hr />
+    </div>
+    <select>
+      <option>Choose Loser</option>
+    </select>
+    <label id="amount">Amount:</label>
+    <input name="amount" disabled="true" type="number" id="amountSingle" min="0" step="10">
+    <input type="checkbox" name="finalCheckbox" id="finalCheckbox">
+    <label id="finalLabel">Final:</label>
+    <input type="final" id="final" value='0' step="2" disabled="true">
+    <button id="nextGame">Next Game</button>
+    <button id="endGame">End Game</button>
+  </div>
+
+  <div id="addExtras">
+    <label>Player Name:</label>
+    <select>
+      <option id="">Select order type</option>
+      <option id="kitchen">Kitchen</option>
+      <option id="drink">Drink</option>
+      <option id="cigarette">Cigarette</option>
+      <option id="misc">Miscalleneous</option>
+    </select>
+  </div>
+
+  <div id="divKitchen">
+    <h4>Kitchen Order</h4>
+    <form action="" method="post" name="registration" class="register">
+      <fieldset>
+        <div class="form-group">
+          <label for="Order Item">Order Item</label>
+          <input Name="orderItem" id="orderItem" />
+        </div>
+        <div class="form-group">
+          <label for="price">Price:</label>
+          <input type="number" name="price" id="price" />
+        </div>
+
+        <input name="btnAddBill" id="addKitchenOrder" type="button" class="button" value="Add Bill" />
+      </fieldset>
+    </form>
+  </div>
+
+  <div id="divDrinks">
+      <h4>Drink Order</h4>
+    <form action="" method="post" name="registration" class="register">
+      <fieldset>
+        <label for="DrinkName">Drink Name:</label>
+        <select>
+          <option value="PepsiTin">Pepsi Tin</option>
+          <option value="PepsiLiter">Pepsi 1.5L</option>
+          <option value="7upTin">7up Tin</option>
+          <option value="7upLiter">7up 1.5L</option>
+          <option value="cokeTin">Coke Tin</option>
+          <option value="cokeLiter">Coke 1.5L</option>
+          <option value="stingReg" selected>Sting Reg</option>
+          <option value="stingHalf" selected>Sting 500ml</option>
+        </select>
+        <label id="drinkPrice">Price:</label>
+        <input name="btnAddBill" id="addDrinkOrder" type="button" class="button" value="Add Bill" />
+      </fieldset>
+    </form>
+  </div>
+
+  <div id="divCigarettes">
+      <h4>Cigarette Order</h4>
+    <form action="" method="post" name="registration" class="register">
+      <fieldset>
+        <label for="CigName">Cigeratte Name:</label>
+        <select>
+          <option value="Capston">Capston</option>
+          <option value="Benson">Benson</option>
+          <option value="Dunhill">Dunhill</option>
+          <option value="Goldleave">Gold Leave</option>
+          <option value="Goldflake">Gold Flake</option>
+          <option value="Malbro">Malbro</option>
+        </select>
+        <label>Price:</label>
+        <input name="btnAddBill" id="addCigaretteOrder" type="button" class="button" value="Add Bill" />
+      </fieldset>
+    </form>
+  </div>
+
+
+  <div id="divMiscalleneous">
+      <h4>Miscalleneous Order</h4>
+    <form action="" method="post" name="registration" class="register">
+      <fieldset>
+        <div class="form-group">
+          <label for="Order Item">Order Item</label>
+          <input Name="orderItem" id="orderItem" />
+        </div>
+        <div class="form-group">
+          <label for="price">Price:</label>
+          <input type="number" name="price" id="price" />
+        </div>
+        <input name="btnAddBill" id="addMiscalleneousOrder" type="button" class="button" value="Add Bill" />
+      </fieldset>
+    </form>
+  </div>
+  <script src="../tab1.js"></script>
 </body>
+
 </html>
