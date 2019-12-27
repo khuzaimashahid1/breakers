@@ -48,7 +48,9 @@
   * {
     box-sizing: border-box;
   }
-  
+  .footer{
+    
+  }
   /* Create two equal columns that floats next to each other */
   .column {
     float: left;
