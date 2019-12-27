@@ -44,7 +44,7 @@ function openEndGame(){
             }
         });
     winEndGame.loadURL(url.format({
-            pathname : path.join(__dirname,"./tableEnd.html"),
+            pathname : path.join(__dirname,"./tableEndNew.html"),
             protocol: "file",
             slashes: "true",
             

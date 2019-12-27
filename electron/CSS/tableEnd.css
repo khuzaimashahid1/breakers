@@ -1,4 +1,4 @@
-input, select {
+/* input, select {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -43,4 +43,60 @@ input, select {
     text-align: left;
     height: 40px;
     width: 60%;
+  } */
+
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Create two equal columns that floats next to each other */
+  .column {
+    float: left;
+    border-left: #000;
+    width: 50%;
+    padding: 10px;
+    height: 100%; /* Should be removed. Only for demonstration */
+  }
+  .columnHeader{
+    width: 100%;
+    display: inline-block;
+    margin-left: 30px;
+  }
+  button {
+    background-color: #4CAF50; /* Green background */
+    border: 1px solid green; /* Green border */
+    color: white; /* White text */
+    padding: 10px 20px;
+    cursor: pointer; /* Pointer/hand icon */
+    display: ruby;
+  }
+  table{
+    margin-top: 30px;
+    border: 1px solid black;
+  }
+   th, td {
+  
+    border: 1px solid black;
+  }
+
+
+  label {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 24px;
+    font-style: bold;
+    color: #000;
+    height: 20px;
+    width: 200px;
+    margin-top: 10px;
+    /* margin-left: 10px; */
+    text-align: left;
+    margin-right:15px;
+    float: center;;
+}
+  /* Clear floats after the columns */
+  .row:after {
+    height: 100%;
+    content: "";
+    display: table;
+    clear: both;
   }
