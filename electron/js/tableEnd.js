@@ -5,8 +5,100 @@ let win = remote.getGlobal('win')
 const players = remote.getGlobal('sharedObj').players;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
-var centuryPlayersCount = 1;
-var centuryMaxPlayers = 10;
+let currentGame=remote.getGlobal('sharedObj').games[tableNumber-1];
+let currentPlayers=[]
+getCurrentPlayers();
+modalScript();
+
+
+//Function For Getting Current Players
+function getCurrentPlayers()
+{
+    let counter=1;
+    Object.values(currentGame).forEach(function(value,index) 
+    {
+        // const playerDiv = document.getElementById("divPlayer"+counter);
+        // const playerField = document.getElementById("player"+counter);
+        if(index>5&&index<16)
+        {
+            if(value!==null)
+            {
+                const player=players.filter((player => (player.customerId === (value))));
+                currentPlayers.push(player[0]);
+                // playerField.innerText=player[0].customerName;
+            }
+            else
+            {
+                // playerDiv.style.display = "none";
+                currentPlayers.push(null)
+            }
+            counter++;
+        } 
+    });
+}
+
+function modalScript()
+{
+    console.log("modalScript")
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("btnAddExtra");
+    
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+    
+        // When the user clicks on the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+            console.log("Clicked")
+        }
+    
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+    
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    
+        
+}
+function tabItem(category) {
+    var i;
+    var x = document.getElementsByClassName("city");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(category).style.display = "block";
+}
+
+
+
+// //Function For Getting Current Players
+// function getCurrentPlayers()
+// {
+//     Object.values(currentGame).forEach(function(value,index) {
+//         if(index>5&&index<16)
+//         {
+//             if(value!==null)
+//             {
+//                 const player=players.filter((player => (player.customerId === (value))));
+//                 currentPlayers.push(player[0])
+//             }
+//             else
+//             {
+//                 currentPlayers.push(null)
+//             }
+//         } 
+//     });
+// }
+
 
 function EditGame() {
     const selectBox = document.getElementById("selectBox");
@@ -68,6 +160,19 @@ function EditGame() {
         century.style.display = "none";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // FUNCTION FOR ADDING PLAYER IN CENTURY
 function addPlayerCentury() {
@@ -329,6 +434,5 @@ function compareAndStartGame(gameType,playersCount)
     remote.getCurrentWindow().close()
                     
 }
-
 
 
