@@ -9,7 +9,7 @@ let currentGame=remote.getGlobal('sharedObj').games[tableNumber-1];
 let currentPlayers=[]
 getCurrentPlayers();
 modalScript();
-
+console.log(currentGame)
 
 //Function For Getting Current Players
 function getCurrentPlayers()
@@ -44,7 +44,7 @@ function modalScript()
         var modal = document.getElementById("myModal");
 
         // Get the button that opens the modal
-        var btn = document.getElementById("btnAddExtra");
+        var btn = document.getElementsByClassName("btnAddExtra");
     
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
