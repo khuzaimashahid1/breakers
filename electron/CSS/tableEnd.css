@@ -45,20 +45,39 @@
     width: 60%;
   } */
 
-  * {
-    box-sizing: border-box;
+  
+  .mainContainer {
+
+    background-image: url("../resources/BREAKERS-SNOOKER.jpg");
+    height: 100%;
+    width: 100%;
+}
+  .header{
+    height: 10%;
+    border: #000;
+    width: 100%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
   }
   .footer{
-    
+    height: 10%;
+    border: #000;
+    width: 100%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
   }
   /* Create two equal columns that floats next to each other */
-  .column {
+  /* .column {
     float: left;
     border-left: #000;
     width: 50%;
     padding: 10px;
     height: 100%; /* Should be removed. Only for demonstration */
-  }
+  /* } */
   .columnHeader{
     width: 100%;
     display: inline-block;
@@ -96,12 +115,12 @@
     float: center;;
 }
   /* Clear floats after the columns */
-  .row:after {
+  /* .row:after {
     height: 100%;
     content: "";
     display: table;
     clear: both;
-  }
+  } */
 
 
   
@@ -143,3 +162,39 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  .column:hover .tableTitle {
+    display: none;
+}
+
+.column:hover .hoverBody {
+    display: block;
+    box-sizing: border-box;
+    border-style: double;
+    background-image: url("../resources/snooker.jpeg");
+    justify-content: center;
+    width: 18.5%;
+    height: 250px;
+    position: absolute;
+
+}
+
+.btnTable1 {
+
+    background-color: #ddd;
+    border: #000;
+    margin: auto;
+    width: 180px;
+    color: black;
+    font-size: 20px;
+    text-decoration: none;
+    display: block;
+    margin: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btnTable1:hover {
+    background-color: #38a13c;
+    color: white;
+}
