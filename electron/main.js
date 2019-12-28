@@ -16,7 +16,8 @@ global.sharedObj = {
     tableNumber:null,
     status:[],
     games:[],
-    players:null
+    players:null,
+    currentPlayers:[]
 }
 
 
