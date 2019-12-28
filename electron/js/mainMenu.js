@@ -9,7 +9,7 @@ let parentWindow = remote.getCurrentWindow() //parentWindow
 global.winStartGame=null
 global.winEndGame=null
 setStatusAndEventListeners();
-
+startTimer();
 //Open 'add game'window
 function openStartGame(){
     let winStartGame= new BrowserWindow({
@@ -85,7 +85,51 @@ function setStatusAndEventListeners()
     
     
 }
+function startTimer()
+{
+    let games=remote.getGlobal('sharedObj').games;
+    console.log(games.length);
+    for(let i=0;i<games.length;i++)
+    {
+        
+        if(games[i]!==null)
+        {
+            
+            let startTime=games[i].startTime;
+            console.log(startTime)
+            startTime = startTime.split(":");
+            console.log(startTime);
+            const today = new Date();
+            let hours= today.getHours()-startTime[0];
+            let min=today.getMinutes()-startTime[1];
+            let sec=today.getSeconds()-startTime[2];
+            let timerField=document.getElementById("timer"+(i+1));
+            timerField.innerText=hours+":"+min+":"+sec;
+            renderTime(timerField,hours,min,sec);
+        }
+    }
+}
 
+function renderTime(timerField,hour,min,sec)
+{
+    function intervalFunc() {
+        sec++;
+        if(sec>60)
+        {
+            min++;
+            sec=0;
+        }
+        if(min>60)
+        {
+            hour++;
+            min=0;
+        }
+        
+        timerField.innerText=hour+":"+min+":"+sec;
+      }
+      
+      setInterval(intervalFunc, 1000);
+}
 
 
 

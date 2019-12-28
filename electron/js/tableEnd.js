@@ -5,8 +5,120 @@ let win = remote.getGlobal('win')
 const players = remote.getGlobal('sharedObj').players;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
-var centuryPlayersCount = 1;
-var centuryMaxPlayers = 10;
+let currentGame=remote.getGlobal('sharedObj').games[tableNumber-1];
+let currentPlayers=[]
+getCurrentPlayers();
+populatePlayers();
+console.log(currentGame)
+
+//Function For Getting Current Players
+function getCurrentPlayers()
+{
+    let counter=1;
+    Object.values(currentGame).forEach(function(value,index) 
+    {
+        // const playerDiv = document.getElementById("divPlayer"+counter);
+        // const playerField = document.getElementById("player"+counter);
+        if(index>5&&index<16)
+        {
+            if(value!==null)
+            {
+                const player=players.filter((player => (player.customerId === (value))));
+                currentPlayers.push(player[0]);
+                // playerField.innerText=player[0].customerName;
+            }
+            else
+            {
+                // playerDiv.style.display = "none";
+                currentPlayers.push(null)
+            }
+            counter++;
+        } 
+    });
+}
+
+function modalScript()
+{
+    console.log("modalScript")
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        modal.style.display = "block";
+        // Get the button that opens the modal
+        // var btn = document.getElementsByClassName("btnAddExtra");
+    
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+    
+        // When the user clicks on the button, open the modal
+        // btn.onclick = function () {
+            // modal.style.display = "block";
+        //     console.log("Clicked")
+        // }
+    
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+    
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    
+        
+}
+function tabItem(category) {
+    var i;
+    var x = document.getElementsByClassName("city");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(category).style.display = "block";
+}
+
+
+
+// //Function For Getting Current Players
+// function getCurrentPlayers()
+// {
+//     Object.values(currentGame).forEach(function(value,index) {
+//         if(index>5&&index<16)
+//         {
+//             if(value!==null)
+//             {
+//                 const player=players.filter((player => (player.customerId === (value))));
+//                 currentPlayers.push(player[0])
+//             }
+//             else
+//             {
+//                 currentPlayers.push(null)
+//             }
+//         } 
+//     });
+// }
+
+function populatePlayers(){
+    var numberofCurrnetPlayers=currentPlayers.length;
+    $(".header").append('<label>Game Type: '+currentGame.gameType+'</label>'+
+    '<label>Table No. : '+tableNumber+'</label>'+
+    '<label>Start Time: '+currentGame.startTime+'</label>');
+    for (i = 0; i < numberofCurrnetPlayers; i++) {
+        if(currentPlayers[i]!=null){
+            $(".grid-container").append(' <div class="grid-item">'+
+            '<div id="'+currentPlayers[i].customerId+'"class="playerTitle">'+
+                '<label class="player">'+currentPlayers[i].customerName+'</label>'+
+            '</div>'+
+            '<div class="hoverBody">'+
+                '<button id="btnAddExtra" class="btnAddExtra" style="float: center" onClick="modalScript()">Add Extra</button>'+
+            '</div>'+
+        '</div>');
+        }
+    }
+
+}
+
 
 function EditGame() {
     const selectBox = document.getElementById("selectBox");
@@ -68,6 +180,19 @@ function EditGame() {
         century.style.display = "none";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // FUNCTION FOR ADDING PLAYER IN CENTURY
 function addPlayerCentury() {
@@ -329,6 +454,5 @@ function compareAndStartGame(gameType,playersCount)
     remote.getCurrentWindow().close()
                     
 }
-
 
 

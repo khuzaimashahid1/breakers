@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../CSS/tableEnd.css">
-    <link rel="stylesheet" href="../CSS/mainMenu.css">
+    <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
 </head>
 
@@ -13,199 +13,130 @@
 
         <!-- MAKING A DIV FOR HEADER OF THE PAGE-->
         <div class="header">
-            <label>Game Type:</label>
+            
         </div>
 
         <!-- MAKING A DIV FOR GAME BODY DEPENDING ON GAME TYPE -->
-        
-       <div class="singleGame">
-        <div class="row">
-            <div class="column" style="background-color:#aaa;">
-                <div class="tableTitle">
-                    <h1>Player 1</h1>
-                </div>
-                <div class="hoverBody">
-                    <button id="btnAddExtra" class="btnAddExtra">Add Extra</button>
-                </div>
+        <div id="playersContainer" class="playersContainer">
+            <legend>Current Players in the game</legend>
+            <div class="grid-container">
             </div>
-            <div class="column" style="background-color:#aaa;">
-                <div class="tableTitle">
-                    <h1>Player 2</h1>
-                </div>
-                <div class="hoverBody">
-                    <button id="btnAddExtra" class="btnAddExtra">Add Extra</button>
-                </div>
-            </div>
-           
-        </div>
-    </div>
 
 
-    <div class="doubleGame">
-        <div class="row">
-            <div class="column" style="background-color:#aaa;">
-                <div class="tableTitle">
-                    <h1>Player 1</h1>
-                </div>
-                <div class="hoverBody">
-                    <button id="btnAddExtra" class="btnAddExtra">Add Extra</button>
-                </div>
-            </div>
-            <div class="column" style="background-color:#aaa;">
-                <div class="tableTitle">
-                    <h1>Player 2</h1>
-                </div>
-                <div class="hoverBody">
-                    <button id="btnAddExtra" class="btnAddExtra">Add Extra</button>
-                </div>
-            </div>
-           
         </div>
-    </div>
         <!-- MAKING A DIV FOR FOOTHER OF THE PAGE -->
-    <div class="footer">
-        <select>
-            <option>Choose Loser</option>
-        </select>
+        <div class="w3-bar">
+            <select>
+                <option>Choose Loser</option>
+            </select>
 
-        <button id="nextGame">Next Game</button>
-        <button id="endGame">End Game</button>
-    </div>
- 
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="w3-bar w3-black">
-                <button class="w3-bar-item w3-button" onclick="tabItem('Kitchen')">Kitchen</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('Drinks')">Drinks</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('Cigarettes')">Cigarettes</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('Miscallenous')">Miscallenous</button>
-            </div>
+            <button id="nextGame" class="w3-button">Next Game</button>
+            <button id="endGame" class="w3-button">End Game</button>
+        </div>
 
-            <div id="Kitchen" class="w3-container city">
-                <h4>Kitchen Order</h4>
-                <form action="" method="post" name="registration" class="register">
-                    <fieldset>
-                        <div class="form-group">
-                            <label for="Order Item">Order Item</label>
-                            <input Name="orderItem" id="orderItem" />
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price:</label>
-                            <input type="number" name="price" id="price" />
-                        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="w3-bar w3-black">
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Kitchen')">Kitchen</button>
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Drinks')">Drinks</button>
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Cigarettes')">Cigarettes</button>
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Miscallenous')">Miscallenous</button>
+                </div>
 
-                        <input name="btnAddBill" id="addKitchenOrder" type="button" class="button" value="Add Bill" />
-                    </fieldset>
-                </form>
-            </div>
+                <div id="Kitchen" class="w3-container city">
+                    <h4>Kitchen Order</h4>
+                    <form action="" method="post" name="registration" class="register">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="Order Item">Order Item</label>
+                                <input Name="orderItem" id="orderItem" />
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price:</label>
+                                <input type="number" name="price" id="price" />
+                            </div>
 
-            <div id="Drinks" class="w3-container city" style="display:none">
-                <h4>Drink Order</h4>
-                <form action="" method="post" name="registration" class="register">
-                    <fieldset>
-                        <label for="DrinkName">Drink Name:</label>
-                        <select>
-                            <option value="PepsiTin">Pepsi Tin</option>
-                            <option value="PepsiLiter">Pepsi 1.5L</option>
-                            <option value="7upTin">7up Tin</option>
-                            <option value="7upLiter">7up 1.5L</option>
-                            <option value="cokeTin">Coke Tin</option>
-                            <option value="cokeLiter">Coke 1.5L</option>
-                            <option value="stingReg" selected>Sting Reg</option>
-                            <option value="stingHalf" selected>Sting 500ml</option>
-                        </select>
-                        <label id="drinkPrice">Price:</label>
-                        <input name="btnAddBill" id="addDrinkOrder" type="button" class="button" value="Add Bill" />
-                    </fieldset>
-                </form>
-            </div>
+                            <input name="btnAddBill" id="addKitchenOrder" type="button" class="button"
+                                value="Add Bill" />
+                        </fieldset>
+                    </form>
+                </div>
 
-            <div id="Cigarettes" class="w3-container city" style="display:none">
-                <h4>Cigarette Order</h4>
-                <form action="" method="post" name="registration" class="register">
-                    <fieldset>
-                        <label for="CigName">Cigeratte Name:</label>
-                        <select>
-                            <option value="Capston">Capston</option>
-                            <option value="Benson">Benson</option>
-                            <option value="Dunhill">Dunhill</option>
-                            <option value="Goldleave">Gold Leave</option>
-                            <option value="Goldflake">Gold Flake</option>
-                            <option value="Malbro">Malbro</option>
-                        </select>
-                        <label>Price:</label>
-                        <input name="btnAddBill" id="addCigaretteOrder" type="button" class="button" value="Add Bill" />
-                    </fieldset>
-                </form>
-            </div>
+                <div id="Drinks" class="w3-container city" style="display:none">
+                    <h4>Drink Order</h4>
+                    <form action="" method="post" name="registration" class="register">
+                        <fieldset>
+                            <label for="DrinkName">Drink Name:</label>
+                            <select>
+                                <option value="PepsiTin">Pepsi Tin</option>
+                                <option value="PepsiLiter">Pepsi 1.5L</option>
+                                <option value="7upTin">7up Tin</option>
+                                <option value="7upLiter">7up 1.5L</option>
+                                <option value="cokeTin">Coke Tin</option>
+                                <option value="cokeLiter">Coke 1.5L</option>
+                                <option value="stingReg" selected>Sting Reg</option>
+                                <option value="stingHalf" selected>Sting 500ml</option>
+                            </select>
+                            <label id="drinkPrice">Price:</label>
+                            <input name="btnAddBill" id="addDrinkOrder" type="button" class="button" value="Add Bill" />
+                        </fieldset>
+                    </form>
+                </div>
 
-            <div id="Miscallenous" class="w3-container city" style="display:none">
-                <h4>Miscalleneous Order</h4>
-                <form action="" method="post" name="registration" class="register">
-                    <fieldset>
-                        <div class="form-group">
-                            <label for="Order Item">Order Item</label>
-                            <input Name="orderItem" id="orderItem" />
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price:</label>
-                            <input type="number" name="price" id="price" />
-                        </div>
-                        <input name="btnAddBill" id="addMiscalleneousOrder" type="button" class="button"
-                            value="Add Bill" />
-                    </fieldset>
-                </form>
-            </div>
+                <div id="Cigarettes" class="w3-container city" style="display:none">
+                    <h4>Cigarette Order</h4>
+                    <form action="" method="post" name="registration" class="register">
+                        <fieldset>
+                            <label for="CigName">Cigeratte Name:</label>
+                            <select>
+                                <option value="Capston">Capston</option>
+                                <option value="Benson">Benson</option>
+                                <option value="Dunhill">Dunhill</option>
+                                <option value="Goldleave">Gold Leave</option>
+                                <option value="Goldflake">Gold Flake</option>
+                                <option value="Malbro">Malbro</option>
+                            </select>
+                            <label>Price:</label>
+                            <input name="btnAddBill" id="addCigaretteOrder" type="button" class="button"
+                                value="Add Bill" />
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div id="Miscallenous" class="w3-container city" style="display:none">
+                    <h4>Miscalleneous Order</h4>
+                    <form action="" method="post" name="registration" class="register">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="Order Item">Order Item</label>
+                                <input Name="orderItem" id="orderItem" />
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price:</label>
+                                <input type="number" name="price" id="price" />
+                            </div>
+                            <input name="btnAddBill" id="addMiscalleneousOrder" type="button" class="button"
+                                value="Add Bill" />
+                        </fieldset>
+                    </form>
+                </div>
 
 
-            <div class="columnBody">
-                <table style="width:80%">
-                    <tr>
-                        <th>Order Item</th>
-                        <th>Order Type</th>
-                        <th>Amount</th>
-                    </tr>
-                </table>
+                <div class="columnBody">
+                    <table style="width:80%">
+                        <tr>
+                            <th>Order Item</th>
+                            <th>Order Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+    
 </body>
-<script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
-    // Get the button that opens the modal
-    var btn = document.getElementById("btnAddExtra");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on the button, open the modal
-    btn.onclick = function () {
-        modal.style.display = "block";
-        console.log("Clicked")
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    function tabItem(category) {
-        var i;
-        var x = document.getElementsByClassName("city");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-        }
-        document.getElementById(category).style.display = "block";
-    }
-</script>
+<script src="../js/tableEnd.js"></script>
 
 </html>
