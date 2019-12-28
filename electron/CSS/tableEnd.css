@@ -45,18 +45,74 @@
     width: 60%;
   } */
 
-  * {
-    box-sizing: border-box;
+  body{
+    background-image: url("../resources/BREAKERS-SNOOKER.jpg");
+    height: 100%;
+    width: 100%; 
   }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  text-align: center;
+}
+legend {
   
+  color: #000;
+  padding: 3px 6px;
+}
+
+.output {
+  font: 1rem 'Fira Sans', sans-serif;
+}
+.playerTitle {
+  justify-content: center;
+  display: block;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  background: transparent;
+}
+.hoverBody {
+  display: none;
+
+}
+
+  .header{
+    height: 10%;
+    padding: 20px;
+    background-color: #ddd;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    border: #000;
+    width: 100%;
+   align-content: center;
+  
+  }
+  .footer{
+    height: 10%;
+    border: #000;
+    width: 100%;
+    display: inline-block;
+  }
+  .playersContainer{
+    background-color: #ddd;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+  }
   /* Create two equal columns that floats next to each other */
-  .column {
+  /* .column {
     float: left;
     border-left: #000;
     width: 50%;
     padding: 10px;
     height: 100%; /* Should be removed. Only for demonstration */
-  }
+  /* } */
   .columnHeader{
     width: 100%;
     display: inline-block;
@@ -68,7 +124,8 @@
     color: white; /* White text */
     padding: 10px 20px;
     cursor: pointer; /* Pointer/hand icon */
-    display: ruby;
+    justify-content: center;
+    display: block;
   }
   table{
     margin-top: 30px;
@@ -80,7 +137,7 @@
   }
 
 
-  label {
+  .player {
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 24px;
     font-style: bold;
@@ -94,12 +151,12 @@
     float: center;;
 }
   /* Clear floats after the columns */
-  .row:after {
+  /* .row:after {
     height: 100%;
     content: "";
     display: table;
     clear: both;
-  }
+  } */
 
 
   
@@ -141,3 +198,19 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  .grid-item:hover .playerTitle {
+    display: none;
+}
+
+.grid-item:hover .hoverBody {
+  
+    display: block;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    background: transparent;
+
+}
+
+

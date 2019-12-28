@@ -8,7 +8,7 @@ let tableNumber = remote.getGlobal('sharedObj').tableNumber
 let currentGame=remote.getGlobal('sharedObj').games[tableNumber-1];
 let currentPlayers=[]
 getCurrentPlayers();
-modalScript();
+populatePlayers();
 console.log(currentGame)
 
 //Function For Getting Current Players
@@ -42,18 +42,18 @@ function modalScript()
     console.log("modalScript")
         // Get the modal
         var modal = document.getElementById("myModal");
-
+        modal.style.display = "block";
         // Get the button that opens the modal
-        var btn = document.getElementsByClassName("btnAddExtra");
+        // var btn = document.getElementsByClassName("btnAddExtra");
     
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
     
         // When the user clicks on the button, open the modal
-        btn.onclick = function () {
-            modal.style.display = "block";
-            console.log("Clicked")
-        }
+        // btn.onclick = function () {
+            // modal.style.display = "block";
+        //     console.log("Clicked")
+        // }
     
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
@@ -98,6 +98,26 @@ function tabItem(category) {
 //         } 
 //     });
 // }
+
+function populatePlayers(){
+    var numberofCurrnetPlayers=currentPlayers.length;
+    $(".header").append('<label>Game Type: '+currentGame.gameType+'</label>'+
+    '<label>Table No. : '+tableNumber+'</label>'+
+    '<label>Start Time: '+currentGame.startTime+'</label>');
+    for (i = 0; i < numberofCurrnetPlayers; i++) {
+        if(currentPlayers[i]!=null){
+            $(".grid-container").append(' <div class="grid-item">'+
+            '<div id="'+currentPlayers[i].customerId+'"class="playerTitle">'+
+                '<label class="player">'+currentPlayers[i].customerName+'</label>'+
+            '</div>'+
+            '<div class="hoverBody">'+
+                '<button id="btnAddExtra" class="btnAddExtra" style="float: center" onClick="modalScript()">Add Extra</button>'+
+            '</div>'+
+        '</div>');
+        }
+    }
+
+}
 
 
 function EditGame() {

@@ -4,27 +4,36 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../CSS/tableEnd.css">
+    <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
 </head>
 
 <body>
     <div class="mainContainer">
-        <div class="row">
-            <div class="column">
-                <div class="columnHeader">
-                    <label id="player1">Player 1</label>
-                    <button id="btnAddExtra" class="btnAddExtra" >Add Extra</button>
-                </div>
-                </div>
 
-            </div>
-            <div class="column">
-                <div class="columnHeader">
-                    <label id="player1">Player 2</label>
-                    <button id="btnAddExtra" class="btnAddExtra" >Add Extra </button>
-                </div>
-            </div>
+        <!-- MAKING A DIV FOR HEADER OF THE PAGE-->
+        <div class="header">
+            
         </div>
+
+        <!-- MAKING A DIV FOR GAME BODY DEPENDING ON GAME TYPE -->
+        <div id="playersContainer" class="playersContainer">
+            <legend>Current Players in the game</legend>
+            <div class="grid-container">
+            </div>
+
+
+        </div>
+        <!-- MAKING A DIV FOR FOOTHER OF THE PAGE -->
+        <div class="w3-bar">
+            <select>
+                <option>Choose Loser</option>
+            </select>
+
+            <button id="nextGame" class="w3-button">Next Game</button>
+            <button id="endGame" class="w3-button">End Game</button>
+        </div>
+
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -125,6 +134,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    
 </body>
 <script src="../js/tableEnd.js"></script>
 
