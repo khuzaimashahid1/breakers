@@ -5,69 +5,63 @@ let win = remote.getGlobal('win')
 const players = remote.getGlobal('sharedObj').players;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
-let currentGame=remote.getGlobal('sharedObj').games[tableNumber-1];
-let currentPlayers=[]
+let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
+let currentPlayers = []
 getCurrentPlayers();
 populatePlayers();
 console.log(currentGame)
 
 //Function For Getting Current Players
-function getCurrentPlayers()
-{
-    let counter=1;
-    Object.values(currentGame).forEach(function(value,index) 
-    {
+function getCurrentPlayers() {
+    let counter = 1;
+    Object.values(currentGame).forEach(function (value, index) {
         // const playerDiv = document.getElementById("divPlayer"+counter);
         // const playerField = document.getElementById("player"+counter);
-        if(index>5&&index<16)
-        {
-            if(value!==null)
-            {
-                const player=players.filter((player => (player.customerId === (value))));
+        if (index > 5 && index < 16) {
+            if (value !== null) {
+                const player = players.filter((player => (player.customerId === (value))));
                 currentPlayers.push(player[0]);
                 // playerField.innerText=player[0].customerName;
             }
-            else
-            {
+            else {
                 // playerDiv.style.display = "none";
                 currentPlayers.push(null)
             }
             counter++;
-        } 
+        }
     });
 }
 
-function modalScript()
-{
+function modalScript() {
     console.log("modalScript")
-        // Get the modal
-        var modal = document.getElementById("myModal");
-        modal.style.display = "block";
-        // Get the button that opens the modal
-        // var btn = document.getElementsByClassName("btnAddExtra");
-    
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-    
-        // When the user clicks on the button, open the modal
-        // btn.onclick = function () {
-            // modal.style.display = "block";
-        //     console.log("Clicked")
-        // }
-    
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function () {
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
+    // Get the button that opens the modal
+    // var btn = document.getElementsByClassName("btnAddExtra");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal
+    // btn.onclick = function () {
+    // modal.style.display = "block";
+    //     console.log("Clicked")
+    // }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
             modal.style.display = "none";
         }
-    
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    
-        
+    }
+
+
 }
 function tabItem(category) {
     var i;
@@ -99,21 +93,31 @@ function tabItem(category) {
 //     });
 // }
 
-function populatePlayers(){
-    var numberofCurrnetPlayers=currentPlayers.length;
-    $(".header").append('<label>Game Type: '+currentGame.gameType+'</label>'+
-    '<label>Table No. : '+tableNumber+'</label>'+
-    '<label>Start Time: '+currentGame.startTime+'</label>');
+function populatePlayers() {
+    var numberofCurrnetPlayers = currentPlayers.length;
+    $(".header").append(
+        '<div class="headerItem">' +
+        '<label>Table No. : ' + tableNumber + '</label>' +
+        '</div>' +
+        '<div class="headerItem">' +
+        '<label>Game Type: ' + currentGame.gameType + ' </label>' +
+        '</div>' +
+        '<div class="headerItem">' +
+        '<label>Start Time: ' + currentGame.startTime + '</label>' +
+        '</div>'
+    );
+
     for (i = 0; i < numberofCurrnetPlayers; i++) {
-        if(currentPlayers[i]!=null){
-            $(".grid-container").append(' <div class="grid-item">'+
-            '<div id="'+currentPlayers[i].customerId+'"class="playerTitle">'+
-                '<label class="player">'+currentPlayers[i].customerName+'</label>'+
-            '</div>'+
-            '<div class="hoverBody">'+
-                '<button id="btnAddExtra" class="btnAddExtra" style="float: center" onClick="modalScript()">Add Extra</button>'+
-            '</div>'+
-        '</div>');
+        if (currentPlayers[i] != null) {
+            $(".grid-container").append(' <div class="grid-item">' +
+                '<div id="' + currentPlayers[i].customerId + '"class="playerTitle">' +
+                '<label class="player">' + currentPlayers[i].customerName + '</label>' +
+                '</div>' +
+                '<div class="hoverBody">' +
+                '<button id="btnAddExtra" class="btnAddExtra"  onClick="modalScript()">Add Extra</button>' +
+                '</div>' +
+                '</div>');
+            $(".playersList").append("<option id=" + currentPlayers[i].customerId + ">" + currentPlayers[i].customerName + "</option");
         }
     }
 
@@ -130,48 +134,41 @@ function EditGame() {
     const btnStartDouble = document.getElementById("btnStartDouble");
     const btnStartCentury = document.getElementById("btnStartCentury");
     setStartTime();
-    
-    if(selectedValue=='single')
-    {
-        displayFirstDivOnly(single,double,century);
-        let playersCount=2;
-        let gameType="single";
-        for (let i=1;i<=playersCount;i++)
-        {
+
+    if (selectedValue == 'single') {
+        displayFirstDivOnly(single, double, century);
+        let playersCount = 2;
+        let gameType = "single";
+        for (let i = 1; i <= playersCount; i++) {
             // renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);
-            autoComplete(gameType+'Player'+i,players);    
+            autoComplete(gameType + 'Player' + i, players);
         }
-        btnStartSingle.addEventListener('click',function(event)
-        {
-            compareAndStartGame(gameType,playersCount);
+        btnStartSingle.addEventListener('click', function (event) {
+            compareAndStartGame(gameType, playersCount);
         })
-        
-    } 
-    else  if(selectedValue=='double')
-    {
-        displayFirstDivOnly(double,century,single);
-        let playersCount=4;
-        let gameType="double";
-        for (let i=1;i<=playersCount;i++)
-        {
+
+    }
+    else if (selectedValue == 'double') {
+        displayFirstDivOnly(double, century, single);
+        let playersCount = 4;
+        let gameType = "double";
+        for (let i = 1; i <= playersCount; i++) {
             // renderSuggestions('#'+gameType+'Player'+i,'#'+gameType+'Players'+i);
-            autoComplete(gameType+'Player'+i,players);        
+            autoComplete(gameType + 'Player' + i, players);
         }
-        btnStartDouble.addEventListener('click',function(event)
-        {
-            compareAndStartGame(gameType,playersCount);
+        btnStartDouble.addEventListener('click', function (event) {
+            compareAndStartGame(gameType, playersCount);
         })
     }
-    
+
     else if (selectedValue == 'century') {
         displayFirstDivOnly(century, single, double);
         autoComplete('centuryPlayer1', players);
         addPlayerCentury();
         removePlayerCentury();
-        btnStartCentury.addEventListener('click',function(event)
-        {
-            compareAndStartGame("century",centuryPlayersCount);
-        
+        btnStartCentury.addEventListener('click', function (event) {
+            compareAndStartGame("century", centuryPlayersCount);
+
         })
     }
     else if (selectedValue == 'Choose') {
@@ -401,58 +398,49 @@ function autoComplete(input, players) {
 }
 
 //Compare All Names in fields and Start Game if No error arises
-function compareAndStartGame(gameType,playersCount)
-{
-    playersArray=[]
-    for (let i=1;i<=playersCount;i++)
-    {
-        let field='#'+gameType+'Player'+i;
-        let fieldValue=$(field).val();
-        if(fieldValue.length=== 0)
-        {
+function compareAndStartGame(gameType, playersCount) {
+    playersArray = []
+    for (let i = 1; i <= playersCount; i++) {
+        let field = '#' + gameType + 'Player' + i;
+        let fieldValue = $(field).val();
+        if (fieldValue.length === 0) {
             $(field).focus();
-            ipc.send('error-dialog',"Please Enter Player "+i);
+            ipc.send('error-dialog', "Please Enter Player " + i);
             return;
         }
-        else
-        {
-            const player=players.filter(player => (player.customerName === (fieldValue)));
-            if(player.length<1)
-            {
+        else {
+            const player = players.filter(player => (player.customerName === (fieldValue)));
+            if (player.length < 1) {
                 $(field).focus();
-                ipc.send('error-dialog',"Player "+i+" not in Database");
+                ipc.send('error-dialog', "Player " + i + " not in Database");
                 return;
             }
-            else
-            {
-                if (playersArray.indexOf(player[0].customerId) !== -1) 
-                {
+            else {
+                if (playersArray.indexOf(player[0].customerId) !== -1) {
                     $(field).focus();
-                    ipc.send('error-dialog',"Player "+i+" is the same as Player "+(playersArray.indexOf(player[0].customerId)+1));
+                    ipc.send('error-dialog', "Player " + i + " is the same as Player " + (playersArray.indexOf(player[0].customerId) + 1));
                     return;
                 }
-                else
-                {
+                else {
                     playersArray.push(player[0].customerId);
                 }
-                
+
             }
         }
     }
-    for(let i=playersArray.length;i<=9;i++)
-    {
+    for (let i = playersArray.length; i <= 9; i++) {
         playersArray.push(null);
     }
-    const status="ongoing";
+    const status = "ongoing";
     const today = new Date();
     const startTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
-    ipc.send('start-game',tableNumber,status,gameType,...playersArray,startTime,createDate)
+    ipc.send('start-game', tableNumber, status, gameType, ...playersArray, startTime, createDate)
     remote.getCurrentWindow().close()
-                    
+
 }
 
 
