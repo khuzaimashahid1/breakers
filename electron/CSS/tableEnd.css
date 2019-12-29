@@ -53,16 +53,24 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto ;
   padding: 10px;
+  
 }
 .grid-item {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  margin-left: 5px;
+  margin-right: 5px ;
   text-align: center;
 }
 legend {
-  
+  margin-left: 30%;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 24px;
+  font-style: bold;
+  color: #000;
   color: #000;
   padding: 3px 6px;
 }
@@ -77,6 +85,7 @@ legend {
   height: 50px;
   text-align: center;
   background: transparent;
+  margin-right: 20px;
 }
 .hoverBody {
   display: none;
@@ -85,20 +94,45 @@ legend {
 
   .header{
     height: 10%;
-    padding: 20px;
-    background-color: #ddd;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background-color: green;
+    color: #fff;
     opacity: 0.8;
     filter: alpha(opacity=80);
-    border: #000;
-    width: 100%;
-   align-content: center;
+    border: #fff;
+    /* width: 100%; */
+    justify-content: center;
   
   }
   .footer{
     height: 10%;
-    border: #000;
-    width: 100%;
-    display: inline-block;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background-color: green;
+    color: #fff;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    border: #fff;
+    /* width: 100%; */
+    justify-content: center;
+  
+  }
+  .headerItem{
+    padding: 10px;
+    border: 1px solid #fff;
+    margin-left: 5px;
+    margin-right: 5px ;
+    text-align: center;
+  }
+  .footerItem{
+    padding: 10px;
+    border: 1px solid #fff;
+    margin-left: 5px;
+    margin-right: 5px ;
+    text-align: center;
   }
   .playersContainer{
     background-color: #ddd;
@@ -118,11 +152,15 @@ legend {
     display: inline-block;
     margin-left: 30px;
   }
+  .btnAddExtra{
+    margin-left: 30%;
+  }
   button {
     background-color: #4CAF50; /* Green background */
     border: 1px solid green; /* Green border */
     color: white; /* White text */
     padding: 10px 20px;
+   
     cursor: pointer; /* Pointer/hand icon */
     justify-content: center;
     display: block;
@@ -139,16 +177,16 @@ legend {
 
   .player {
     font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 24px;
+    font-size: 20px;
     font-style: bold;
     color: #000;
     height: 20px;
     width: 200px;
     margin-top: 10px;
     /* margin-left: 10px; */
-    text-align: left;
+    justify-content: center;
     margin-right:15px;
-    float: center;;
+  
 }
   /* Clear floats after the columns */
   /* .row:after {
@@ -200,7 +238,7 @@ legend {
   }
 
   .grid-item:hover .playerTitle {
-    display: none;
+    justify-content: left;
 }
 
 .grid-item:hover .hoverBody {
