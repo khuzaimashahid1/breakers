@@ -2,7 +2,7 @@ const { remote } = require('electron');
 const electron = require('electron');
 let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
-const players = remote.getGlobal('sharedObj').players;
+const players = remote.getGlobal('sharedObj').currentPlayers;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
 let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];

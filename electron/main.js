@@ -7,11 +7,7 @@ const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 const connections=require("./DataBaseOperations/connections.js");
 connections.createTables();
-getAllCustomers();
-getAllOngoingGames();
-
 global.win=null;
-
 global.sharedObj = {
     tableNumber:null,
     status:[],
@@ -19,8 +15,6 @@ global.sharedObj = {
     players:null,
     currentPlayers:[]
 }
-
-
 function createWindow(){
     win = new BrowserWindow({
         fullscreen:true,
@@ -135,12 +129,33 @@ function getAllOngoingGames()
                 {
                     global.sharedObj.status[i] ='Ongoing - '+result[i][0].gameType;
                     global.sharedObj.games[i]=result[i][0];
+                    Object.values(global.sharedObj.games[i]).forEach(function(value,index) 
+                    {
+                        if(index>5&&index<16)
+                        {
+                            
+                            if(value!==null)
+                            {
+                                if((global.sharedObj.currentPlayers.filter(currentPlayer => (currentPlayer.customerId === value))).length===0)
+                                {
+                                    const player=global.sharedObj.players.filter((player => (player.customerId === (value))));
+                                    global.sharedObj.currentPlayers.push(player[0]);
+                                    global.sharedObj.players=global.sharedObj.players.filter(currentPlayer => (currentPlayer !== player[0]));
+                                }
+                                
+                                
+                            }
+                        } 
+                    });
                 }
                 else
                 {
                     global.sharedObj.status[i] ='Vacant'
                     global.sharedObj.games[i]=null;
                 }
-            }  
+            } 
         })
+        
 }
+getAllCustomers();
+getAllOngoingGames();
