@@ -154,6 +154,7 @@ legend {
   }
   .btnAddExtra{
     margin-left: 30%;
+    border-radius: 5px; 
   }
   button {
     background-color: #4CAF50; /* Green background */
@@ -166,7 +167,7 @@ legend {
     display: block;
   }
   table{
-    margin-top: 30px;
+    margin-top: 50px;
     border: 1px solid black;
   }
    th, td {
@@ -199,7 +200,10 @@ legend {
 
   
 
-
+/*  TABLE STYLE IN MODAL */
+.columnBody{
+  margin-left: 30px;
+}
   .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -210,6 +214,7 @@ legend {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
+    background-image: url("../resources/BREAKERS-SNOOKER.jpg");
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
   

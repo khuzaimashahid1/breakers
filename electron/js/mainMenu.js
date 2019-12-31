@@ -88,7 +88,7 @@ function setStatusAndEventListeners()
 function startTimer()
 {
     let games=remote.getGlobal('sharedObj').games;
-    console.log(games.length);
+    
     for(let i=0;i<games.length;i++)
     {
         
@@ -96,16 +96,34 @@ function startTimer()
         {
             
             let startTime=games[i].startTime;
-            console.log(startTime)
             startTime = startTime.split(":");
-            console.log(startTime);
             const today = new Date();
-            let hours= today.getHours()-startTime[0];
-            let min=today.getMinutes()-startTime[1];
-            let sec=today.getSeconds()-startTime[2];
-            let timerField=document.getElementById("timer"+(i+1));
-            timerField.innerText=hours+":"+min+":"+sec;
-            renderTime(timerField,hours,min,sec);
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            const createDate = yyyy + '-' + mm + '-' + dd;
+            const currentDate=games[i].createDate;
+            let hours,min,sec,timerField;
+            if(createDate===currentDate)
+            {
+                hours= Math.abs(today.getHours()-startTime[0]);
+                min=Math.abs(today.getMinutes()-startTime[1]);
+                sec=Math.abs(today.getSeconds()-startTime[2]);
+                timerField=document.getElementById("timer"+(i+1));
+                timerField.innerText=hours+":"+min+":"+sec;
+                renderTime(timerField,hours,min,sec);
+                
+            }
+            else
+            {
+                hours= Math.abs(24-startTime[0]+today.getHours());
+                min=Math.abs(60-startTime[1]+today.getMinutes());
+                sec=Math.abs(60-startTime[2]+today.getSeconds());
+                timerField=document.getElementById("timer"+(i+1));
+                timerField.innerText=hours+":"+min+":"+sec;
+                renderTime(timerField,hours,min,sec);
+            }
+            
         }
     }
 }
