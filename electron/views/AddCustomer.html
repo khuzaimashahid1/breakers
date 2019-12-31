@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../CSS/breakers.css">
+<link rel="stylesheet" href="../CSS/addCustomer.css">
 </head>
 <body>
 
@@ -15,31 +16,32 @@
         <a class='active' href="AddCustomer.html">Add Customer</a>
         <a href="SummeryTab.html">Summary</a>
       </div>
-      <div class="topnav central">
-        <a class="active" href="kitchen.html">Add Bill</a>
-        <a href="kitcheSummeryTable.html">Kitchen Summary</a>
-      </div>
+      <div class="addCustomer">
 
-<div id="form">
-    <form action="" method="post" name="registration" class="register">
-        <fieldset>
-            <div class="form-group">
-                <label for="Name">Cutomer Name:</label>
-                <input Name="name" id="name" />
-            </div>
-            <div class="form-group">
-                <label for="address">Address:</label>
-                <input Name="address" id="address" />
-            </div>
-            <div class="form-group">
-                <label for="price">Mobile Number:</label>
-                <input type="number" name="number" id="number" />
-            </div>
-            
-            <input name="btnAddBill" id="addCustomer" type="button" class="button" value="Add Customer" />
-        </fieldset>
-    </form>
-</div>
+      <form >
+        <h1>Add New Customer</h1>
+        <!-- <div class="icon">
+          <i class="fas fa-user-circle"></i>
+        </div> -->
+        <div class="formcontainer">
+        <div class="container">
+          <label for="uname"><strong>Customer Name</strong></label>
+          <input type="text" placeholder="Enter Name" name="uname" required>
+          <label for="address"><strong>Address</strong></label>
+          <input type="text" placeholder="Enter Address" name="address" required>
+          <label for="phone"><strong>Phone</strong></label>
+          <input type="text" placeholder="+92-xxx-xxx-xxxx" name="phone" required>
+        </div>
+        <button type="submit" class="btnAddNewCustomer"><strong>Register</strong></button>
+        <div class="container" style="display: none;">
+          <label style="padding-left: 15px">
+          <input type="checkbox"  checked="checked" name="remember"> Remember me
+          </label>
+        </div>
+      </form>
+              
+    </div>
+
 
 </body>
 </html>
