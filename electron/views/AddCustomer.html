@@ -8,11 +8,11 @@
 
     <div class="topnav">
         <a href="mainMenu.html">Tables</a>
-        <a class="active" href="kitchen.html">Kitchen</a>
+        <a href="kitchen.html">Kitchen</a>
         <a href="DrinksTab.html">Drinks</a>
         <a href="CigeratteTab.html">Cigarettes</a>
         <a >Expense</a>
-        <a href="AddCustomer.html">Add Customer</a>
+        <a class='active' href="AddCustomer.html">Add Customer</a>
         <a href="SummeryTab.html">Summary</a>
       </div>
       <div class="topnav central">
@@ -24,23 +24,22 @@
     <form action="" method="post" name="registration" class="register">
         <fieldset>
             <div class="form-group">
-                <label for="Name">Name:</label>
+                <label for="Name">Cutomer Name:</label>
                 <input Name="name" id="name" />
             </div>
             <div class="form-group">
-                <label for="Order Item">Order Item</label>
-                <input Name="orderItem" id="orderItem" />
+                <label for="address">Address:</label>
+                <input Name="address" id="address" />
             </div>
             <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="number" name="price" id="price" />
+                <label for="price">Mobile Number:</label>
+                <input type="number" name="number" id="number" />
             </div>
             
-            <input onclick="placeOrder()" name="btnAddBill" id="addOrder" type="button" class="button" value="Add Bill" />
+            <input name="btnAddBill" id="addCustomer" type="button" class="button" value="Add Customer" />
         </fieldset>
     </form>
 </div>
-<script src="../js/kitchen.js"></script>
 
 </body>
 </html>

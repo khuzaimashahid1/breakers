@@ -1,11 +1,13 @@
 const { remote } = require('electron');
 const electron = require('electron');
+const connections=require('../DataBaseOperations/connections.js')
 let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
 const players = remote.getGlobal('sharedObj').currentPlayers;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
 let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
+let cigaretteStock,drinkStock;
 let currentPlayers = []
 getCurrentPlayers();
 populatePlayers();
@@ -32,34 +34,26 @@ function getCurrentPlayers() {
     });
 }
 
-function modalScript() {
-    console.log("modalScript")
+function modalScript(playerId) {
+    console.log(playerId)
+    
+    
     // Get the modal
     var modal = document.getElementById("myModal");
     modal.style.display = "block";
-    // Get the button that opens the modal
-    // var btn = document.getElementsByClassName("btnAddExtra");
-
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on the button, open the modal
-    // btn.onclick = function () {
-    // modal.style.display = "block";
-    //     console.log("Clicked")
-    // }
-
     // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
         modal.style.display = "none";
     }
-
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
     }
+
 
 
 }
@@ -69,29 +63,50 @@ function tabItem(category) {
     for (i = 0; i < x.length; i++) {
         x[i].style.display = "none";
     }
+    if(category==="Cigarettes")
+    {
+        connections.getCigarettes().then(rows=>
+            {   
+                cigaretteStock =rows;
+                console.log(cigaretteStock)
+                for(let i=0;i<cigaretteStock.length;i++)
+                {
+                    $("select#CigaretteSelect").append( $("<option>")
+                    .val(cigaretteStock[i].inventoryId)
+                    .html(cigaretteStock[i].itemName)
+                    );
+                }
+                $("select#CigaretteSelect").change(function(){
+                    var selectedCigarette = $(this).children("option:selected").val();
+                    const cigaretteFilter=cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
+                    $("#CigarettePrice").val(cigaretteFilter[0].itemAmount)
+                });
+            });
+    }
+    else if(category==="Drinks")
+    {
+        connections.getDrinks().then(rows=>
+            {   
+                drinkStock =rows;
+                console.log(drinkStock)
+                for(let i=0;i<drinkStock.length;i++)
+                {
+                    $("select#DrinkSelect").append( $("<option>")
+                    .val(drinkStock[i].inventoryId)
+                    .html(drinkStock[i].itemName)
+                    );
+                }
+                $("select#DrinkSelect").change(function(){
+                    var selectedDrink = $(this).children("option:selected").val();
+                    const drinkFilter=drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
+                    $("#DrinkPrice").val(drinkFilter[0].itemAmount)
+                });
+            });
+    }
     document.getElementById(category).style.display = "block";
 }
 
 
-
-// //Function For Getting Current Players
-// function getCurrentPlayers()
-// {
-//     Object.values(currentGame).forEach(function(value,index) {
-//         if(index>5&&index<16)
-//         {
-//             if(value!==null)
-//             {
-//                 const player=players.filter((player => (player.customerId === (value))));
-//                 currentPlayers.push(player[0])
-//             }
-//             else
-//             {
-//                 currentPlayers.push(null)
-//             }
-//         } 
-//     });
-// }
 
 function populatePlayers() {
     var numberofCurrnetPlayers = currentPlayers.length;
@@ -114,7 +129,7 @@ function populatePlayers() {
                 '<label class="player">' + currentPlayers[i].customerName + '</label>' +
                 '</div>' +
                 '<div class="hoverBody">' +
-                '<button id="btnAddExtra" class="btnAddExtra"  onClick="modalScript()">Add Extra</button>' +
+                '<button id="btnAddExtra" class="btnAddExtra"  onClick="modalScript('+currentPlayers[i].customerId+')">Add Extra</button>' +
                 '</div>' +
                 '</div>');
             $(".playersList").append("<option id=" + currentPlayers[i].customerId + ">" + currentPlayers[i].customerName + "</option");

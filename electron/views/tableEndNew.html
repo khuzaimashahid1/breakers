@@ -70,20 +70,12 @@
                 <div id="Drinks" class="w3-container city" style="display:none">
                     <div class="main-block">
                         <h1>Drinks Order</h1>
-                        <form action="/">
+                        <form >
                             <div class="info">
-                                <select>
+                                <select id=DrinkSelect>
                                     <option value="number" disabled selected>Select Drink</option>
-                                    <option value="PepsiTin">Pepsi Tin</option>
-                                    <option value="PepsiLiter">Pepsi 1.5L</option>
-                                    <option value="7upTin">7up Tin</option>
-                                    <option value="7upLiter">7up 1.5L</option>
-                                    <option value="cokeTin">Coke Tin</option>
-                                    <option value="cokeLiter">Coke 1.5L</option>
-                                    <option value="stingReg">Sting Reg</option>
-                                    <option value="stingHalf">Sting 500ml</option>
                                 </select>
-                                <input type="text" name="name" placeholder="Price">
+                                <input id="DrinkPrice" type="text" name="name" placeholder="Price">
                             </div>
                             <button href="/" class="btnModal">Add to bill</button>
                         </form>
@@ -96,16 +88,10 @@
                         <h1>Cigarette Order</h1>
                         <form action="/">
                             <div class="info">
-                                <select>
+                                <select id=CigaretteSelect>
                                     <option value="number" disabled selected>Select Cigarette</option>
-                                    <option value="Capstan">Capstan</option>
-                                    <option value="Benson">Benson</option>
-                                    <option value="Dunhill">Dun hill</option>
-                                    <option value="Goldleave">Gold Leave</option>
-                                    <option value="Goldflake">Gold Flake</option>
-                                    <option value="Marlboro">Marlboro</option>
                                 </select>
-                                <input type="text" name="name" placeholder="Price">
+                                <input id="CigarettePrice" type="text" name="name" placeholder="Price">
                             </div>
                             <button href="/" class="btnModal">Add to bill</button>
                         </form>

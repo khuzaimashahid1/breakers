@@ -93,7 +93,7 @@ module.exports.createTables = () =>
   
   db.serialize(() => {
     // Queries scheduled here will be serialized.
-    db.run('CREATE TABLE IF NOT EXISTS Customer(customerId INTEGER PRIMARY KEY AUTOINCREMENT,customerName text NOT NULL, customerPhone text, customerAddress text, createDate text NOT NULL,updateDate text)')
+    db.run('CREATE TABLE IF NOT EXISTS Customer(customerId INTEGER PRIMARY KEY AUTOINCREMENT,customerName text NOT NULL, customerPhone text, customerAddress text, createDate text NOT NULL,updateDate text,member INTEGER DEFAULT 0)')
       .run('CREATE TABLE IF NOT EXISTS Game(gameId INTEGER PRIMARY KEY AUTOINCREMENT,gameType text NOT NULL, tableNo int NOT NULL, startTime text NOT NULL, endTime text,status text NOT NULL,customerId1 int ,customerId2 int,customerId3 int ,customerId4 int,customerId5 int ,customerId6 int,customerId7 int ,customerId8 int, customerId9 int ,customerId10 int, loserId1 int,loserId2 int, amount int, createDate text NOT NULL,updateDate text,FOREIGN KEY(customerId1) REFERENCES Customer(customerId),FOREIGN KEY(customerId2) REFERENCES Customer(customerId),FOREIGN KEY(customerId3) REFERENCES Customer(customerId),FOREIGN KEY(customerId4) REFERENCES Customer(customerId),FOREIGN KEY(customerId5) REFERENCES Customer(customerId),FOREIGN KEY(customerId6) REFERENCES Customer(customerId),FOREIGN KEY(customerId7) REFERENCES Customer(customerId),FOREIGN KEY(customerId8) REFERENCES Customer(customerId),FOREIGN KEY(customerId9) REFERENCES Customer(customerId),FOREIGN KEY(customerId10) REFERENCES Customer(customerId),FOREIGN KEY(loserId1) REFERENCES Customer(customerId),FOREIGN KEY(loserId2) REFERENCES Customer(customerId))')
       .run('Create table IF NOT EXISTS InventoryCategory(inventoryCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,inventoryCategoryName text UNIQUE, createDate text, updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS Inventory(inventoryId INTEGER PRIMARY KEY AUTOINCREMENT,itemName text UNIQUE, itemAmount int,quantity REAL,itemDescription text, createDate text,updateDate text,inventoryCategoryId int,FOREIGN KEY(inventoryCategoryId) REFERENCES InventoryCategory(inventoryCategoryId))')
@@ -157,6 +157,65 @@ module.exports.getCustomers =  async() =>
     resolve(rows);
    });
 }
+
+//Get All Cigarettes in Stock
+module.exports.getCigarettes =  async() =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select * from Inventory WHERE inventoryCategoryId=1 AND quantity>0';
+  
+  
+  let rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+//Get All Drinks in Stock
+module.exports.getDrinks =  async() =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select * from Inventory WHERE inventoryCategoryId=2 AND quantity>0';
+  
+  
+  let rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
 
 //Start Game
 module.exports.startGame=(tableNumber, status, gameType, id1, id2,id3,id4,id5,id6,id7,id8,id9,id10, startTime,createDate)=>
@@ -244,9 +303,6 @@ module.exports.getOngoingGames =  async() =>
     }
     console.log('Close the database connection.');
   });
-  // return new Promise(function(resolve, reject) {
-  //   resolve(rows);
-  //  });
   return Promise.all([tab1, tab2, tab3,tab4, tab5, tab6,tab7, tab8]);
 }
 
