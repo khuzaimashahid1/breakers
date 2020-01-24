@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../CSS/tableEnd.css">
+    <link rel="stylesheet" href="../CSS/modal.css">
+    <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
+    <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
+</head>
+
+<body>
+    <div class="mainContainer">
+
+        <!-- MAKING A DIV FOR HEADER OF THE PAGE-->
+        <div class="header">
+
+        </div>
+
+        <!-- MAKING A DIV FOR GAME BODY DEPENDING ON GAME TYPE -->
+        <div id="playersContainer" class="playersContainer">
+            <legend>Current Players in the game</legend>
+            <div class="grid-container">
+            </div>
+
+
+        </div>
+        <!-- MAKING A DIV FOR FOOTHER OF THE PAGE -->
+        <div class="footer">
+            <div class="footerItem">
+                <select class="playersList">
+                    <option>Choose Loser</option>
+                </select>
+            </div>
+            <div class="footerItem">
+                <button id="nextGame" class="w3-button">Next Game</button>
+            </div>
+            <div class="footerItem">
+                <button id="endGame" class="w3-button">End Game</button>
+            </div>
+
+        </div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="w3-bar w3-black">
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Kitchen')">Kitchen</button>
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Drinks')">Drinks</button>
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Cigarettes')">Cigarettes</button>
+                    <button class="w3-bar-item w3-button" onclick="tabItem('Miscallenous')">Miscallenous</button>
+                </div>
+
+                <div id="Kitchen" class="w3-container city">
+                    <div class="main-block">
+                        <h1>Kitchen Order</h1>
+                        <form action="/">
+                            <div class="info">
+                                <input type="text" name="name" placeholder="Order Item">
+                                <input type="text" name="name" placeholder="Price">
+                            </div>
+                            <button href="/" class="btnModal">Add to Bill</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="Drinks" class="w3-container city" style="display:none">
+                    <div class="main-block">
+                        <h1>Drinks Order</h1>
+                        <form>
+                            <div class="info">
+                                <select id=DrinkSelect>
+                                    <option value="number" disabled selected>Select Drink</option>
+                                </select>
+                                <input id="DrinkPrice" type="text" name="name" placeholder="Price">
+                            </div>
+                            <button href="/" class="btnModal">Add to bill</button>
+                        </form>
+                    </div>
+                    </form>
+                </div>
+
+                <div id="Cigarettes" class="w3-container city" style="display:none">
+                    <div class="main-block">
+                        <h1>Cigarette Order</h1>
+                        <form action="/">
+                            <div class="info">
+                                <select id=CigaretteSelect>
+                                    <option value="number" disabled selected>Select Cigarette</option>
+                                </select>
+                                <input id="CigarettePrice" type="text" name="name" placeholder="Price">
+                            </div>
+                            <button href="/" class="btnModal">Add to bill</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="Miscallenous" class="w3-container city" style="display:none">
+                    <div class="main-block">
+                        <h1>Miscellaneous Order</h1>
+                        <form action="/">
+                            <div class="info">
+
+                                <input type="text" name="name" placeholder="Order Item">
+                                <input type="text" name="name" placeholder="Price">
+
+                            </div>
+
+                            <button href="/" class="btnModal">Add to Bill</button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="columnBody">
+                    <table style="width:80%">
+                        <tr>
+                            <th>Order Item</th>
+                            <th>Order Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="../js/tableEnd.js"></script>
+
+</html>
