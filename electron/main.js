@@ -12,6 +12,7 @@ global.sharedObj = {
     tableNumber:null,
     status:[],
     games:[],
+    allplayers:null,
     players:null,
     currentPlayers:[]
 }
@@ -62,14 +63,31 @@ ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone
         {
             if(result===true)
             {
-               getAllCustomers();
+                getAllCustomers()
+                win.reload();
+                console.log("Player Added")
             }
             
         });
     
 })
 
-//Add Order for inventory
+//Delete Customer
+ipc.on('delete-customer',function(event, customerId){
+    connections.deleteCustomer(customerId).then(result=>
+        {
+            if(result===true)
+            {
+                getAllCustomers()
+                win.reload();
+                console.log("Player Deleted")
+            }
+            
+        });
+    
+})
+
+//Add Order
 ipc.on('add-order',function(event,inventoryId,gameId,customerId,quantity,amount){
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -131,6 +149,7 @@ function getAllCustomers()
     connections.getCustomers().then(rows=>
         {   
             global.sharedObj.players =rows;
+            global.sharedObj.allplayers =rows;
             console.log("All Customers Fetched From DB")
         });
 }
