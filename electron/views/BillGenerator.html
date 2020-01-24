@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../CSS/placeOrder.css">
     <link rel="stylesheet" href="../CSS/breakers.css">
     <link rel="stylesheet" href="../CSS/tableEnd.css">
-    <link rel="stylesheet" href="../CSS/modal.css">
+    <link rel="stylesheet" href="../CSS/BillGenerator.css">
     <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
 </head>
@@ -15,42 +15,65 @@
 
     <div class="topnav">
         <a href="mainMenu.html">Tables</a>
-        <a class="active" href="orders.html">Place Order</a>
+        <a  href="orders.html">Place Order</a>
         <a>Expense</a>
-        <a href="BillGenerator.html">Generte Bill</a>
+        <a class="active" href="BillGenerator.html">Generte Bill</a>
         <a href="AddCustomer.html">Add Customer</a>
         <a href="SummeryTab.html">Summary</a>
     </div>
 
-    <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
-        <h5 class="w3-bar-item" width=20%>Order Type</h5>
-        <button class="w3-bar-item w3-button tablink w3-green" onclick="openLink(event, 'Fade')">Kitchen</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Left')">Drinks</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Top')">Cigarettes</button>
-    </div>
+ 
 
-    <div style="margin-left:15%">
+    <div>
 
         <div id="Fade" class="w3-container city w3-animate-opacity">
-            <h1>Kitchen</h1>
+            <h1 
+            style="width:100%; 
+            text-align: center;"
+            >Generate Invoice</h1>
             <div class="w3-bar w3-black">
-                <button class="w3-bar-item w3-button" onclick="tabItem('Order')">Add Kitchen Order</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('Summary')">Kitchen Summary</button>
+                <input id="PlayerName" class="w3-bar-item"
+                    type="text" 
+                    name="name"
+                    placeholder="Player Name"
+                    style="margin-left: 30%;
+                           height: 40px;
+                           width: 20%;
+                           padding: 10px; "
+                    >
+
+                <button
+                  id="btnGenerateBill"
+                  class="w3-button"
+                  onclick=""
+                  style="margin-left: 2%;
+                        height: 40px;
+                        width: 20%;
+                        margin-right: 20%;
+                        background: #ffff; 
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: green;
+                        padding: 10px; "
+           >Generate Invoice</button
+                  >
             </div>
 
             <div id="Order" class="w3-container category">
-                <h1>Kitchen Order</h1>
+                <h1 
+                    style="width: 100%;
+                           margin-left: 45%;">Bill Details</h1>
                 <div class="main-block">
-                    <form action="/">
+                    <!-- <form action="/">
                         <input id="KitchenOrderItem" type="text" name="name" placeholder="Order Item" style="width:100%; margin-left:20%; margin-right:50%;">
                         <br/>
                         <input id="KitchenOrderPrice" type="text" name="name" placeholder="Price" style="width:100%; margin-left:20%; margin-right:50%;">
                         <button  id="btnModal"class="btnModal">Add to Bill</button>
-                    </form>
+                    </form> -->
                 </div>
             </div>
             <!-- Kitchen Summary Tab -->
-            <div id="Summary" class="w3-container category" style="display:none">
+            <!-- <div id="Summary" class="w3-container category" style="display:none">
                 <div class="main-block">
                     <h2>Kitchen Summary Table</h2>
                     <table>
@@ -87,7 +110,7 @@
                 <button class="w3-bar-item w3-button" onclick="cigaretteItem('New')">Add New Cigarette</button>
                 <button class="w3-bar-item w3-button" onclick="cigaretteItem('Stock')">Add Stock</button>
             </div>
-        </div>
+        </div> -->
     </div>
     <script>
         function openLink(evt, animName) {
