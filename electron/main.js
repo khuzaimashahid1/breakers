@@ -113,7 +113,7 @@ function getAllCustomers()
     connections.getCustomers().then(rows=>
         {   
             global.sharedObj.players =rows;
-            console.log("Players added")
+            console.log("All Customers Fetched From DB")
         });
 }
 
