@@ -36,20 +36,6 @@ function createWindow(){
     })
 }
 
-//Place Kitchen Order
-ipc.on('place-kitchen-order',function(event,customerName,orderItem,price){
-    console.log(customerName)
-    console.log(orderItem)
-    console.log(price)
-})
-
-//Place Drink Order
-ipc.on('place-drink-order',function(event,customerName,orderItem,price){
-    console.log(customerName)
-    console.log(orderItem)
-    console.log(price)
-})
-
 //Error Dialouge Box Pop-up
 ipc.on('error-dialog',function(event,message){
     dialog.showErrorBox("ERROR",message)
@@ -75,15 +61,14 @@ ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone
         {
             if(result===true)
             {
-                win.reload();
-                console.log("Player Added")
+               getAllCustomers();
             }
             
         });
     
 })
 
-//Add Order
+//Add Order for inventory
 ipc.on('add-order',function(event,inventoryId,gameId,customerId,quantity,amount){
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -91,6 +76,38 @@ ipc.on('add-order',function(event,inventoryId,gameId,customerId,quantity,amount)
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
     connections.addOrder(currentDate,currentDate,inventoryId,gameId,customerId,quantity,amount);
+})
+
+//Add Order Others
+ipc.on('add-order-others',function(event,gameId,customerId,categoryName,itemName,amount){
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const currentDate = yyyy + '-' + mm + '-' + dd;
+    connections.addOrderOthers(currentDate,gameId,customerId,categoryName,itemName,amount);
+})
+
+//End Game
+ipc.on('end-game',function(event,gameId,loserId1,loserId2)
+{
+    const today = new Date();
+    const endTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const updateDate = yyyy + '-' + mm + '-' + dd;
+    connections.endGame(updateDate,gameId,loserId1,loserId2,endTime).then(result=>
+        {
+            if(result===true)
+            {
+                getAllCustomers();
+                getAllOngoingGames();
+                win.reload();
+            }
+            
+        });
+    
 })
 
 app.on('ready', createWindow);
