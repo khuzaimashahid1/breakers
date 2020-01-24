@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../CSS/tableStart.css">
+</head>
+
+<body>
+  <div id="d1" class='selectBoxContainer'>
+    <select id="selectBox" onchange="selectGame()" name="Game Type">
+      <option id="a" value="Choose">Game Category</option>
+      <option id="s" value="single">Single</option>
+      <option id="d" value="double">Double</option>
+      <option id="c" value="century">Century</option>
+    </select>
+
+  </div>
+  <div class="gameContainer">
+    <div id="single" class='singleGame'>
+      <div>
+        <input type="text" id="singlePlayer1" placeholder="Player 1" />
+      </div>
+
+      <label id="label_1" style="margin:45%;">vs</label>
+      <br />
+      <div>
+        <input type="text" id="singlePlayer2" placeholder="Player 2" />
+      </div>
+      <label id="startTimeSingle" class="label">Start Time:</label>
+      <br />
+      <button id="btnStartSingle">Start Game</button>
+    </div>
+
+    <div id="double" class='doubleGame'>
+      <div>
+        <input type="text" id="doublePlayer1" placeholder="Player 1" />
+      </div>
+      <div>
+        <input type="text" id="doublePlayer2" placeholder="Player 2" />
+      </div>
+      <label id="label_1" class='label' style="margin: 45%;">vs</label>
+      <br />
+      <div>
+        <input type="text" id="doublePlayer3" placeholder="Player 1" />
+      </div>
+      <div>
+        <input type="text" id="doublePlayer4" placeholder="Player 2" />
+      </div>
+      <label id="startTimeDouble" class="label">Start Time :</label>
+      <br />
+      <button id="btnStartDouble">Start Game</button>
+
+    </div>
+
+
+    <div id="century" class='centuryGame'>
+      <div id='players'>
+        <div class="playersFieldsWrap">
+          <div>
+            <input type="text" id="centuryPlayer1" class="inputField" name="centuryPlayer1"
+              placeholder="Player 1 Name" />
+          </div>
+        </div>
+        <button hidden='true' class="removeField">X</button>
+        <button class="btnAddPlayerField">Add Player</button>
+
+
+        <label id="startTimeCentury" class='label'>Start Time :</label>
+        <br />
+        <button id="btnStartCentury">Start Game</button>
+
+      </div>
+    </div>
+  </div>
+  <script src="../js/tableStart.js"></script>
+  <script>
+    const single = document.getElementById("single");
+    single.style.display = "none";
+    const double = document.getElementById("double");
+    double.style.display = "none";
+    const century = document.getElementById("century");
+    century.style.display = "none";
+
+  </script>
+</body>
+
+</html>
