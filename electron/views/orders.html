@@ -17,18 +17,19 @@
         <a href="mainMenu.html">Tables</a>
         <a class="active" href="orders.html">Place Order</a>
         <a>Expense</a>
+        <a href="BillGenerator.html">Generte Bill</a>
         <a href="AddCustomer.html">Add Customer</a>
         <a href="SummeryTab.html">Summary</a>
     </div>
 
-    <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:130px">
-        <h5 class="w3-bar-item">Order Type</h5>
-        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Fade')">Kitchen</button>
+    <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
+        <h5 class="w3-bar-item" width=20%>Order Type</h5>
+        <button class="w3-bar-item w3-button tablink w3-green" onclick="openLink(event, 'Fade')">Kitchen</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Left')">Drinks</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Top')">Cigarettes</button>
     </div>
 
-    <div style="margin-left:130px">
+    <div style="margin-left:15%">
 
         <div id="Fade" class="w3-container city w3-animate-opacity">
             <h1>Kitchen</h1>
@@ -40,11 +41,11 @@
             <div id="Order" class="w3-container category">
                 <h1>Kitchen Order</h1>
                 <div class="main-block">
-                    <form>
-                        <input type="text" name="name" placeholder="Customer Name" /><br />
-                        <input type="text" name="name" placeholder="Order Item" /><br />
-                        <input type="number" name="name" placeholder="Price" /><br />
-                        <button class="btnModal">Add to Bill</button>
+                    <form action="/">
+                        <input id="KitchenOrderItem" type="text" name="name" placeholder="Order Item" style="width:100%; margin-left:20%; margin-right:50%;">
+                        <br/>
+                        <input id="KitchenOrderPrice" type="text" name="name" placeholder="Price" style="width:100%; margin-left:20%; margin-right:50%;">
+                        <button  id="btnModal"class="btnModal">Add to Bill</button>
                     </form>
                 </div>
             </div>
@@ -215,10 +216,10 @@
             }
             tablinks = document.getElementsByClassName("tablink");
             for (i = 0; i < x.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+                tablinks[i].className = tablinks[i].className.replace(" w3-green", "");
             }
             document.getElementById(animName).style.display = "block";
-            evt.currentTarget.className += " w3-red";
+            evt.currentTarget.className += " w3-green";
         }
 
         function tabItem(category) {

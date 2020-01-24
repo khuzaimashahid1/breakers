@@ -44,8 +44,8 @@
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <div class="w3-bar w3-black">
-                    <button class="w3-bar-item w3-button" onclick="tabItem('Kitchen')">Kitchen</button>
+                <div class="w3-bar w3-black" >
+                    <button class="w3-bar-item w3-button"  style="margin-left: 20%;" onclick="tabItem('Kitchen')">Kitchen</button>
                     <button class="w3-bar-item w3-button" onclick="tabItem('Drinks')">Drinks</button>
                     <button class="w3-bar-item w3-button" onclick="tabItem('Cigarettes')">Cigarettes</button>
                     <button class="w3-bar-item w3-button" onclick="tabItem('Miscallenous')">Miscallenous</button>
@@ -56,8 +56,10 @@
                         <h1>Kitchen Order</h1>
                         <form >
                             <div class="info">
-                                <input type="text" id="kitchenItem" placeholder="Order Item">
-                                <input type="text" id="kitchenPrice" placeholder="Price">
+                                <input type="text" name="name" placeholder="Order Item" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <br/>
+                                <input type="text" name="name" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                
                             </div>
                             <button  type="button" class="btnModal" onclick="kitchenOrder()">Add to Bill</button>
                         </form>
@@ -69,10 +71,17 @@
                         <h1>Drinks Order</h1>
                         <form>
                             <div class="info">
-                                <select id=DrinkSelect>
-                                    <option value="number" disabled selected>Select Drink</option>
+                                <select id=DrinkSelect style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                    <option value="number" disabled selected style="text-indent: 40%;">Select Drink</option>
                                 </select>
+<<<<<<< HEAD
+                                <br/>
+                                <input id="DrinkQuantity" type="text" name="number" placeholder="Quantity" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <br/>
+                                <input id="DrinkPrice" type="text" name="name" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+=======
                                 <input id="drinkPrice" type="text" placeholder="Price">
+>>>>>>> 16f9448247809af22264820a939adf54f4079f6e
                             </div>
                             <button type="button" class="btnModal" onclick="drinksOrder()">Add to bill</button>
                         </form>
@@ -85,10 +94,17 @@
                         <h1>Cigarette Order</h1>
                         <form >
                             <div class="info">
-                                <select id=CigaretteSelect>
+                                <select id=CigaretteSelect style="width: 100%; margin-left: 20%; margin-right: 20%;">
                                     <option value="number" disabled selected>Select Cigarette</option>
                                 </select>
+<<<<<<< HEAD
+                                <br/>
+                                <input id="CigaretteQuantity"type="text" name="number" placeholder="Quantity" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <br/>
+                                <input id="CigarettePrice" type="text" name="name" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+=======
                                 <input id="cigarettePrice" type="text" placeholder="Price">
+>>>>>>> 16f9448247809af22264820a939adf54f4079f6e
                             </div>
                             <button type="button" class="btnModal" onclick="cigarettesOrder()">Add to bill</button>
                         </form>
@@ -101,8 +117,14 @@
                         <form >
                             <div class="info">
 
+<<<<<<< HEAD
+                                <input type="text" name="name" placeholder="Order Item" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <br/>
+                                <input type="text" name="name" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+=======
                                 <input type="text" id="miscItem" placeholder="Order Item">
                                 <input type="text" id="miscPrice" placeholder="Price">
+>>>>>>> 16f9448247809af22264820a939adf54f4079f6e
 
                             </div>
 
