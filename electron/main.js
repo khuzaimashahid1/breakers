@@ -69,28 +69,28 @@ ipc.on('start-game',function(event, tableNumber, status, gameType, id1, id2,id3,
     
 })
 
+//Add Customer
+ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone,createDate){
+    connections.addCustomer(customerName,customerAddress,customerPhone,createDate).then(result=>
+        {
+            if(result===true)
+            {
+                win.reload();
+                console.log("Player Added")
+            }
+            
+        });
+    
+})
 
-ipc.on('add-order',function(event,kitchenVal,kitchenAmt,p1,p2,startTime, final,type, table){
-    console.log(global.sharedObj.player1)
-    console.log(global.sharedObj.player2)
-    console.log(global.sharedObj.tableNumber)
-    console.log(global.sharedObj.game)
-    global.sharedObj = {
-        kitchen: kitchenVal,
-        kitchenAmount: kitchenAmt,
-        player1:p1,
-        player2:p2,
-        start: startTime,
-        final: final,
-        game:type,
-        tableNumber: table
-    }
-    console.log(kitchenVal)
-    console.log(kitchenAmt)
-    console.log(global.sharedObj.player1)
-    console.log(global.sharedObj.player2)
-    console.log(global.sharedObj.tableNumber)
-    console.log(global.sharedObj.game)
+//Add Order
+ipc.on('add-order',function(event,inventoryId,gameId,customerId,quantity,amount){
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const currentDate = yyyy + '-' + mm + '-' + dd;
+    connections.addOrder(currentDate,currentDate,inventoryId,gameId,customerId,quantity,amount);
 })
 
 app.on('ready', createWindow);

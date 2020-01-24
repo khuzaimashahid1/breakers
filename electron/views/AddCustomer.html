@@ -26,17 +26,15 @@
         <div class="formcontainer">
         <div class="container">
           <label for="uname"><strong>Customer Name</strong></label>
-          <input type="text" placeholder="Enter Name" name="uname" required>
+          <input type="text" placeholder="Enter Name" id="uname" required>
           <label for="address"><strong>Address</strong></label>
-          <input type="text" placeholder="Enter Address" name="address" required>
+          <input type="text" placeholder="Enter Address" id="address" required>
           <label for="phone"><strong>Phone</strong></label>
-          <input type="text" placeholder="+92-xxx-xxx-xxxx" name="phone" required>
+          <input type="text" placeholder="+92-xxx-xxx-xxxx" id="phone" required>
         </div>
-        <button type="submit" class="btnAddNewCustomer"><strong>Register</strong></button>
+        <button type="submit" class="btnAddNewCustomer" onclick="addCustomer()"><strong>Register</strong></button>
         <div class="container" style="display: none;">
-          <label style="padding-left: 15px">
-          <input type="checkbox"  checked="checked" name="remember"> Remember me
-          </label>
+          
         </div>
       </form>
               
@@ -44,4 +42,5 @@
 
 
 </body>
+<script src="../js/addCustomer.js"></script>></script>
 </html>

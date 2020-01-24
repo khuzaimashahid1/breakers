@@ -82,6 +82,10 @@ function tabItem(category) {
                     $("#CigarettePrice").val(cigaretteFilter[0].itemAmount)
                 });
             });
+            // $("#cigarettesButton").click(function(){
+            //     console.log("Button was clicked.");
+            //   });
+            // ipc.send('add-order',inventoryId,gameId,customerId,quantity,amount);
     }
     else if(category==="Drinks")
     {

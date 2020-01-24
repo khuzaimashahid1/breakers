@@ -333,3 +333,59 @@ module.exports.runDuplicateInsertQuery = () =>
     console.log('Close the database connection.');
   });
 }
+
+
+//Add Order
+module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,quantity,amount) =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  db.serialize(() => {
+    // Queries scheduled here will be serialized.
+    db.run('Insert into InventoryManagement(createDate,quantity,inventoryId,gameId) values(?,?,?,?)',[createDate,-quantity,inventoryId,gameId])
+    .run('UPDATE Inventory SET updateDate=?,quantity=(Select quantity from Inventory where inventoryId=?)-? where inventoryId=?',[updateDate,inventoryId,quantity,inventoryId])
+    .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,inventoryManagementId,gameId) values (?,((Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))||" Sold"),?,(Select itemName from Inventory where inventoryId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName=(Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))), (SELECT MAX(inventoryManagementId) FROM InventoryManagement),?)',[createDate,inventoryId,amount,inventoryId,inventoryId,gameId])
+    .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount])
+    });
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+}
+
+
+//Add Customer
+module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDate)=>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  return new Promise(function(resolve, reject) {
+    db.run('Insert into customer ( customerName,customerAddress,customerPhone, createDate ) values (?,?,?,?)', [customerName,customerAddress,customerPhone,createDate], (err) => {
+        if (err !== null) 
+        reject(err);
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
+  });
+}
