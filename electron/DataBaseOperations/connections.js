@@ -360,8 +360,8 @@ module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,q
     console.log('Close the database connection.');
   });
 }
-
-
+ 
+ 
 //Add Customer
 module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDate)=>
 {
