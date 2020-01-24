@@ -110,7 +110,7 @@ legend {
     height: 10%;
     padding: 10px;
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 20% 20% 20%;
     background-color: green;
     color: #fff;
     opacity: 0.8;
@@ -128,11 +128,14 @@ legend {
     text-align: center;
   }
   .footerItem{
-    padding: 10px;
+    /* padding: 10px; */
     border: 1px solid #fff;
-    margin-left: 5px;
-    margin-right: 5px ;
+    margin-left: 2px;
+    margin-right: 2px ;
+   
     text-align: center;
+  }.playersList{
+    width: 150px;
   }
   .playersContainer{
     background-color: #ddd;
@@ -211,7 +214,7 @@ legend {
     left: 0;
     top: 0;
     width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    height: auto; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     /* background-color: rgb(0,0,0); Fallback color */
     background-color: green; /* Fallback color */
@@ -222,7 +225,7 @@ legend {
   /* Modal Content/Box */
   .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
@@ -255,6 +258,9 @@ legend {
     height: 50px;
     background: transparent;
 
+}
+.btnAddExtra{
+  margin-left: 35%;
 }
 
 
