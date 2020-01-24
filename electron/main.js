@@ -15,6 +15,7 @@ global.sharedObj = {
     players:null,
     currentPlayers:[]
 }
+
 function createWindow(){
     win = new BrowserWindow({
         fullscreen:true,
