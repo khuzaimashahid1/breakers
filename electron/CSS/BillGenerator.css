@@ -1,0 +1,38 @@
+td{
+ width: 250px;
+}
+
+tr{
+    width: 750px;
+}
+
+.fixed_header{
+    margin-top: -10px;
+    margin-left: 20%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+
+.fixed_header tbody{
+  display:block;
+  width: 100%;
+  overflow: auto;
+  height: 230px;
+}
+
+.fixed_header thead tr {
+   display: block;
+}
+
+.fixed_header thead {
+  background: black;
+  color:#fff;
+}
+
+.fixed_header th, .fixed_header td {
+  padding: 5px;
+  text-align: center;
+  /* width: 40%; */
+}
+
