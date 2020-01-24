@@ -4,8 +4,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../CSS/breakers.css">
 <link rel="stylesheet" href="../CSS/addCustomer.css">
+<link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
+<style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+
+</style>
 </head>
 <body>
+
+  <div class="row">
+
 
     <div class="topnav">
         <a href="mainMenu.html">Tables</a>
@@ -40,7 +62,54 @@
               
     </div>
 
+  </div>
+
+  <div class="row">
+    <h2>Customers Summary</h2>
+    
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>Customer Phone Number</th>
+                <th>Cutomer Registration Date</th>
+                <th>Edit / Delete</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Id</th>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>Customer Phone Number</th>
+                <th>Cutomer Registration Date</th>
+                <th>Edit / Delete</th>
+            </tr>
+        </tfoot>
+    </table>
+    <!-- <table id="example" class="display table table-striped table-bordered"
+       cellspacing="0" width="100%"></table>
+  </div> -->
+
+  <!-- <div class="row">
+      <table id="example" class="display" width="100%"></table>
+  </div> -->
+
 
 </body>
-<script src="../js/addCustomer.js"></script>></script>
+<script src="../js/addCustomer.js"></script>
+
+<!-- <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script> -->
+
+<!-- <script src="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"></script>
+
+<script src="node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script> -->
+<!-- <script>
+$(document).ready( function () {
+      $('#table_id').DataTable();
+  } );
+</script> -->
+
 </html>

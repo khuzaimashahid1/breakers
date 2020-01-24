@@ -389,3 +389,35 @@ module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDat
     });
   });
 }
+
+//Delete Customer
+module.exports.deleteCustomer=(customerId)=>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  console.log("delete")
+  return new Promise(function(resolve, reject) {
+    db.run('Delete from customer where customerId=?', [customerId], (err) => {
+        if (err !== null){
+          reject(err);
+          console.log("error in 222")
+        } 
+        
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
+  });
+}
