@@ -63,20 +63,15 @@ ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone
         {
             if(result===true)
             {
-<<<<<<< HEAD
                 getAllCustomers()
                 win.reload();
                 console.log("Player Added")
-=======
-               getAllCustomers();
->>>>>>> f3109688315e60dccd9326f2cd79b85947dde428
             }
             
         });
     
 })
 
-<<<<<<< HEAD
 //Delete Customer
 ipc.on('delete-customer',function(event, customerId){
     connections.deleteCustomer(customerId).then(result=>
@@ -93,9 +88,6 @@ ipc.on('delete-customer',function(event, customerId){
 })
 
 //Add Order
-=======
-//Add Order for inventory
->>>>>>> f3109688315e60dccd9326f2cd79b85947dde428
 ipc.on('add-order',function(event,inventoryId,gameId,customerId,quantity,amount){
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
