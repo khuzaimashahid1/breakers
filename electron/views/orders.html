@@ -72,20 +72,138 @@
         <div id="Left" class="w3-container city w3-animate-left" style="display:none">
             <h1>Drinks Order</h1>
             <div class="w3-bar w3-black">
-                <button class="w3-bar-item w3-button" onclick="drinksItem('Order')">Add Drinks Order</button>
-                <button class="w3-bar-item w3-button" onclick="drinksItem('Summary')">Drinks Summary</button>
-                <button class="w3-bar-item w3-button" onclick="drinksItem('New')">Add New Drink</button>
-                <button class="w3-bar-item w3-button" onclick="drinksItem('Stock')">Add Stock</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('drinkOrder')">Add Drinks Order</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('drinkSummary')">Drinks Summary</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('drinkNew')">Add New Drink</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('drinkStock')">Add Stock</button>
+            </div>
+
+            <div id="drinkOrder" class="w3-container category">
+                <h1>Drinks Order</h1>
+                <div class="main-block">
+                    <form>
+                        <select id=DrinkSelect>
+                            <option value="number" disabled selected>Select Drink</option>
+                        </select>
+                        <br />
+                        <input id="DrinkPrice" type="text" name="name" placeholder="Price"><br />
+                        <button href="/" class="btnModal">Add to bill</button>
+                    </form>
+                </div>
+                <h3 id="remainingStock">In Stock:</h3>
+            </div>
+            <!-- Kitchen Summary Tab -->
+            <div id="drinkSummary" class="w3-container category" style="display:none">
+                <div class="main-block">
+                    <h2>Drinks Sale Summary Table</h2>
+                    <table>
+                        <tr>
+                            <th>Cutomer Name</th>
+                            <th>Table Number</th>
+                            <th>Ordered Item</th>
+                            <th>Price</th>
+                        </tr>
+                    </table>
+                    <hr />
+                    <br />
+                    <br />
+                    <label>Total Sale:</label>
+                </div>
+            </div>
+            <div id="drinkNew" class="w3-container category" style="display:none">
+                <h1>Add New Drink To Inventory</h1>
+                <div class="main-block">
+                    <form>
+                        <input type="text" placeholder="Enter Drink Name" /><br />
+                        <input type="number" placeholder="Enter Drink Price" /><br />
+                        <button class="btnModal">Add Drink to Inventory!</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="drinkStock" class="w3-container category" style="display:none">
+                <h1>Add Stock to Inventory</h1>
+                <div class="main-block">
+                    <form>
+                        <select id=DrinkSelect>
+                            <option value="number" disabled selected>Select Drink</option>
+                        </select>
+                        <br />
+                        <input type="number" placeholder="Quantity" />
+                        <button class="btnModal">Add to Inventory</button>
+                    </form>
+                </div>
+                <h3 id="remainingStock">In Stock:</h3>
             </div>
         </div>
+
 
         <div id="Top" class="w3-container city w3-animate-top" style="display:none">
             <h1>Cigarettes Order</h1>
             <div class="w3-bar w3-black">
-                <button class="w3-bar-item w3-button" onclick="cigaretteItem('Order')">Add Cigarettes Order</button>
-                <button class="w3-bar-item w3-button" onclick="cigaretteItem('Summary')">Cigarettes Summary</button>
-                <button class="w3-bar-item w3-button" onclick="cigaretteItem('New')">Add New Cigarette</button>
-                <button class="w3-bar-item w3-button" onclick="cigaretteItem('Stock')">Add Stock</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigOrder')">Add Cigarettes Order</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigSummary')">Cigarettes Summary</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigNew')">Add New Cigarette</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigStock')">Add Stock</button>
+            </div>
+
+
+            <div id="cigOrder" class="w3-container category">
+                <h1>Cigarette Order</h1>
+                <div class="main-block">
+                    <form>
+                        <select id=DrinkSelect>
+                            <option value="number" disabled selected>Select Cigarette</option>
+                        </select>
+                        <br />
+                        <input id="DrinkPrice" type="text" name="name" placeholder="Price"><br />
+                        <button href="/" class="btnModal">Add to bill</button>
+                    </form>
+                </div>
+                <h3 id="remainingStock">In Stock:</h3>
+            </div>
+
+            <div id="cigSummary" class="w3-container category" style="display:none">
+                <div class="main-block">
+                    <h2>Cigarette Sale Summary Table</h2>
+                    <table>
+                        <tr>
+                            <th>Cutomer Name</th>
+                            <th>Table Number</th>
+                            <th>Ordered Item</th>
+                            <th>Price</th>
+                        </tr>
+                    </table>
+                    <hr />
+                    <br />
+                    <br />
+                    <label>Total Sale:</label>
+                </div>
+            </div>
+            <div id="cigNew" class="w3-container category" style="display:none">
+                <h1>Add New Cigarette To Inventory</h1>
+                <div class="main-block">
+                    <form>
+                        <input type="text" placeholder="Enter Drink Name" /><br />
+                        <input type="number" placeholder="Enter Drink Price" /><br />
+                        <button class="btnModal">Add Cigarette to Inventory!</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="cigStock" class="w3-container category" style="display:none">
+                <h1>Add Stock to Inventory</h1>
+                <div class="main-block">
+                    <form>
+                        <select id=cigSelect>
+                            <option value="number" disabled selected>Select Cigarette</option>
+                        </select>
+                        <br />
+                        <input type="number" placeholder="Quantity" />
+                        <button class="btnModal">Add to Inventory</button>
+                    </form>
+                </div>
+                <h3 id="remainingStock">In Stock:</h3>
             </div>
         </div>
     </div>
@@ -109,40 +227,6 @@
             var x = document.getElementsByClassName("category");
             for (i = 0; i < x.length; i++) {
                 x[i].style.display = "none";
-            }
-            if (category === "Cigarettes") {
-                connections.getCigarettes().then(rows => {
-                    cigaretteStock = rows;
-                    console.log(cigaretteStock)
-                    for (let i = 0; i < cigaretteStock.length; i++) {
-                        $("select#CigaretteSelect").append($("<option>")
-                            .val(cigaretteStock[i].inventoryId)
-                            .html(cigaretteStock[i].itemName)
-                        );
-                    }
-                    $("select#CigaretteSelect").change(function () {
-                        var selectedCigarette = $(this).children("option:selected").val();
-                        const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-                        $("#CigarettePrice").val(cigaretteFilter[0].itemAmount)
-                    });
-                });
-            }
-            else if (category === "Drinks") {
-                connections.getDrinks().then(rows => {
-                    drinkStock = rows;
-                    console.log(drinkStock)
-                    for (let i = 0; i < drinkStock.length; i++) {
-                        $("select#DrinkSelect").append($("<option>")
-                            .val(drinkStock[i].inventoryId)
-                            .html(drinkStock[i].itemName)
-                        );
-                    }
-                    $("select#DrinkSelect").change(function () {
-                        var selectedDrink = $(this).children("option:selected").val();
-                        const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-                        $("#DrinkPrice").val(drinkFilter[0].itemAmount)
-                    });
-                });
             }
             document.getElementById(category).style.display = "block";
         }

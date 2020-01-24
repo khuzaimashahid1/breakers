@@ -335,7 +335,44 @@ module.exports.runDuplicateInsertQuery = () =>
 }
 
 
-//Add Order
+//End Game
+module.exports.endGame = (updateDate,gameId,loserId1,loserId2,endTime) =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  //   db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,gameId,loserId1,loserId2,endTime])
+    
+  // db.close((err) => {
+  //   if (err) {
+  //     return console.error(err.message);
+  //   }
+  //   console.log('Close the database connection.');
+  // });
+
+  return new Promise(function(resolve, reject) {
+    db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,gameId], (err) => {
+        if (err !== null) 
+        reject(err);
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
+  });
+}
+
+//Add Order For inventory Items
 module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,quantity,amount) =>
 {
   let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -349,7 +386,32 @@ module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,q
     // Queries scheduled here will be serialized.
     db.run('Insert into InventoryManagement(createDate,quantity,inventoryId,gameId) values(?,?,?,?)',[createDate,-quantity,inventoryId,gameId])
     .run('UPDATE Inventory SET updateDate=?,quantity=(Select quantity from Inventory where inventoryId=?)-? where inventoryId=?',[updateDate,inventoryId,quantity,inventoryId])
-    .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,inventoryManagementId,gameId) values (?,((Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))||" Sold"),?,(Select itemName from Inventory where inventoryId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName=(Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))), (SELECT MAX(inventoryManagementId) FROM InventoryManagement),?)',[createDate,inventoryId,amount,inventoryId,inventoryId,gameId])
+    .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,inventoryManagementId,gameId) values (?,((Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))||" Sale"),?,(Select itemName from Inventory where inventoryId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName=(Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))), (SELECT MAX(inventoryManagementId) FROM InventoryManagement),?)',[createDate,inventoryId,amount,inventoryId,inventoryId,gameId])
+    .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount])
+    });
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+}
+
+
+//Add Order for others
+module.exports.addOrderOthers = (createDate,gameId,customerId,categoryName,itemName,amount) =>
+{
+  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  db.serialize(() => {
+    // Queries scheduled here will be serialized.
+    db.run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,(?||" Sale"),?,?,(Select revenueCategoryId from RevenueCategory where revenueCategoryName=?),?)',[createDate,categoryName,itemName,amount,categoryName,gameId])
     .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount])
     });
 
