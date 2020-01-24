@@ -187,7 +187,7 @@ function miscOrder()
 //End Game (Iron Man Dies)
 function endGame()
 {
-    if(currentGame.gameType==="single")
+    if(currentGame.gameType==="single" || currentGame.gameType==="century")
     {
         var loser = $("select#loserSelect").children("option:selected").val();
         console.log(loser)
