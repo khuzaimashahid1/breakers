@@ -7,7 +7,7 @@ window.$ = window.jQuery = require('jquery');
 require( 'datatables.net-dt' )();
 let allplayers = remote.getGlobal('sharedObj').allplayers;
 let currentPlayers = remote.getGlobal('sharedObj').currentPlayers;
-// var editor= require('https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js');
+
 
 function addCustomer()
 {
@@ -71,6 +71,6 @@ $(document).ready(function() {
   })
 });
 
-// });
+
 
     
