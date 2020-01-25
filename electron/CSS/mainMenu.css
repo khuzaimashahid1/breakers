@@ -3,6 +3,7 @@
      .gameContainer {
 
         background-image: url("../resources/BREAKERS-SNOOKER.jpg");
+        height: 100%;
     }
 
     .row {
@@ -67,7 +68,7 @@
         background-image: url("../resources/snooker.jpeg");
         justify-content: center;
         width: 18.5%;
-        height: 250px;
+        height: 18.5%;
         position: absolute;
 
     }

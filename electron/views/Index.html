@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+        <script>let $ = require('jquery');</script>
+        <script>require('popper.js');</script>
+        <script>require('bootstrap');</script>
+        <!-- <link rel="stylesheet" href="../CSS/breakers.css"> -->
+<script>
+
+  $(document).ready(function(){
+     
+     $('#content').load("mainMenu.html");
+  
+  });
+  function clicked(fileName)
+  {
+      
+     $('#content').load(fileName);
+  
+  
+  }
+  </script>
+</head>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Breakers</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExample04">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" onclick='clicked("mainMenu.html")'>Tables <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick='clicked("orders.html")'>Order Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  onclick='clicked("BillGenerator.html")'>Generte Bill</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick='clicked("AddCustomer.html")'>Customer Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick='clicked("SummeryTab.html")'>Reports</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<body>
+             
+  <div id="content" style="height: 100%;"></div>
+
+</body>
+</html>
