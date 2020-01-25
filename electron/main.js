@@ -49,6 +49,7 @@ ipc.on('start-game',function(event, tableNumber, status, gameType, id1, id2,id3,
         {
             if(result===true)
             {
+                getAllCustomers();
                 getAllOngoingGames();
                 win.reload();
             }
