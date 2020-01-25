@@ -34,23 +34,23 @@
         <div id="Fade" class="w3-container city w3-animate-opacity">
             <h1>Kitchen</h1>
             <div class="w3-bar w3-black">
-                <button class="w3-bar-item w3-button" onclick="tabItem('Order')">Add Kitchen Order</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('Summary')">Kitchen Summary</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('kitchenOrder')">Add Kitchen Order</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('kitchenSummary')">Kitchen Summary</button>
             </div>
 
-            <div id="Order" class="w3-container category">
+            <div id="kitchenOrder" class="w3-container category">
                 <h1>Kitchen Order</h1>
                 <div class="main-block">
                     <form action="/">
-                        <input id="KitchenOrderItem" type="text" name="name" placeholder="Order Item" style="width:100%; margin-left:20%; margin-right:50%;">
+                        <input id="kitchenOrderItem" type="text" name="name" placeholder="Order Item" style="width:100%; margin-left:20%; margin-right:50%;">
                         <br/>
-                        <input id="KitchenOrderPrice" type="text" name="name" placeholder="Price" style="width:100%; margin-left:20%; margin-right:50%;">
+                        <input id="kitchenOrderPrice" type="text" name="name" placeholder="Price" style="width:100%; margin-left:20%; margin-right:50%;">
                         <button  id="btnModal"class="btnModal">Add to Bill</button>
                     </form>
                 </div>
             </div>
             <!-- Kitchen Summary Tab -->
-            <div id="Summary" class="w3-container category" style="display:none">
+            <div id="kitchenSummary" class="w3-container category" style="display:none">
                 <div class="main-block">
                     <h2>Kitchen Summary Table</h2>
                     <table>
@@ -82,12 +82,12 @@
                 <h1>Drinks Order</h1>
                 <div class="main-block">
                     <form>
-                        <select id=DrinkSelect>
+                        <select id=drinkSelectOrder>
                             <option value="number" disabled selected>Select Drink</option>
                         </select>
                         <br />
-                        <input id="DrinkPrice" type="text" name="name" placeholder="Price"><br />
-                        <button href="/" class="btnModal">Add to bill</button>
+                        <input id="drinkPriceOrder" type="text" name="name" placeholder="Price"><br />
+                        <button id="drinkOrderAdd" class="btnModal">Add to bill</button>
                     </form>
                 </div>
                 <h3 id="remainingStock">In Stock:</h3>
@@ -114,9 +114,9 @@
                 <h1>Add New Drink To Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <input type="text" placeholder="Enter Drink Name" /><br />
-                        <input type="number" placeholder="Enter Drink Price" /><br />
-                        <button class="btnModal">Add Drink to Inventory!</button>
+                        <input id="drinkNewName" type="text" placeholder="Enter Drink Name" /><br />
+                        <input id="drinkNewPrice" type="number" placeholder="Enter Drink Price" /><br />
+                        <button id="drinkNewAdd" class="btnModal">Add Drink to Inventory!</button>
                     </form>
                 </div>
             </div>
@@ -125,12 +125,12 @@
                 <h1>Add Stock to Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <select id=DrinkSelect>
+                        <select id=drinkSelectStock>
                             <option value="number" disabled selected>Select Drink</option>
                         </select>
                         <br />
-                        <input type="number" placeholder="Quantity" />
-                        <button class="btnModal">Add to Inventory</button>
+                        <input id="drinkStockQuantity" type="number" placeholder="Quantity" />
+                        <button id="drinkStockAdd" class="btnModal">Add to Inventory</button>
                     </form>
                 </div>
                 <h3 id="remainingStock">In Stock:</h3>
@@ -141,29 +141,29 @@
         <div id="Top" class="w3-container city w3-animate-top" style="display:none">
             <h1>Cigarettes Order</h1>
             <div class="w3-bar w3-black">
-                <button class="w3-bar-item w3-button" onclick="tabItem('cigOrder')">Add Cigarettes Order</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('cigSummary')">Cigarettes Summary</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('cigNew')">Add New Cigarette</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('cigStock')">Add Stock</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigaretteOrder')">Add Cigarettes Order</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigaretteSummary')">Cigarettes Summary</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigaretteNew')">Add New Cigarette</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('cigaretteStock')">Add Stock</button>
             </div>
 
 
-            <div id="cigOrder" class="w3-container category">
+            <div id="cigaretteOrder" class="w3-container category">
                 <h1>Cigarette Order</h1>
                 <div class="main-block">
                     <form>
-                        <select id=DrinkSelect>
+                        <select id=cigaretteSelectOrder>
                             <option value="number" disabled selected>Select Cigarette</option>
                         </select>
                         <br />
-                        <input id="DrinkPrice" type="text" name="name" placeholder="Price"><br />
-                        <button href="/" class="btnModal">Add to bill</button>
+                        <input id="cigarettePriceOrder" type="text" name="name" placeholder="Price"><br />
+                        <button id="cigaretteOrderAdd" class="btnModal">Add to bill</button>
                     </form>
                 </div>
                 <h3 id="remainingStock">In Stock:</h3>
             </div>
 
-            <div id="cigSummary" class="w3-container category" style="display:none">
+            <div id="cigaretteSummary" class="w3-container category" style="display:none">
                 <div class="main-block">
                     <h2>Cigarette Sale Summary Table</h2>
                     <table>
@@ -180,58 +180,34 @@
                     <label>Total Sale:</label>
                 </div>
             </div>
-            <div id="cigNew" class="w3-container category" style="display:none">
+            <div id="cigaretteNew" class="w3-container category" style="display:none">
                 <h1>Add New Cigarette To Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <input type="text" placeholder="Enter Drink Name" /><br />
-                        <input type="number" placeholder="Enter Drink Price" /><br />
-                        <button class="btnModal">Add Cigarette to Inventory!</button>
+                        <input id="cigaretteNewName" type="text" placeholder="Enter Drink Name" /><br />
+                        <input id="cigaretteNewPrice" type="number" placeholder="Enter Drink Price" /><br />
+                        <button id="cigaretteNewAdd" class="btnModal">Add Cigarette to Inventory!</button>
                     </form>
                 </div>
             </div>
 
-            <div id="cigStock" class="w3-container category" style="display:none">
+            <div id="cigaretteStock" class="w3-container category" style="display:none">
                 <h1>Add Stock to Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <select id=cigSelect>
+                        <select id=cigaretteSelectStock>
                             <option value="number" disabled selected>Select Cigarette</option>
                         </select>
                         <br />
-                        <input type="number" placeholder="Quantity" />
-                        <button class="btnModal">Add to Inventory</button>
+                        <input id="cigaretteStockQuantity" type="number" placeholder="Quantity" />
+                        <button id="cigaretteStockAdd" class="btnModal">Add to Inventory</button>
                     </form>
                 </div>
                 <h3 id="remainingStock">In Stock:</h3>
             </div>
         </div>
     </div>
-    <script>
-        function openLink(evt, animName) {
-            var i, x, tablinks;
-            x = document.getElementsByClassName("city");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablink");
-            for (i = 0; i < x.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" w3-green", "");
-            }
-            document.getElementById(animName).style.display = "block";
-            evt.currentTarget.className += " w3-green";
-        }
-
-        function tabItem(category) {
-            var i;
-            var x = document.getElementsByClassName("category");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            document.getElementById(category).style.display = "block";
-        }
-
-    </script>
+    <script src="../js/placeOrder.js"></script>
 
 </body>
 
