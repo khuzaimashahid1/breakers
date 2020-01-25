@@ -81,14 +81,13 @@ body{
       width: 100%; /* Full width */
       height: auto; /* Full height */
       overflow: auto; /* Enable scroll if needed */
-      background: transparent;
       /* background-color: green; /* Fallback color */
       /* background-image: url("../resources/BREAKERS-SNOOKER.jpg"); */
-      /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
+      /* background-color: black; */
     }
       /* Modal Content/Box */
   .modal-content {
-    /* background-color: #fefefe; */
+    background-color: white;
     margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;

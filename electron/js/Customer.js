@@ -1,12 +1,25 @@
 // const { remote } = require('electron');
 // const electron = require('electron');
-const connections=require('../DataBaseOperations/connections.js')
+var connections;
+if(connections==null){
+    connections = require('../DataBaseOperations/connections.js')
+}
+
 // let ipc = electron.ipcRenderer;
-let win = remote.getGlobal('win')
+var win;
+if(win==null){
+ win = remote.getGlobal('win')
+}
 window.$ = window.jQuery = require('jquery');
 require( 'datatables.net-dt' )();
-let allplayers = remote.getGlobal('sharedObj').allplayers;
-let currentPlayers = remote.getGlobal('sharedObj').currentPlayers;
+
+var allplayers;
+var currentPlayers;
+if(allplayers==null){
+    allplayers = remote.getGlobal('sharedObj').allplayers;
+    currentPlayers = remote.getGlobal('sharedObj').currentPlayers;
+} 
+
 
 
 
@@ -48,7 +61,7 @@ function addCustomer()
 console.log(allplayers);
 
 
-let data=[]
+var data=[]
 for(let i=0;i<allplayers.length;i++)
 {
     data.push(allplayers[i])
