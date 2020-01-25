@@ -32,19 +32,38 @@
     <div style="margin-left:15%">
 
         <div id="Fade" class="w3-container city w3-animate-opacity">
-            <h1>Kitchen</h1>
+            <h1
+            style="
+            width: 100%;
+            text-align: center;">Kitchen</h1
+                >
             <div class="w3-bar w3-black">
                 <button class="w3-bar-item w3-button" onclick="tabItem('kitchenOrder')">Add Kitchen Order</button>
                 <button class="w3-bar-item w3-button" onclick="tabItem('kitchenSummary')">Kitchen Summary</button>
             </div>
 
             <div id="kitchenOrder" class="w3-container category">
-                <h1>Kitchen Order</h1>
+                <h1
+                style="
+                        width: 100%;
+                        text-align: center;">Kitchen Order</h1
+                    >
                 <div class="main-block">
                     <form action="/">
-                        <input id="kitchenOrderItem" type="text" name="name" placeholder="Order Item" style="width:100%; margin-left:20%; margin-right:50%;">
+                        <input 
+                            id="kitchenOrderItem" 
+                            type="text" 
+                            name="name" 
+                            placeholder="Order Item" 
+                            style="width: 40%;margin-left: 30%; padding-left: 30px; ">
                         <br/>
-                        <input id="kitchenOrderPrice" type="text" name="name" placeholder="Price" style="width:100%; margin-left:20%; margin-right:50%;">
+
+                        <input 
+                            id="kitchenOrderPrice" 
+                            type="text"
+                            name="name" 
+                            placeholder="Price" 
+                            style="width:40%;margin-left:30%; padding-left: 30px; margin-top: 30px;">
                         <button  id="btnModal"class="btnModal">Add to Bill</button>
                     </form>
                 </div>
@@ -82,11 +101,25 @@
                 <h1>Drinks Order</h1>
                 <div class="main-block">
                     <form>
-                        <select id=drinkSelectOrder>
+                        <select 
+                            id=drinkSelectOrder
+                            style="width:40%; margin-left:30%; padding-left: 30px;"
+                            >
                             <option value="number" disabled selected>Select Drink</option>
                         </select>
                         <br />
-                        <input id="drinkPriceOrder" type="text" name="name" placeholder="Price"><br />
+                        <input 
+                        type="number"
+                        id="drinkOrderQuantity"
+                        placeholder="Quantity"
+                        style="width:40%; margin-left:30%; padding-left: 30px; margin-top: 30px;"/>
+                        <br/>
+                        <input 
+                            id="drinkPriceOrder" 
+                            readonly
+                            placeholder="Price"
+                            style="width:40%; margin-left:30%; padding-left: 30px; margin-top: 30px;"/>
+                             
                         <button id="drinkOrderAdd" class="btnModal">Add to bill</button>
                     </form>
                 </div>
@@ -114,9 +147,18 @@
                 <h1>Add New Drink To Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <input id="drinkNewName" type="text" placeholder="Enter Drink Name" /><br />
-                        <input id="drinkNewPrice" type="number" placeholder="Enter Drink Price" /><br />
-                        <button id="drinkNewAdd" class="btnModal">Add Drink to Inventory!</button>
+                        <input 
+                            id="drinkNewName" 
+                            type="text" 
+                            placeholder="Enter Drink Name" 
+                            style="width:40%;margin-left:30%; padding-left: 30px;"/><br />
+
+                        <input 
+                            id="drinkNewPrice" 
+                            type="number" 
+                            placeholder="Enter Drink Price"
+                            style="width:40%;margin-left:30%; padding-left: 30px; margin-top: 30px;" /><br />
+                        <button id="drinkNewAdd" class="btnModal">Add to Inventory</button>
                     </form>
                 </div>
             </div>
@@ -125,11 +167,17 @@
                 <h1>Add Stock to Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <select id=drinkSelectStock>
+                        <select 
+                            id=drinkSelectStock 
+                            style="width:40%;margin-left:30%; padding-left: 30px;">
                             <option value="number" disabled selected>Select Drink</option>
                         </select>
                         <br />
-                        <input id="drinkStockQuantity" type="number" placeholder="Quantity" />
+                        <input 
+                            id="drinkStockQuantity" 
+                            type="number" 
+                            placeholder="Quantity" 
+                            style="width:40%;margin-left:30%; padding-left: 30px; margin-top: 30px;"/>
                         <button id="drinkStockAdd" class="btnModal">Add to Inventory</button>
                     </form>
                 </div>
@@ -152,11 +200,18 @@
                 <h1>Cigarette Order</h1>
                 <div class="main-block">
                     <form>
-                        <select id=cigaretteSelectOrder>
+                        <select 
+                            id=cigaretteSelectOrder
+                            style="width:40%;margin-left:30%; padding-left: 30px;">
                             <option value="number" disabled selected>Select Cigarette</option>
                         </select>
                         <br />
-                        <input id="cigarettePriceOrder" type="text" name="name" placeholder="Price"><br />
+                        <input 
+                            id="cigarettePriceOrder" 
+                            type="text" 
+                            name="name" 
+                            placeholder="Price"
+                            style="width:40%;margin-left:30%; padding-left: 30px; margin-top: 30px;"><br />
                         <button id="cigaretteOrderAdd" class="btnModal">Add to bill</button>
                     </form>
                 </div>
@@ -184,9 +239,17 @@
                 <h1>Add New Cigarette To Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <input id="cigaretteNewName" type="text" placeholder="Enter Drink Name" /><br />
-                        <input id="cigaretteNewPrice" type="number" placeholder="Enter Drink Price" /><br />
-                        <button id="cigaretteNewAdd" class="btnModal">Add Cigarette to Inventory!</button>
+                        <input 
+                            id="cigaretteNewName" 
+                            type="text" 
+                            placeholder="Cigarette Name" 
+                            style="width:40%;margin-left:30%; padding-left: 30px;"/><br />
+                        <input  
+                            id="cigaretteNewPrice" 
+                            type="number" 
+                            placeholder="Cigarette Price Per Pack"
+                            style="width:40%;margin-left:30%; padding-left: 30px; margin-top: 30px;" /><br />
+                        <button id="cigaretteNewAdd" class="btnModal">Add to Inventory</button>
                     </form>
                 </div>
             </div>
@@ -195,11 +258,17 @@
                 <h1>Add Stock to Inventory</h1>
                 <div class="main-block">
                     <form>
-                        <select id=cigaretteSelectStock>
+                        <select 
+                            id=cigaretteSelectStock
+                            style="width:40%;margin-left:30%; padding-left: 30px;">
                             <option value="number" disabled selected>Select Cigarette</option>
                         </select>
                         <br />
-                        <input id="cigaretteStockQuantity" type="number" placeholder="Quantity" />
+                        <input 
+                            id="cigaretteStockQuantity" 
+                            type="number" 
+                            placeholder="Quantity"
+                            style="width:40%;margin-left:30%; padding-left: 30px; margin-top: 30px;" />
                         <button id="cigaretteStockAdd" class="btnModal">Add to Inventory</button>
                     </form>
                 </div>
