@@ -60,7 +60,7 @@ module.exports.selectStatementMultipleRowsSeperately= (db,sql,params) =>
 //open Database
 module.exports.openDB= () =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -72,7 +72,7 @@ module.exports.openDB= () =>
 //Close Databse
 module.exports.closeDB= () =>
 {
-  let db = new sqlite3.Database('./db/breakers.db');
+  var db = new sqlite3.Database('./db/breakers.db');
   db.close((err) => {
     if (err) {
       return console.error(err.message);
@@ -84,7 +84,7 @@ module.exports.closeDB= () =>
 //Create Tables
 module.exports.createTables = () =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -132,7 +132,7 @@ function selectStatementMultipleRowsTogether (db,sql)
 //Get Customers
 module.exports.getCustomers =  async() =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -142,7 +142,7 @@ module.exports.getCustomers =  async() =>
   sql='Select * from Customer';
   
   
-  let rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
       {
         return rows;
       })
@@ -161,7 +161,7 @@ module.exports.getCustomers =  async() =>
 //Get All Cigarettes in Stock
 module.exports.getCigarettes =  async() =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -171,7 +171,7 @@ module.exports.getCigarettes =  async() =>
   sql='Select * from Inventory WHERE inventoryCategoryId=1 AND quantity>0';
   
   
-  let rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
       {
         return rows;
       })
@@ -190,7 +190,7 @@ module.exports.getCigarettes =  async() =>
 //Get All Drinks in Stock
 module.exports.getDrinks =  async() =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -200,7 +200,7 @@ module.exports.getDrinks =  async() =>
   sql='Select * from Inventory WHERE inventoryCategoryId=2 AND quantity>0';
   
   
-  let rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
       {
         return rows;
       })
@@ -220,7 +220,7 @@ module.exports.getDrinks =  async() =>
 //Start Game
 module.exports.startGame=(tableNumber, status, gameType, id1, id2,id3,id4,id5,id6,id7,id8,id9,id10, startTime,createDate)=>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -249,7 +249,7 @@ module.exports.startGame=(tableNumber, status, gameType, id1, id2,id3,id4,id5,id
 //Check Ongoing Games on All Tables
 module.exports.getOngoingGames =  async() =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -264,35 +264,35 @@ module.exports.getOngoingGames =  async() =>
   sql6='SELECT * FROM Game WHERE tableNo=6 AND status=\'ongoing\'';
   sql7='SELECT * FROM Game WHERE tableNo=7 AND status=\'ongoing\'';
   sql8='SELECT * FROM Game WHERE tableNo=8 AND status=\'ongoing\'';
-  let tab1=await selectStatementMultipleRowsTogether(db,sql1).then(rows=>
+  var tab1=await selectStatementMultipleRowsTogether(db,sql1).then(rows=>
       {
         return rows;
       })
-  let tab2=await selectStatementMultipleRowsTogether(db,sql2).then(rows=>
+  var tab2=await selectStatementMultipleRowsTogether(db,sql2).then(rows=>
       {
         return rows;
       })
-  let tab3=await selectStatementMultipleRowsTogether(db,sql3).then(rows=>
+  var tab3=await selectStatementMultipleRowsTogether(db,sql3).then(rows=>
       {
         return rows;
       })
-  let tab4=await selectStatementMultipleRowsTogether(db,sql4).then(rows=>
+  var tab4=await selectStatementMultipleRowsTogether(db,sql4).then(rows=>
       {
         return rows;
       })
-  let tab5=await selectStatementMultipleRowsTogether(db,sql5).then(rows=>
+  var tab5=await selectStatementMultipleRowsTogether(db,sql5).then(rows=>
       {
         return rows;
       })
-  let tab6=await selectStatementMultipleRowsTogether(db,sql6).then(rows=>
+  var tab6=await selectStatementMultipleRowsTogether(db,sql6).then(rows=>
       {
         return rows;
       })
-  let tab7=await selectStatementMultipleRowsTogether(db,sql7).then(rows=>
+  var tab7=await selectStatementMultipleRowsTogether(db,sql7).then(rows=>
       {
         return rows;
       })
-  let tab8=await selectStatementMultipleRowsTogether(db,sql8).then(rows=>
+  var tab8=await selectStatementMultipleRowsTogether(db,sql8).then(rows=>
       {
         return rows;
       })
@@ -311,7 +311,7 @@ module.exports.getOngoingGames =  async() =>
 //Unique Constraint Failed (errno:19)
 module.exports.runDuplicateInsertQuery = () =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -338,14 +338,14 @@ module.exports.runDuplicateInsertQuery = () =>
 //End Game
 module.exports.endGame = (updateDate,gameId,loserId1,loserId2,endTime) =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
     console.log('Connected to the breakers database.');
   });
   
-  //   db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,gameId,loserId1,loserId2,endTime])
+  //   db.run('UPDATE Game SET updateDate=?,status="compvared",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,gameId,loserId1,loserId2,endTime])
     
   // db.close((err) => {
   //   if (err) {
@@ -355,7 +355,7 @@ module.exports.endGame = (updateDate,gameId,loserId1,loserId2,endTime) =>
   // });
 
   return new Promise(function(resolve, reject) {
-    db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,gameId], (err) => {
+    db.run('UPDATE Game SET updateDate=?,status="compvared",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,gameId], (err) => {
         if (err !== null) 
         reject(err);
         else 
@@ -375,7 +375,7 @@ module.exports.endGame = (updateDate,gameId,loserId1,loserId2,endTime) =>
 //Add Order For inventory Items
 module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,quantity,amount) =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -402,7 +402,7 @@ module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,q
 //Add Order for others
 module.exports.addOrderOthers = (createDate,gameId,customerId,categoryName,itemName,amount) =>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -427,7 +427,7 @@ module.exports.addOrderOthers = (createDate,gameId,customerId,categoryName,itemN
 //Add Customer
 module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDate)=>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -452,19 +452,19 @@ module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDat
   });
 }
 
-//Delete Customer
-module.exports.deleteCustomer=(customerId)=>
+//Devare Customer
+module.exports.devareCustomer=(customerId)=>
 {
-  let db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
     console.log('Connected to the breakers database.');
   });
 
-  console.log("delete")
+  console.log("devare")
   return new Promise(function(resolve, reject) {
-    db.run('Delete from customer where customerId=?', [customerId], (err) => {
+    db.run('Devare from customer where customerId=?', [customerId], (err) => {
         if (err !== null){
           reject(err);
           console.log("error in 222")

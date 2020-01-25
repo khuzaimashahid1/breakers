@@ -1,7 +1,7 @@
-const { remote } = require('electron');
-const electron = require('electron');
+// const { remote } = require('electron');
+// const electron = require('electron');
 const connections=require('../DataBaseOperations/connections.js')
-let ipc = electron.ipcRenderer;
+// let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
 window.$ = window.jQuery = require('jquery');
 require( 'datatables.net-dt' )();
