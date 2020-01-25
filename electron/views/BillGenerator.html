@@ -13,46 +13,42 @@
 
 <body>
 
-    <div class="topnav">
-        <a href="mainMenu.html">Tables</a>
-        <a href="orders.html">Place Order</a>
-        <a>Expense</a>
-        <a class="active" href="BillGenerator.html">Generte Bill</a>
-        <a href="CreditPage.html">Customers</a>
-        <a href="AddCustomer.html">Add Customer</a>
-        <a href="SummeryTab.html">Summary</a>
-    </div>
-
 
 
     <div>
 
-        <div id="Fade" class="w3-container city w3-animate-opacity" style="margin-right: 0%;
-                        margin-left: 0%;">
+        <div id="Fade" class="w3-container city" style="margin-right: 10%;
+                        margin-left: 10%; margin-top: 2%; margin-bottom: 2%; background: #ffff; opacity:0.8;">
             <h1 style="width:100%; 
             text-align: center;
-            margin-top: -10px;">Generate Invoice</h1>
-            <div class="w3-bar w3-black">
+            margin-top: 10px;">Generate Invoice</h1>
+            <div class="w3-bar">
                 <input id="PlayerName" class="w3-bar-item" type="text" name="name" placeholder="Player Name" style="margin-left: 30%;
                            height: 40px;
                            width: 20%;
-                           padding: 10px; ">
+                           padding: 10px;
+                           border: 2px solid black;
+                           border-radius: 10px;
+                           background: white;  ">
 
                 <button id="btnGenerateBill" class="w3-button" onclick="" style="margin-left: 2%;
                         height: 40px;
                         width: 20%;
                         margin-right: 20%;
-                        background: #ffff; 
                         font-size: 14px;
                         font-weight: 600;
-                        color: green;
-                        padding: 10px; ">Generate Invoice</button>
+                        color: white;
+                        border-radius: 10px;
+                        border: 2px solid black;
+                        background: green;
+                         ">Generate Invoice</button>
             </div>
 
             <div id="Order" class="w3-container category">
-                <h1 style="width: 100%;
-                           margin-left: 45%;
-                           margin-bottom: 10px;">Bill Details</h1>
+                           
+                           <h1 style="width:100%; 
+                           text-align: center;
+                           margin-top: 10px;">Bill Details</h1>
 
             </div>
 
@@ -106,7 +102,7 @@
 
             <div class="main-block">
                 <label for="" style="
-                           margin-left: 38%;
+                           margin-left: 33%;
                            height: 40px;
                            width: 20%;
                            padding: 10px;
@@ -115,7 +111,7 @@
                            color: black;
                             ">Bill: </label>
                 <label for="" style="
-                          margin-left: 10%;
+                          margin-left: 2%;
                           height: 40px;
                           width: 20%;
                           padding: 10px;
@@ -125,7 +121,7 @@
                            ">0.0$ </label>
                 <br />
                 <label for="" style="
-                           margin-left: 38%;
+                           margin-left: 33%;
                            height: 40px;
                            width: 20%;
                            padding: 10px;
@@ -136,7 +132,7 @@
 
 
                 <input type="text" style="
-                          margin-left: 10%;
+                          margin-left: 2%;
                           height: 30px;
                           width: 100px;
                           padding: 10px;
@@ -145,25 +141,31 @@
                           color: black;" name="lname" placeholder="0.0$"><br>
                 <br />
                 <br />
-                <div class="w3-bar w3-black" style="margin-bottom: 0%;">
-                    <button id="btnAmountReceived" class="w3-button" onclick="" style="margin-left: 2%;
+                <div style="margin-bottom: 5%;">
+
+                        <button id="btnAmountReceived" class="w3-button" onclick="" style="margin-left: 2%;
                         height: 40px;
                         width: 20%;
                         margin-left: 30%;
-                        background: #ffff; 
                         font-size: 14px;
                         font-weight: 600;
-                        color: green;
-                        padding: 10px; ">Amount Received</button>
-                    <button id="btnCancel" class="w3-button" onclick="" style="margin-left: 2%;
+                        color: white;
+                        border-radius: 10px;
+                        border: 2px solid black;
+                        background: green;
+                         ">Amount Received</button>
+
+                        <button id="btnCancel" class="w3-button" onclick="" style="margin-left: 2%;
                         height: 40px;
                         width: 20%;
                         margin-right: 20%;
-                        background: #ffff; 
                         font-size: 14px;
                         font-weight: 600;
-                        color: green;
-                        padding: 10px; ">Cancel</button>
+                        color: white;
+                        border-radius: 10px;
+                        border: 2px solid black;
+                        background: green;
+                         ">Cancel</button>
 
                 </div>
             </div>
