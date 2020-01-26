@@ -1,117 +1,89 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="../CSS/breakers.css">
-<link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="../CSS/Customer.css">
-<link rel="stylesheet" href="../CSS/modal.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../CSS/breakers.css">
+  <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="../CSS/Customer.css">
+  <link rel="stylesheet" href="../CSS/modal.css">
 </head>
+
 <body>
 
-    <div id="Fade" class="w3-container city" style="margin-right: 5%;
+  <div id="Fade" class="w3-container city"
+    style="margin-right: 5%;
     margin-left: 5%; margin-top: 2%; padding-right: 5%; padding-left: 5%; padding-bottom: 1%; margin-bottom: 2%; background: #ffff; opacity:0.8;">
 
 
-  <div class="row">
-    <button 
-      class="btn" 
-      onclick="openModal()"
-      > Add New Customer</button>
-</div>
+    <div class="row">
+      <button class="btn" onclick="openModal()"> Add New Customer</button>
+    </div>
     <!-- CREATING MODAL STRUCTURE -->
-<div id="myModal" class="modal">
-  <div class="modal-content">
-      <span class="close">&times;</span>
-    
-      <div 
-        id="AddNewCustomer" 
-        class="w3-container city"
-       
-        >
-        <div class="main-block">
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <div id="AddNewCustomer" class="w3-container city">
+          <div class="main-block">
             <h1>Add New Customer</h1>
-            <form >
-              <div 
-                class="info"
-                style=
-                        "
+            <form>
+              <div class="info" style="
                         background: rgba(0, 0, 0, 1);
                        ">
-                    <input 
-                      id="uname"
-                      type="text" 
-                      name="name" 
-                      placeholder="Customer Name" 
-                      required
-                      style=
-                        "
-                        color: white;
-                        background: rgba(0, 0, 0, 0.9);
-                        width: 100%; 
-                        margin-left: 20%; 
-                        margin-right: 20%;"
-                      >
-                    <br/>
-                    <input 
-                      id="address"
-                      type="text"  
-                      name="name" 
-                      placeholder="Address"
-                      required 
-                      style=
-                        "
+                <input id="uname" type="text" name="name" placeholder="Customer Name" required style="
                         color: white;
                         background: rgba(0, 0, 0, 0.9);
                         width: 100%; 
                         margin-left: 20%; 
                         margin-right: 20%;">
-                        <br/>
-                      <input 
-                        type="text" 
-                        placeholder="+92-xxx-xxx-xxxx" 
-                        id="phone" 
-                        required
-                        style=
-                          "
+                <br />
+                <input id="address" type="text" name="name" placeholder="Address" required style="
+                        color: white;
+                        background: rgba(0, 0, 0, 0.9);
+                        width: 100%; 
+                        margin-left: 20%; 
+                        margin-right: 20%;">
+                <br />
+                <input type="text" placeholder="+92-xxx-xxx-xxxx" id="phone" required style="
                           color: white;
                           background: rgba(0, 0, 0, 0.9);
                           width: 100%; 
                           margin-left: 20%; 
                           margin-right: 20%;">
-                    
-                </div>
-                <button  type="button" class="btnModal" onclick="addCustomer()">Register</button>
-            </form>
-        </div>
-    </div>
-  </div>
 
-</div>
-<table id="example" class="display" style="width:100%;  overflow: auto;">
-  <thead>
-      <tr>
+              </div>
+              <button type="button" class="btnModal" onclick="addCustomer()">Register</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <table id="example" class="display" style="width:100%;  overflow: auto;">
+      <thead>
+        <tr>
           <th>Id</th>
           <th>Customer Name</th>
           <th>Customer Address</th>
           <th>Customer Phone Number</th>
           <th>Registration Date</th>
           <th>Edit / Delete</th>
-      </tr>
-  </thead>
-  <tfoot>
-      <tr>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
           <th>Id</th>
           <th>Customer Name</th>
           <th>Customer Address</th>
           <th>Customer Phone Number</th>
           <th>Cutomer Registration Date</th>
           <th>Edit / Delete</th>
-      </tr>
-  </tfoot>
-</table>
+        </tr>
+      </tfoot>
+    </table>
 
-</div>
+  </div>
 </body>
 <script src="../js/Customer.js"></script>
 
