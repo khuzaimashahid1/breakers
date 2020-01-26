@@ -39,6 +39,7 @@
     background: transparent;
     border: none;
     border-bottom: 1px solid #eee;
+    /* Due to datatables getting fucked  */
     }
     input::placeholder {
     color: #eee;

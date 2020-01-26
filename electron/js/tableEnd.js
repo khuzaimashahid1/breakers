@@ -114,21 +114,18 @@ function populateStock() {
     ipc.send('get-cigs');
     ipc.on('Cigarette Stock', (event, cigStock) => 
     {
-        let cigaretteStock=cigStock
+        let cigaretteStock = cigStock
+        console.log(cigaretteStock)
         for (let i = 0; i < cigaretteStock.length; i++) {
-            $("select#cigaretteSelectOrder").append($("<option>")
-                .val(cigaretteStock[i].inventoryId)
-                .html(cigaretteStock[i].itemName)
-            );
-            $("select#cigaretteSelectStock").append($("<option>")
+            $("select#CigaretteSelect").append($("<option>")
                 .val(cigaretteStock[i].inventoryId)
                 .html(cigaretteStock[i].itemName)
             );
         }
-        $("select#cigaretteSelectOrder").change(function () {
+        $("select#CigaretteSelect").change(function () {
             var selectedCigarette = $(this).children("option:selected").val();
             const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-            $("#cigarettePriceOrder").val(cigaretteFilter[0].itemAmount)
+            $("#cigarettePrice").val(cigaretteFilter[0].itemAmount)
         });
     })
    
@@ -136,21 +133,17 @@ function populateStock() {
     ipc.send('get-drinks');
     ipc.on('Drinks Stock', (event, drinks) => 
     {
-        let drinkStock=drinks;
+        let drinkStock = drinks;
         for (let i = 0; i < drinkStock.length; i++) {
-            $("select#drinkSelectOrder").append($("<option>")
-                .val(drinkStock[i].inventoryId)
-                .html(drinkStock[i].itemName)
-            );
-            $("select#drinkSelectStock").append($("<option>")
+            $("select#DrinkSelect").append($("<option>")
                 .val(drinkStock[i].inventoryId)
                 .html(drinkStock[i].itemName)
             );
         }
-        $("select#drinkSelectOrder").change(function () {
+        $("select#DrinkSelect").change(function () {
             var selectedDrink = $(this).children("option:selected").val();
             const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-            $("#drinkPriceOrder").val(drinkFilter[0].itemAmount)
+            $("#drinkPrice").val(drinkFilter[0].itemAmount)
         });
     })
 
