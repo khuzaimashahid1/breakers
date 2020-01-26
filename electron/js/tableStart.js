@@ -1,7 +1,6 @@
-// const { remote } = require('electron');
-// const electron = require('electron');
+const { remote } = require('electron');
+const electron = require('electron');
 let ipc = electron.ipcRenderer;
-let win = remote.getGlobal('win')
 let players = remote.getGlobal('sharedObj').players;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
@@ -142,33 +141,6 @@ function displayFirstDivOnly(first, second, third) {
     }
 
 }
-
-// //Render Suggestions for Required Field
-// function renderSuggestions(fieldID, listID) {
-
-//     $(fieldID).on('input', function (e) {
-//         if ($(fieldID).val().length === 0) {
-//             $(listID).empty();
-//         }
-//         else {
-//             $(listID).empty()
-//             const searchString = $(this).val().toLowerCase();
-//             for (let i = 0; i < players.length; i++) {
-//                 const actualName = players[i].customerName.toLowerCase();
-//                 if (actualName.includes(searchString)) {
-//                     $(listID).append('<li class=\'suggestion\'>' + players[i].customerName + '</li>');
-//                     $(listID + " li").click(function () {
-//                         $(listID).empty()
-//                         const value = $(this).text();
-//                         $(fieldID).val(value);
-
-//                     });
-//                 }
-//             }
-//         }
-
-//     });
-// }
 
 /*
                 AUTO-COMPLETE PLAYER NAME SUGGESTION BOX GENERATOR
