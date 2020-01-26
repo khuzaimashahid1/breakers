@@ -1,13 +1,3 @@
-const { BrowserWindow } = require('electron').remote
-const { remote } =require('electron');
-const electron= require('electron');
-const path = require('path');
-const url =  require('url');
-const ipc = electron.ipcRenderer;
-let parentWindow = remote.getCurrentWindow() //parentWindow
-
-global.winStartGame=null
-global.winEndGame=null
 setStatusAndEventListeners();
 startTimer();
 //Open 'add game'window
@@ -149,9 +139,3 @@ function renderTime(timerField,hour,min,sec)
       
       setInterval(intervalFunc, 1000);
 }
-
-
-
-
-
-
