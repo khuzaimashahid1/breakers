@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../CSS/AccountsManagement.css">
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/modal.css">
+    <link rel="stylesheet" href="../CSS/index.css">
+    <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
+</head>
+
+<body>
+    <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
+        <h5 class="w3-bar-item" width=20%>Accounts Menu</h5>
+        <!-- <div class="w3-dropdown-hover">
+          <button class="w3-bar-item w3-button tablink">Expense</button>
+          <div class="w3-dropdown-content w3-bar-block w3-border">
+            <button class="w3-bar-item w3-button tablink w3-green" onclick="openModal()">Add Expense</button>
+            <a href="#" class="w3-bar-item w3-button">Link 2</a>
+            <a href="#" class="w3-bar-item w3-button">Link 3</a>
+          </div>
+        </div> -->
+        
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Fade')">Expense Summary</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openModal()">Add Expense</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Left')">Revenue</button>
+    </div>
+
+    <div style="margin-left:15%">
+
+        <div 
+          id="Fade" 
+          class="w3-container city " 
+          style="
+            background-color: white;
+            opacity: 0.8;">
+
+            <h1 style="
+            width: 100%;
+            text-align: center;">Expene Details</h1>
+            <!-- BELOW IS THE DATA TABLE FOR EXPENSE DETAILS -->
+            <table id="Expene" class="display" style="width:100%;  overflow: auto;">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </tfoot>
+            </table>
+        
+            </div>
+        
+
+        <div 
+          id="Left" 
+          class="w3-container city w3-animate-left" 
+          style="
+            display:none; 
+            background-color: white;
+            opacity: 0.8;">
+            <h1 style="
+            width: 100%;
+            text-align: center; ">Revenue Details</h1>
+            <!--  BELOW IS THE DATA TABLE FOR REVENUE DETAILS -->
+            <table id="Revenue" class="display" style="width:100%;  overflow: auto;">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                  </tr>
+                </tfoot>
+              </table>
+          
+            </div>
+        </div>
+  <!-- CREATING MODAL STRUCTURE -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+
+      <div id="AddNewExpense" class="w3-container">
+        <div class="main-block">
+          <h1>Add New Expense</h1>
+          <form>
+            <div class="info" style="
+                      background: rgba(0, 0, 0, 1);
+                     ">
+              <input id="expenseDescription" type="text" name="name" placeholder="Expense Description" required style="
+                      color: white;
+                      background: rgba(0, 0, 0, 0.9);
+                      width: 100%; 
+                      margin-left: 20%; 
+                      margin-right: 20%;
+                      padding-left: 30px;
+                      ">
+              <br />
+              <select id="expenseTypeSelect" 
+              
+                  style="
+                    width: 100%; 
+                    margin-left: 20%; 
+                    margin-right: 20%;
+                    padding-left: 30px;">
+                <option value="text" disabled selected>Select Expense Type</option>
+                <option id="expenseClub" value="text" >Club Expense</option>
+                <option id="expenseKitchen" value="text" >Kitchen Expense</option>
+                <!-- <option id="expenseClub" value="text" disabled selected>Select Expense Type</option> -->
+            </select>
+            <br />
+              <br />
+              <input type="text" placeholder="Amount" id="Number" required style="
+                        color: white;
+                        background: rgba(0, 0, 0, 0.9);
+                        width: 100%; 
+                        margin-left: 20%; 
+                        margin-right: 20%;
+                        padding-left: 30px;">
+
+            </div>
+            <button type="button" class="btnModal" onclick="addExpense()">Add Expense</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+    <script src="../js/AccountsManagement.js"></script>
+    <!-- <script src="../js/Customer.js"></script> -->
+
+</body>
+
+</html>

@@ -4,11 +4,12 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../CSS/placeOrder.css">
-    <link rel="stylesheet" href="../CSS/breakers.css">
+    <!-- <link rel="stylesheet" href="../CSS/breakers.css"> -->
     <link rel="stylesheet" href="../CSS/tableEnd.css">
     <link rel="stylesheet" href="../CSS/BillGenerator.css">
     <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
 </head>
 
 <body>
@@ -53,7 +54,7 @@
             </div>
 
 
-            <table class="fixed_header">
+            <!-- <table class="fixed_header">
                 <thead style="width: 750px;">
                     <tr>
                         <th style="width: 250px;">Item Name</th>
@@ -98,7 +99,24 @@
                         <td id="billTableCell-3">Cell 3</td>
                     </tr>
                 </tbody>
-            </table>
+            </table> -->
+
+            <table id="example" class="display" style="width:100%;  overflow: auto;">
+                <thead>
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Time || Quantity</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Time || Quantity</th>
+                    <th>Price</th>
+                  </tr>
+                </tfoot>
+              </table>
 
             <div class="main-block">
                 <label for="" style="
@@ -143,16 +161,20 @@
                 <br />
                 <div style="margin-bottom: 5%;">
 
-                        <button id="btnAmountReceived" class="w3-button" onclick="" style="margin-left: 2%;
-                        height: 40px;
-                        width: 20%;
-                        margin-left: 30%;
-                        font-size: 14px;
-                        font-weight: 600;
-                        color: white;
-                        border-radius: 10px;
-                        border: 2px solid black;
-                        background: green;
+                        <button 
+                            id="btnAmountReceived" 
+                            class="w3-button" 
+                            onclick="" 
+                            style="margin-left: 2%;
+                                height: 40px;
+                                width: 20%;
+                                margin-left: 30%;
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: white;
+                                border-radius: 10px;
+                                border: 2px solid black;
+                                background: green;
                          ">Amount Received</button>
 
                         <button id="btnCancel" class="w3-button" onclick="" style="margin-left: 2%;
@@ -175,5 +197,6 @@
     </script>
 
 </body>
+<script src="../js/BillGenerator.js"></script>
 
 </html>
