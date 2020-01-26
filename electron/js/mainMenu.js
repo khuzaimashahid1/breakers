@@ -1,5 +1,10 @@
 setStatusAndEventListeners();
 startTimer();
+ipc.on('Reload', (event, message) => {
+    console.log(message)
+    setStatusAndEventListeners();
+    startTimer();
+  })
 //Open 'add game'window
 function openStartGame(){
     let winStartGame= new BrowserWindow({
@@ -57,19 +62,30 @@ function setStatusAndEventListeners()
         if(remote.getGlobal('sharedObj').status[i]!=='Vacant')
         {
             tableButton.innerText='End Game';
-            tableButton.addEventListener('click',function(event)
-            {
+            $( "#tab"+currentTable ).off();
+            $( "#tab"+currentTable ).click(function() {
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openEndGame();
-            })
+              });
+            // tableButton.addEventListener('click',function(event)
+            // {
+            //     remote.getGlobal('sharedObj').tableNumber = currentTable;
+            //     openEndGame();
+            // })
         }
         else
         {
-            tableButton.addEventListener('click',function(event)
-            {
+            tableButton.innerText='Start Game';
+            $( "#tab"+currentTable ).off();
+            $( "#tab"+currentTable ).click(function() {
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openStartGame();
-            })
+              });
+            // tableButton.addEventListener('click',function(event)
+            // {
+            //     remote.getGlobal('sharedObj').tableNumber = currentTable;
+            //     openStartGame();
+            // })
         }
         
     }
@@ -101,8 +117,10 @@ function startTimer()
                 min=Math.abs(today.getMinutes()-startTime[1]);
                 sec=Math.abs(today.getSeconds()-startTime[2]);
                 timerField=document.getElementById("timer"+(i+1));
-                timerField.innerText=hours+":"+min+":"+sec;
-                renderTime(timerField,hours,min,sec);
+                var newTimer = timerField.cloneNode(true);
+                timerField.parentNode.replaceChild(newTimer, timerField);
+                newTimer.innerText=hours+":"+min+":"+sec;
+                renderTime(newTimer,hours,min,sec);
                 
             }
             else
@@ -111,10 +129,19 @@ function startTimer()
                 min=Math.abs(60-startTime[1]+today.getMinutes());
                 sec=Math.abs(60-startTime[2]+today.getSeconds());
                 timerField=document.getElementById("timer"+(i+1));
-                timerField.innerText=hours+":"+min+":"+sec;
-                renderTime(timerField,hours,min,sec);
+                var newTimer = timerField.cloneNode(true);
+                timerField.parentNode.replaceChild(newTimer, timerField);
+                newTimer.innerText=hours+":"+min+":"+sec;
+                renderTime(newTimer,hours,min,sec);
             }
             
+        }
+        else
+        {
+            timerField=document.getElementById("timer"+(i+1));
+            var newTimer = timerField.cloneNode(true);
+            timerField.parentNode.replaceChild(newTimer, timerField);
+            newTimer.innerText=0+":"+0+":"+0;
         }
     }
 }

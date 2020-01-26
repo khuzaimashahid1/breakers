@@ -6,6 +6,8 @@ const url = require("url");
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 const connections=require("./DataBaseOperations/connections.js");
+
+
 connections.createTables();
 global.win=null;
 global.sharedObj = {
@@ -51,7 +53,6 @@ ipc.on('start-game',function(event, tableNumber, status, gameType, id1, id2,id3,
             {
                 getAllCustomers();
                 getAllOngoingGames();
-                win.reload();
             }
             
         });
@@ -64,9 +65,8 @@ ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone
         {
             if(result===true)
             {
-                getAllCustomers()
-                win.reload();
-                console.log("Player Added")
+                getAllCustomers();
+                getAllOngoingGames();
             }
             
         });
@@ -80,8 +80,7 @@ ipc.on('delete-customer',function(event, customerId){
             if(result===true)
             {
                 getAllCustomers()
-                win.reload();
-                console.log("Player Deleted")
+                getAllOngoingGames();
             }
             
         });
@@ -117,13 +116,12 @@ ipc.on('end-game',function(event,gameId,amount,loserId1,loserId2)
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const updateDate = yyyy + '-' + mm + '-' + dd;
-    connections.endGame(updateDate,gameId,amount,loserId1,loserId2,endTime).then(result=>
+    connections.endGame(updateDate,updateDate,gameId,amount,loserId1,loserId2,endTime).then(result=>
         {
             if(result===true)
             {
                 getAllCustomers();
                 getAllOngoingGames();
-                win.reload();
             }
             
         });
@@ -207,9 +205,11 @@ function getAllOngoingGames()
                     global.sharedObj.status[i] ='Vacant'
                     global.sharedObj.games[i]=null;
                 }
-            } 
+            }
+            win.webContents.send('Reload', 'New Game Started!')    
         })
-        
+            
 }
 getAllCustomers();
 getAllOngoingGames();
+

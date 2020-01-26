@@ -7,23 +7,22 @@ let tableNumber = remote.getGlobal('sharedObj').tableNumber
 let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
 let currentPlayerId;
 let currentPlayers = []
-
+let drinkStock,cigaretteStock;
 getCurrentPlayers();
 populatePlayers();
 populateStock();
+console.log(players)
+console.log(currentPlayers)
 //Function For Getting Current Players
 function getCurrentPlayers() {
     Object.values(currentGame).forEach(function (value, index) {
-        // const playerDiv = document.getElementById("divPlayer"+counter);
-        // const playerField = document.getElementById("player"+counter);
         if (index > 5 && index < 16) {
             if (value !== null) {
                 const player = players.filter((player => (player.customerId === (value))));
                 currentPlayers.push(player[0]);
-                // playerField.innerText=player[0].customerName;
+                console.log(player[0])
             }
             else {
-                // playerDiv.style.display = "none";
                 currentPlayers.push(null)
             }
         }
@@ -114,8 +113,7 @@ function populateStock() {
     ipc.send('get-cigs');
     ipc.on('Cigarette Stock', (event, cigStock) => 
     {
-        let cigaretteStock = cigStock
-        console.log(cigaretteStock)
+        cigaretteStock = cigStock
         for (let i = 0; i < cigaretteStock.length; i++) {
             $("select#CigaretteSelect").append($("<option>")
                 .val(cigaretteStock[i].inventoryId)
@@ -133,7 +131,7 @@ function populateStock() {
     ipc.send('get-drinks');
     ipc.on('Drinks Stock', (event, drinks) => 
     {
-        let drinkStock = drinks;
+        drinkStock = drinks;
         for (let i = 0; i < drinkStock.length; i++) {
             $("select#DrinkSelect").append($("<option>")
                 .val(drinkStock[i].inventoryId)
@@ -213,7 +211,7 @@ function endGame()
             {
                 let gameId=currentGame.gameId;
                 let loserId1=player[0].customerId;
-                ipc.send('end-game',gameId,loserId1,null)
+                ipc.send('end-game',gameId,100,loserId1,null)
                 remote.getCurrentWindow().close()
             }
     }
@@ -222,10 +220,36 @@ function endGame()
         var loser = $("select#loserSelect").children("option:selected").attr('id');
         loser = loser.split(",");
         let gameId=currentGame.gameId;
-        ipc.send('end-game',gameId,parseInt(loser[0]),parseInt(loser[1]))
+        ipc.send('end-game',gameId,100,parseInt(loser[0]),parseInt(loser[1]))
         remote.getCurrentWindow().close()
 
     }
+}
+
+function nextGame()
+{
+    const status="ongoing";
+    const today = new Date();
+    const startTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const createDate = yyyy + '-' + mm + '-' + dd;
+    let playersArray=[]
+    for(let i =0;i<currentPlayers.length;i++)
+    {
+        if(currentPlayers[i]!==null)
+        {
+            playersArray.push(currentPlayers[i].customerId)
+        }
+        else
+        {
+            playersArray.push(null)
+        }
+        
+    }
+    ipc.send('start-game',tableNumber,status,currentGame.gameType,...playersArray,startTime,createDate)
+    endGame();
 }
 
 

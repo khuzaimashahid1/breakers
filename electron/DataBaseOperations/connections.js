@@ -320,7 +320,7 @@ module.exports.runDuplicateInsertQuery = () =>
 
 
 //End Game
-module.exports.endGame = (updateDate,gameId,amount,loserId1,loserId2,endTime) =>
+module.exports.endGame = (createDate,updateDate,gameId,amount,loserId1,loserId2,endTime) =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -329,14 +329,39 @@ module.exports.endGame = (updateDate,gameId,amount,loserId1,loserId2,endTime) =>
     console.log('Connected to the breakers database.');
   });
 
-
+  if(loserId2===null)
+  {
+    return new Promise(function(resolve, reject) {
+      db.serialize(() => {
+        // Queries scheduled here will be serialized.
+        db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=?,amount=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,amount,gameId])
+        .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,((SELECT gameType from Game WHERE gameId=?)||" Sale"),?,(SELECT tableNo from Game WHERE gameId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Games"),?)',[createDate,gameId,amount,gameId,gameId])
+        .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,loserId1,amount], (err) => {
+          if (err !== null) 
+          reject(err);
+          else 
+          {
+            db.close((err) => {
+              if (err) {
+                return console.error(err.message);
+              }
+              console.log('Close the database connection.');
+            });
+            resolve(true);
+          }
+      });
+     })
+    });
+  }
+  else
+  {
   return new Promise(function(resolve, reject) {
     db.serialize(() => {
       // Queries scheduled here will be serialized.
       db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=?,amount=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,amount,gameId])
-      .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,(?||" Sale"),?,?,(Select revenueCategoryId from RevenueCategory where revenueCategoryName=?),?)',[createDate,categoryName,itemName,amount,categoryName,gameId])
-      .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount])
-      }).catch(err  => {
+      .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,((SELECT gameType from Game WHERE gameId=?)||" Sale"),?,(SELECT tableNo from Game WHERE gameId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Games"),?)',[createDate,gameId,amount,gameId,gameId])
+      .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,loserId1,amount/2])
+      .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,loserId2,amount/2], (err) => {
         if (err !== null) 
         reject(err);
         else 
@@ -350,7 +375,9 @@ module.exports.endGame = (updateDate,gameId,amount,loserId1,loserId2,endTime) =>
           resolve(true);
         }
     });
+   })
   });
+}
 }
 
 //Add Order For inventory Items
@@ -367,8 +394,8 @@ module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,q
     // Queries scheduled here will be serialized.
     db.run('Insert into InventoryManagement(createDate,quantity,inventoryId,gameId) values(?,?,?,?)',[createDate,-quantity,inventoryId,gameId])
     .run('UPDATE Inventory SET updateDate=?,quantity=(Select quantity from Inventory where inventoryId=?)-? where inventoryId=?',[updateDate,inventoryId,quantity,inventoryId])
-    .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,inventoryManagementId,gameId) values (?,((Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))||" Sale"),?,(Select itemName from Inventory where inventoryId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName=(Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))), (SELECT MAX(inventoryManagementId) FROM InventoryManagement),?)',[createDate,inventoryId,amount,inventoryId,inventoryId,gameId])
-    .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount])
+    .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,inventoryManagementId,gameId) values (?,((Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))||" Sale"),?,(Select itemName from Inventory where inventoryId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName=(Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))), (SELECT MAX(inventoryManagementId) FROM InventoryManagement),?)',[createDate,inventoryId,amount*quantity,inventoryId,inventoryId,gameId])
+    .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount*quantity])
     });
 
   db.close((err) => {
