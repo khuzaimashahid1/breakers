@@ -1,17 +1,17 @@
-const { remote } = require('electron');
-const electron = require('electron');
-var ipc = electron.ipcRenderer;
-var win = remote.getGlobal('win')
+// const { remote } = require('electron');
+// const electron = require('electron');
+// var ipc = electron.ipcRenderer;
+// var win = remote.getGlobal('win')
 var players = remote.getGlobal('sharedObj').allplayers;
-window.$ = window.jQuery = require('jquery');
-var tableNumber = remote.getGlobal('sharedObj').tableNumber
-var centuryPlayersCount = 1;
-var centuryMaxPlayers = 10;
+// window.$ = window.jQuery = require('jquery');
+// var tableNumber = remote.getGlobal('sharedObj').tableNumber
+// var centuryPlayersCount = 1;
+// var centuryMaxPlayers = 10;
 const connections = require('../DataBaseOperations/connections.js')
-var currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
-var cigaretteStock, drinkStock;
-var currentPlayerId;
-var currentPlayers = []
+// var currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
+// var cigaretteStock, drinkStock;
+// var currentPlayerId;
+// var currentPlayers = []
 
 
 populateStock();
