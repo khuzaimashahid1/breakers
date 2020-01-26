@@ -1,21 +1,5 @@
 var sqlite3 = require('sqlite3').verbose();
 var util=require('util')
- 
-// db.serialize(function() {
-//   db.run("CREATE TABLE lorem (info TEXT)");
- 
-//   var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
-//   for (var i = 0; i < 10; i++) {
-//       stmt.run("Ipsum " + i);
-//   }
-//   stmt.finalize();
- 
-//   db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
-//       console.log(row.id + ": " + row.info);
-//   });
-// });
- 
-
 
 
 
@@ -336,7 +320,7 @@ module.exports.runDuplicateInsertQuery = () =>
 
 
 //End Game
-module.exports.endGame = (updateDate,gameId,loserId1,loserId2,endTime) =>
+module.exports.endGame = (updateDate,gameId,amount,loserId1,loserId2,endTime) =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -344,18 +328,15 @@ module.exports.endGame = (updateDate,gameId,loserId1,loserId2,endTime) =>
     }
     console.log('Connected to the breakers database.');
   });
-  
-  //   db.run('UPDATE Game SET updateDate=?,status="compvared",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,gameId,loserId1,loserId2,endTime])
-    
-  // db.close((err) => {
-  //   if (err) {
-  //     return console.error(err.message);
-  //   }
-  //   console.log('Close the database connection.');
-  // });
+
 
   return new Promise(function(resolve, reject) {
-    db.run('UPDATE Game SET updateDate=?,status="compvared",loserId1=?,loserId2=?,endTime=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,gameId], (err) => {
+    db.serialize(() => {
+      // Queries scheduled here will be serialized.
+      db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=?,amount=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,amount,gameId])
+      .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,(?||" Sale"),?,?,(Select revenueCategoryId from RevenueCategory where revenueCategoryName=?),?)',[createDate,categoryName,itemName,amount,categoryName,gameId])
+      .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount])
+      }).catch(err  => {
         if (err !== null) 
         reject(err);
         else 

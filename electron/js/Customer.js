@@ -1,49 +1,29 @@
-// const { remote } = require('electron');
-// const electron = require('electron');
-var connections;
-if(connections==null){
-    connections = require('../DataBaseOperations/connections.js')
-}
-
-// let ipc = electron.ipcRenderer;
-var win;
-if(win==null){
- win = remote.getGlobal('win')
-}
-window.$ = window.jQuery = require('jquery');
 require( 'datatables.net-dt' )();
 
-var allplayers;
-var currentPlayers;
-if(allplayers==null){
-    allplayers = remote.getGlobal('sharedObj').allplayers;
-    currentPlayers = remote.getGlobal('sharedObj').currentPlayers;
-} 
-
-
-
-
+//Function for opening Modal
 function openModal()
 {
-  
-  // Get the modal
-  var modal = document.getElementById("myModal");
-  modal.style.display = "block";
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-      modal.style.display = "none";
-  }
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-      if (event.target == modal) {
-          modal.style.display = "none";
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () 
+    {
+        modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) 
+    {
+      if (event.target == modal) 
+      {
+        modal.style.display = "none";
       }
-  }
-
+    }
 }
 
+//Functions For adding Customer
 function addCustomer()
 {
     let customerName=$('#uname').val();
@@ -57,18 +37,11 @@ function addCustomer()
     ipc.send('add-customer',customerName,customerAddress,customerPhone,createDate)
 }
 
-
-console.log(allplayers);
-
-
 var data=[]
 for(let i=0;i<allplayers.length;i++)
 {
     data.push(allplayers[i])
 }
-
-console.log(data)
-
 
 // Edit record
 $('#example').on('click', 'a.editor_edit', function (e) {

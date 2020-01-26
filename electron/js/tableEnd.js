@@ -1,21 +1,16 @@
 const { remote } = require('electron');
 const electron = require('electron');
-const connections=require('../DataBaseOperations/connections.js')
 let ipc = electron.ipcRenderer;
-let win = remote.getGlobal('win')
 const players = remote.getGlobal('sharedObj').currentPlayers;
 window.$ = window.jQuery = require('jquery');
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
 let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
-let cigaretteStock,drinkStock;
 let currentPlayerId;
 let currentPlayers = []
 
 getCurrentPlayers();
 populatePlayers();
 populateStock();
-console.log(players)
-console.log(currentPlayers)
 //Function For Getting Current Players
 function getCurrentPlayers() {
     Object.values(currentGame).forEach(function (value, index) {
@@ -82,9 +77,9 @@ function populatePlayers() {
         '<label>Start Time: ' + currentGame.startTime + '</label>' +
         '</div>'
     );
-
+    let team=1;
     for (i = 0; i < numberofCurrnetPlayers; i++) {
-        if (currentPlayers[i] != null) {
+        if (currentPlayers[i] !== null) {
             $(".grid-container").append(' <div class="grid-item">' +
                 '<div id="' + currentPlayers[i].customerId + '"class="playerTitle">' +
                 '<label class="player">' + currentPlayers[i].customerName + '</label>' +
@@ -93,50 +88,74 @@ function populatePlayers() {
                 '<button id="btnAddExtra" class="btnAddExtra"  onClick="modalScript('+currentPlayers[i].customerId+')">Add Extra</button>' +
                 '</div>' +
                 '</div>');
-            $(".playersList").append("<option id=" + currentPlayers[i].customerId + ">" + currentPlayers[i].customerName + "</option");
+            if(currentGame.gameType==="double")
+            {
+                if(i==0 || i ==2)
+                {
+                    $(".playersList").append("<option id=" + currentPlayers[i].customerId +","+currentPlayers[i+1].customerId + ">" + "Team "+team+ " ( "+currentPlayers[i].customerName +" and "+currentPlayers[i+1].customerName+")"+ "</option");
+                    team++;
+                }
+                
+            }
+            else
+            {
+                $(".playersList").append("<option id=" + currentPlayers[i].customerId + ">" + currentPlayers[i].customerName + "</option");
+            }
+                
         }
     }
 
 }
 
-//Populate Stock Items
-function populateStock()
-{
-    connections.getCigarettes().then(rows=>
-        {   
-            cigaretteStock =rows;
-            for(let i=0;i<cigaretteStock.length;i++)
-            {
-                $("select#CigaretteSelect").append( $("<option>")
+//Populate All Stocks
+function populateStock() {
+    
+    //Get Cigarettes from Main Process IPC
+    ipc.send('get-cigs');
+    ipc.on('Cigarette Stock', (event, cigStock) => 
+    {
+        let cigaretteStock=cigStock
+        for (let i = 0; i < cigaretteStock.length; i++) {
+            $("select#cigaretteSelectOrder").append($("<option>")
                 .val(cigaretteStock[i].inventoryId)
                 .html(cigaretteStock[i].itemName)
-                );
-            }
-            $("select#CigaretteSelect").change(function(){
-                var selectedCigarette = $(this).children("option:selected").val();
-                const cigaretteFilter=cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-                $("#cigarettePrice").val(cigaretteFilter[0].itemAmount)
-            });
+            );
+            $("select#cigaretteSelectStock").append($("<option>")
+                .val(cigaretteStock[i].inventoryId)
+                .html(cigaretteStock[i].itemName)
+            );
+        }
+        $("select#cigaretteSelectOrder").change(function () {
+            var selectedCigarette = $(this).children("option:selected").val();
+            const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
+            $("#cigarettePriceOrder").val(cigaretteFilter[0].itemAmount)
         });
+    })
+   
+    //Get Drinks from Main Process IPC
+    ipc.send('get-drinks');
+    ipc.on('Drinks Stock', (event, drinks) => 
+    {
+        let drinkStock=drinks;
+        for (let i = 0; i < drinkStock.length; i++) {
+            $("select#drinkSelectOrder").append($("<option>")
+                .val(drinkStock[i].inventoryId)
+                .html(drinkStock[i].itemName)
+            );
+            $("select#drinkSelectStock").append($("<option>")
+                .val(drinkStock[i].inventoryId)
+                .html(drinkStock[i].itemName)
+            );
+        }
+        $("select#drinkSelectOrder").change(function () {
+            var selectedDrink = $(this).children("option:selected").val();
+            const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
+            $("#drinkPriceOrder").val(drinkFilter[0].itemAmount)
+        });
+    })
 
-        connections.getDrinks().then(rows=>
-            {   
-                drinkStock =rows;
-                for(let i=0;i<drinkStock.length;i++)
-                {
-                    $("select#DrinkSelect").append( $("<option>")
-                    .val(drinkStock[i].inventoryId)
-                    .html(drinkStock[i].itemName)
-                    );
-                }
-                $("select#DrinkSelect").change(function(){
-                    var selectedDrink = $(this).children("option:selected").val();
-                    const drinkFilter=drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-                    $("#drinkPrice").val(drinkFilter[0].itemAmount)
-                });
-            });
-    
 }
+
 
 //Drinks Order
 function drinksOrder()
@@ -204,6 +223,15 @@ function endGame()
                 ipc.send('end-game',gameId,loserId1,null)
                 remote.getCurrentWindow().close()
             }
+    }
+    else
+    {
+        var loser = $("select#loserSelect").children("option:selected").attr('id');
+        loser = loser.split(",");
+        let gameId=currentGame.gameId;
+        ipc.send('end-game',gameId,parseInt(loser[0]),parseInt(loser[1]))
+        remote.getCurrentWindow().close()
+
     }
 }
 
