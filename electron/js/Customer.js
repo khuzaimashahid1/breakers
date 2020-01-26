@@ -1,7 +1,6 @@
 require('datatables.net-dt')();
 
 
-
 //Switching Customer Management Type
 function openLink(evt, animName) {
   var i, x, tablinks;

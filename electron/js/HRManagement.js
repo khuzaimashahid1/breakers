@@ -1,3 +1,5 @@
+require('datatables.net-dt')();
+
 function openModal(modalName)
 {
     // Get the modal
@@ -35,3 +37,70 @@ function addAdvance()
 {
     
 }
+
+var data = [];
+var jsonData = [{
+        FirstName: "1-06-2020",
+        LastName: "2000",
+        Post: "200",
+        Phone: "5600",
+        Address: "24000",
+        BasicPay: "22000",
+        Advance: "250"
+    },
+    {
+      FirstName: "1-06-2020",
+      LastName: "2000",
+      Post: "200",
+      Phone: "5600",
+      Address: "24000",
+      BasicPay: "22000",
+      Advance: "250"
+    },
+    {
+      FirstName: "1-06-2020",
+      LastName: "2000",
+      Post: "200",
+      Phone: "5600",
+      Address: "24000",
+      BasicPay: "22000",
+      Advance: "250"
+
+    }
+
+
+
+]
+for (let i = 0; i < jsonData.length; i++) {
+    data.push(jsonData[i])
+}
+
+console.log(data)
+
+$(document).ready(function () {
+    $('#example').dataTable({
+        data: data,
+        "columns": [{
+                data: "FirstName"
+            },
+            {
+                data: "LastName"
+            },
+            {
+                data: "Post"
+            },
+            {
+                data: "Phone"
+            },
+            {
+                data: "Address"
+            },
+            {
+                data: "BasicPay"
+            },
+            {
+                data: "Advance"
+            }
+        ]
+    })
+});
