@@ -109,7 +109,7 @@ ipc.on('add-order-others',function(event,gameId,customerId,categoryName,itemName
 })
 
 //End Game
-ipc.on('end-game',function(event,gameId,loserId1,loserId2)
+ipc.on('end-game',function(event,gameId,amount,loserId1,loserId2)
 {
     const today = new Date();
     const endTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -117,7 +117,7 @@ ipc.on('end-game',function(event,gameId,loserId1,loserId2)
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const updateDate = yyyy + '-' + mm + '-' + dd;
-    connections.endGame(updateDate,gameId,loserId1,loserId2,endTime).then(result=>
+    connections.endGame(updateDate,gameId,amount,loserId1,loserId2,endTime).then(result=>
         {
             if(result===true)
             {
@@ -128,6 +128,22 @@ ipc.on('end-game',function(event,gameId,loserId1,loserId2)
             
         });
     
+})
+
+//Get Cigarette Stock
+ipc.on('get-cigs',function(event)
+{
+    connections.getCigarettes().then(rows => {
+        event.sender.send("Cigarette Stock", rows);
+    });
+})
+
+//Get Drinks Stock
+ipc.on('get-drinks',function(event)
+{
+    connections.getDrinks().then(rows => {
+        event.sender.send("Drinks Stock", rows);
+    });
 })
 
 app.on('ready', createWindow);

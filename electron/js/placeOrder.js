@@ -1,19 +1,3 @@
-// const { remote } = require('electron');
-// const electron = require('electron');
-// var ipc = electron.ipcRenderer;
-// var win = remote.getGlobal('win')
-var players = remote.getGlobal('sharedObj').allplayers;
-// window.$ = window.jQuery = require('jquery');
-// var tableNumber = remote.getGlobal('sharedObj').tableNumber
-// var centuryPlayersCount = 1;
-// var centuryMaxPlayers = 10;
-const connections = require('../DataBaseOperations/connections.js')
-// var currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
-// var cigaretteStock, drinkStock;
-// var currentPlayerId;
-// var currentPlayers = []
-
-
 populateStock();
 
 function renderSuggestions() {
@@ -48,11 +32,23 @@ function tabItem(category) {
     document.getElementById(category).style.display = "block";
 }
 
+<<<<<<< HEAD
 //Populating Drinks and Cigarette Stock
 function populateStock() {
     connections.getCigarettes().then(rows => {
         cigaretteStock = rows;
         for (var i = 0; i < cigaretteStock.length; i++) {
+=======
+//Populate All Stocks
+function populateStock() {
+    
+    //Get Cigarettes from Main Process IPC
+    ipc.send('get-cigs');
+    ipc.on('Cigarette Stock', (event, cigStock) => 
+    {
+        let cigaretteStock=cigStock
+        for (let i = 0; i < cigaretteStock.length; i++) {
+>>>>>>> 7e8a5df1032826490577b672f9d21e47c0048209
             $("select#cigaretteSelectOrder").append($("<option>")
                 .val(cigaretteStock[i].inventoryId)
                 .html(cigaretteStock[i].itemName)
@@ -67,11 +63,22 @@ function populateStock() {
             const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
             $("#cigarettePriceOrder").val(cigaretteFilter[0].itemAmount)
         });
+<<<<<<< HEAD
     });
 
     connections.getDrinks().then(rows => {
         drinkStock = rows;
         for (var i = 0; i < drinkStock.length; i++) {
+=======
+    })
+   
+    //Get Drinks from Main Process IPC
+    ipc.send('get-drinks');
+    ipc.on('Drinks Stock', (event, drinks) => 
+    {
+        let drinkStock=drinks;
+        for (let i = 0; i < drinkStock.length; i++) {
+>>>>>>> 7e8a5df1032826490577b672f9d21e47c0048209
             $("select#drinkSelectOrder").append($("<option>")
                 .val(drinkStock[i].inventoryId)
                 .html(drinkStock[i].itemName)
@@ -86,7 +93,7 @@ function populateStock() {
             const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
             $("#drinkPriceOrder").val(drinkFilter[0].itemAmount)
         });
-    });
+    })
 
 }
 
