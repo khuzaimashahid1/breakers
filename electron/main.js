@@ -128,6 +128,17 @@ ipc.on('end-game',function(event,gameId,amount,loserId1,loserId2)
     
 })
 
+
+//Get Employees Data
+ipc.on('employee',function(event)
+{
+    connections.getEmployees().then(rows => {
+        event.sender.send("employee Data", rows);
+    });
+})
+
+
+
 //Get Cigarette Stock
 ipc.on('get-cigs',function(event)
 {

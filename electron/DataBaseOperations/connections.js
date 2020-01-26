@@ -88,7 +88,7 @@ module.exports.createTables = () =>
       .run('CREATE TABLE IF NOT EXISTS Revenue(revenueId INTEGER PRIMARY KEY AUTOINCREMENT,revenueName text, revenueAmount int, revenueDescription text , createDate text,updateDate text, revenueCategoryId int,inventoryManagementId int, gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(revenueCategoryId) REFERENCES RevenueCategory(revenueCategoryId))')
       .run('CREATE TABLE IF NOT EXISTS Account(accountId INTEGER PRIMARY KEY AUTOINCREMENT,accountName text,accountDescription text, amount int,createDate text,updateDate text)')
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
-      .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeeCNIC text,employeeDesignation text, employeeSalary int, createDate text,updateDate text)')
+      .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int, createDate text,updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int,salaryNote text, salaryDue int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
       .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
     });
@@ -141,6 +141,36 @@ module.exports.getCustomers =  async() =>
     resolve(rows);
    });
 }
+
+//Get All Employees in Stock
+module.exports.getEmployees =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select * from Employee';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
 
 //Get All Cigarettes in Stock
 module.exports.getCigarettes =  async() =>

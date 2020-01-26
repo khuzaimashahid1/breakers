@@ -23,6 +23,7 @@ function openModal(modalName)
     }
 }
 
+
 function addEmployee()
 {
 
@@ -39,38 +40,8 @@ function addAdvance()
 }
 
 var data = [];
-var jsonData = [{
-        FirstName: "1-06-2020",
-        LastName: "2000",
-        Post: "200",
-        Phone: "5600",
-        Address: "24000",
-        BasicPay: "22000",
-        Advance: "250"
-    },
-    {
-      FirstName: "1-06-2020",
-      LastName: "2000",
-      Post: "200",
-      Phone: "5600",
-      Address: "24000",
-      BasicPay: "22000",
-      Advance: "250"
-    },
-    {
-      FirstName: "1-06-2020",
-      LastName: "2000",
-      Post: "200",
-      Phone: "5600",
-      Address: "24000",
-      BasicPay: "22000",
-      Advance: "250"
+var jsonData;
 
-    }
-
-
-
-]
 for (let i = 0; i < jsonData.length; i++) {
     data.push(jsonData[i])
 }
@@ -81,26 +52,32 @@ $(document).ready(function () {
     $('#example').dataTable({
         data: data,
         "columns": [{
-                data: "FirstName"
+                data: "EmployeeName"
             },
             {
-                data: "LastName"
+                data: "EmployeeDesignation"
             },
             {
-                data: "Post"
+                data: "EmployeePhone"
             },
             {
-                data: "Phone"
+                data: "EmployeeAddress"
             },
             {
-                data: "Address"
-            },
-            {
-                data: "BasicPay"
+                data: "EmployeeSalary"
             },
             {
                 data: "Advance"
             }
         ]
     })
+});
+
+$(document).ready(function () {
+      //Get Cigarettes from Main Process IPC
+      ipc.send('employee');
+      ipc.on('employee Data', (event, employeeData) => 
+      {
+           jsonData=employeeData;
+      })
 });
