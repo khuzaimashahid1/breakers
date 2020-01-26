@@ -1,15 +1,15 @@
-const { remote } = require('electron');
-const electron = require('electron');
-const connections=require('../DataBaseOperations/connections.js')
-let ipc = electron.ipcRenderer;
-let win = remote.getGlobal('win')
-const players = remote.getGlobal('sharedObj').currentPlayers;
-window.$ = window.jQuery = require('jquery');
-let tableNumber = remote.getGlobal('sharedObj').tableNumber
-let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
-let cigaretteStock,drinkStock;
-let currentPlayerId;
-let currentPlayers = []
+// var { remote } = require('electron');
+// var electron = require('electron');
+var connections=require('../DataBaseOperations/connections.js')
+// var ipc = electron.ipcRenderer;
+// var win = remote.getGlobal('win')
+// var players = remote.getGlobal('sharedObj').currentPlayers;
+// window.$ = window.jQuery = require('jquery');
+// var tableNumber = remote.getGlobal('sharedObj').tableNumber
+// var currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
+// var cigaretteStock,drinkStock;
+// var currentPlayerId;
+// var currentPlayers = []
 
 populateStock();
 

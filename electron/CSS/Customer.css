@@ -1,7 +1,10 @@
 body{
     background-image: url("../resources/BREAKERS-SNOOKER.jpg");
-    height: 100%;
+    background-attachment: fixed;
+    height: 100vh;
     width: 100%; 
+   
+    overflow: initial;
   }
   .btn {
     background-color: green;
@@ -15,13 +18,7 @@ body{
     border: 2px solid black;
     cursor: pointer;
   }
-  .tableDataTable
-  {
-    margin-top: -5%;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    height: 400px;
-  }
+ 
   /* Darker background on mouse-over */
   .btn:hover {
     background-color: white;
@@ -123,7 +120,7 @@ body{
     margin: 24px 50px 12px;
     }
     .container {
-    background-color: transparent;
+    background-color: black;
     padding: 16px 0;
     text-align:left;
     }

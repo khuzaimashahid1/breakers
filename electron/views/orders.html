@@ -13,14 +13,14 @@
 
 <body>
 
-    <div class="topnav">
+    <!-- <div class="topnav">
         <a href="mainMenu.html">Tables</a>
         <a class="active" href="orders.html">Place Order</a>
         <a>Expense</a>
         <a href="BillGenerator.html">Generte Bill</a>
         <a href="AddCustomer.html">Add Customer</a>
         <a href="SummeryTab.html">Summary</a>
-    </div>
+    </div> -->
 
     <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
         <h5 class="w3-bar-item" width=20%>Order Type</h5>
@@ -31,7 +31,10 @@
 
     <div style="margin-left:15%">
 
-        <div id="Fade" class="w3-container city w3-animate-opacity">
+        <div id="Fade" 
+            class="w3-container city w3-animate-opacity"
+            style="background-color: white;">
+            
             <h1
             style="
             width: 100%;
@@ -88,7 +91,10 @@
             </div>
         </div>
 
-        <div id="Left" class="w3-container city w3-animate-left" style="display:none">
+        <div 
+            id="Left" 
+            class="w3-container city w3-animate-left" 
+            style="display:none; background-color: white;">
             <h1>Drinks Order</h1>
             <div class="w3-bar w3-black">
                 <button class="w3-bar-item w3-button" onclick="tabItem('drinkOrder')">Add Drinks Order</button>
@@ -100,7 +106,7 @@
             <div id="drinkOrder" class="w3-container category">
                 <h1>Drinks Order</h1>
                 <div class="main-block">
-                    <form>
+                    <form action="/">
                         <select 
                             id=drinkSelectOrder
                             style="width:40%; margin-left:30%; padding-left: 30px;"
@@ -166,7 +172,7 @@
             <div id="drinkStock" class="w3-container category" style="display:none">
                 <h1>Add Stock to Inventory</h1>
                 <div class="main-block">
-                    <form>
+                    <form >
                         <select 
                             id=drinkSelectStock 
                             style="width:40%;margin-left:30%; padding-left: 30px;">
@@ -186,7 +192,10 @@
         </div>
 
 
-        <div id="Top" class="w3-container city w3-animate-top" style="display:none">
+        <div 
+            id="Top" 
+            class="w3-container city w3-animate-top" 
+            style="display:none; background-color: white;">
             <h1>Cigarettes Order</h1>
             <div class="w3-bar w3-black">
                 <button class="w3-bar-item w3-button" onclick="tabItem('cigaretteOrder')">Add Cigarettes Order</button>
@@ -199,7 +208,7 @@
             <div id="cigaretteOrder" class="w3-container category">
                 <h1>Cigarette Order</h1>
                 <div class="main-block">
-                    <form>
+                    <form action="/">
                         <select 
                             id=cigaretteSelectOrder
                             style="width:40%;margin-left:30%; padding-left: 30px;">
