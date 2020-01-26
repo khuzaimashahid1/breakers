@@ -13,3 +13,11 @@ div{
     -o-transition: all 2s ease-in-out;
     transition: all 2s ease-in-out;
 }
+th{
+    background : black;
+    color: white;
+}
+#dataTables_Filter {
+    border-radius: 5px;
+    border: 5px black;
+  }
