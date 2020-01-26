@@ -1,5 +1,5 @@
-const { remote } = require('electron');
-const electron = require('electron');
+// const { remote } = require('electron');
+// const electron = require('electron');
 let ipc = electron.ipcRenderer;
 let win = remote.getGlobal('win')
 let players = remote.getGlobal('sharedObj').players;
