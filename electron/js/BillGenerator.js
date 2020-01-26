@@ -1,24 +1,5 @@
-// const { remote } = require('electron');
-// const electron = require('electron');
-var connections;
-if (connections == null) {
-    connections = require('../DataBaseOperations/connections.js')
-}
-
-// let ipc = electron.ipcRenderer;
-var win;
-if (win == null) {
-    win = remote.getGlobal('win')
-}
-window.$ = window.jQuery = require('jquery');
+// window.$ = window.jQuery = require('jquery');
 require('datatables.net-dt')();
-
-// var allplayers;
-// var currentPlayers;
-// if(allplayers==null){
-//     allplayers = remote.getGlobal('sharedObj').allplayers;
-//     currentPlayers = remote.getGlobal('sharedObj').currentPlayers;
-// } 
 
 
 var data = [];
@@ -62,7 +43,7 @@ $(document).ready(function () {
             {
                 data: "price"
             }
-           
+
         ]
     })
 });
