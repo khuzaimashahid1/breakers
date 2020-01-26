@@ -2,9 +2,9 @@ populateStock();
 
 function renderSuggestions() {
     console.log("Working")
-    autoComplete("customerNameKitchen", players)
-    autoComplete("customerNameDrink", players)
-    autoComplete("customerNameCigarette", players)
+    autoComplete("customerNameKitchen", allplayers)
+    autoComplete("customerNameDrink", allplayers)
+    autoComplete("customerNameCigarette", allplayers)
 }
 
 //Switching Order Type
@@ -32,13 +32,6 @@ function tabItem(category) {
     document.getElementById(category).style.display = "block";
 }
 
-<<<<<<< HEAD
-//Populating Drinks and Cigarette Stock
-function populateStock() {
-    connections.getCigarettes().then(rows => {
-        cigaretteStock = rows;
-        for (var i = 0; i < cigaretteStock.length; i++) {
-=======
 //Populate All Stocks
 function populateStock() {
     
@@ -48,7 +41,6 @@ function populateStock() {
     {
         let cigaretteStock=cigStock
         for (let i = 0; i < cigaretteStock.length; i++) {
->>>>>>> 7e8a5df1032826490577b672f9d21e47c0048209
             $("select#cigaretteSelectOrder").append($("<option>")
                 .val(cigaretteStock[i].inventoryId)
                 .html(cigaretteStock[i].itemName)
@@ -63,13 +55,6 @@ function populateStock() {
             const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
             $("#cigarettePriceOrder").val(cigaretteFilter[0].itemAmount)
         });
-<<<<<<< HEAD
-    });
-
-    connections.getDrinks().then(rows => {
-        drinkStock = rows;
-        for (var i = 0; i < drinkStock.length; i++) {
-=======
     })
    
     //Get Drinks from Main Process IPC
@@ -78,7 +63,6 @@ function populateStock() {
     {
         let drinkStock=drinks;
         for (let i = 0; i < drinkStock.length; i++) {
->>>>>>> 7e8a5df1032826490577b672f9d21e47c0048209
             $("select#drinkSelectOrder").append($("<option>")
                 .val(drinkStock[i].inventoryId)
                 .html(drinkStock[i].itemName)
@@ -98,7 +82,7 @@ function populateStock() {
 }
 
 //Autocomplete Customer Name Field
-function autoComplete(input, players) {
+function autoComplete(input, allplayers) {
     var inp = document.getElementById(input);
     console.log(inp)
     /*the autocomplete function takes two arguments,
@@ -119,16 +103,16 @@ function autoComplete(input, players) {
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(listContainerDiv);
         /*for each item in the array...*/
-        for (i = 0; i < players.length; i++) {
+        for (i = 0; i < allplayers.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
-            if (players[i].customerName.substr(0, val.length).toLowerCase() == val.toLowerCase()) {
+            if (allplayers[i].customerName.substr(0, val.length).toLowerCase() == val.toLowerCase()) {
                 /*create a DIV element for each matching element:*/
                 elementContainerDiv = document.createElement("DIV");
                 /*make the matching letters bold:*/
-                elementContainerDiv.innerHTML = "<strong>" + players[i].customerName.substr(0, val.length) + "</strong>";
-                elementContainerDiv.innerHTML += players[i].customerName.substr(val.length);
+                elementContainerDiv.innerHTML = "<strong>" + allplayers[i].customerName.substr(0, val.length) + "</strong>";
+                elementContainerDiv.innerHTML += allplayers[i].customerName.substr(val.length);
                 /*insert a input field that will hold the current array item's value:*/
-                elementContainerDiv.innerHTML += "<input type='hidden' value='" + players[i].customerName + "'>";
+                elementContainerDiv.innerHTML += "<input type='hidden' value='" + allplayers[i].customerName + "'>";
                 /*execute a function when someone clicks on the item value (DIV element):*/
                 elementContainerDiv.addEventListener("click", function (e) {
                     /*insert the value for the autocomplete text field:*/
@@ -212,11 +196,11 @@ function kitchenOrder()
 
 function getId(name)
 {
-    for(var i=0; i<players.length;i++)
+    for(var i=0; i<allplayers.length;i++)
     {
-        if(players.customerName[i]===name)
+        if(allplayers.customerName[i]===name)
         {
-            console.log(players)
+            console.log(allplayers)
         }
     }
 }
