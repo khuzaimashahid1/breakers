@@ -77,8 +77,9 @@ module.exports.createTables = () =>
   
   db.serialize(() => {
     // Queries scheduled here will be serialized.
-    db.run('CREATE TABLE IF NOT EXISTS Customer(customerId INTEGER PRIMARY KEY AUTOINCREMENT,customerName text NOT NULL, customerPhone text, customerAddress text, createDate text NOT NULL,updateDate text,member INTEGER DEFAULT 0)')
+    db.run('CREATE TABLE IF NOT EXISTS Customer(customerId INTEGER PRIMARY KEY AUTOINCREMENT,customerName text NOT NULL, customerPhone text, customerAddress text, createDate text NOT NULL,updateDate text,member INTEGER DEFAULT 0,creditAmount INTEGER DEFAULT 0)')
       .run('CREATE TABLE IF NOT EXISTS Game(gameId INTEGER PRIMARY KEY AUTOINCREMENT,gameType text NOT NULL, tableNo int NOT NULL, startTime text NOT NULL, endTime text,status text NOT NULL,customerId1 int ,customerId2 int,customerId3 int ,customerId4 int,customerId5 int ,customerId6 int,customerId7 int ,customerId8 int, customerId9 int ,customerId10 int, loserId1 int,loserId2 int, amount int, createDate text NOT NULL,updateDate text,FOREIGN KEY(customerId1) REFERENCES Customer(customerId),FOREIGN KEY(customerId2) REFERENCES Customer(customerId),FOREIGN KEY(customerId3) REFERENCES Customer(customerId),FOREIGN KEY(customerId4) REFERENCES Customer(customerId),FOREIGN KEY(customerId5) REFERENCES Customer(customerId),FOREIGN KEY(customerId6) REFERENCES Customer(customerId),FOREIGN KEY(customerId7) REFERENCES Customer(customerId),FOREIGN KEY(customerId8) REFERENCES Customer(customerId),FOREIGN KEY(customerId9) REFERENCES Customer(customerId),FOREIGN KEY(customerId10) REFERENCES Customer(customerId),FOREIGN KEY(loserId1) REFERENCES Customer(customerId),FOREIGN KEY(loserId2) REFERENCES Customer(customerId))')
+      .run('CREATE TABLE IF NOT EXISTS CreditManagement(creditManagementId INTEGER PRIMARY KEY AUTOINCREMENT, amount REAL,clearingTime text, createDate text,updateDate text,customerId INTEGER,FOREIGN KEY(customerId) REFERENCES Customer(customerId))')
       .run('Create table IF NOT EXISTS InventoryCategory(inventoryCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,inventoryCategoryName text UNIQUE, createDate text, updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS Inventory(inventoryId INTEGER PRIMARY KEY AUTOINCREMENT,itemName text UNIQUE, itemAmount int,quantity REAL,itemDescription text, createDate text,updateDate text,inventoryCategoryId int,FOREIGN KEY(inventoryCategoryId) REFERENCES InventoryCategory(inventoryCategoryId))')
       .run('CREATE TABLE IF NOT EXISTS InventoryManagement(inventoryManagementId INTEGER PRIMARY KEY AUTOINCREMENT, createDate text,updateDate text,quantity REAL,inventoryId int,gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) ,FOREIGN KEY(inventoryId) REFERENCES Inventory(inventoryId))')
@@ -357,6 +358,38 @@ module.exports.generateBill =  async(customerId) =>
   return Promise.all([tab1, tab2,tab3]);
 }
 
+
+//Pay Bill
+module.exports.payBill=(currentDate,status,creditAmount,customerId,...billIdArray)=>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+
+  //Set Status in Bill
+  for(let i=0;i<billIdArray.length;i++)
+    {
+      db.run('UPDATE Bill SET status=?,updateDate=? WHERE billId=?',[status,currentDate,billIdArray[i]])
+    }
+
+  //If Partial paid add into creditAmount
+  if(status==="Partial Paid")
+  {
+    db.run('UPDATE Customer SET updateDate=?,creditAmount=((SELECT creditAmount FROM Customer WHERE customerId=?)+?) WHERE customerId=?',[currentDate,customerId,creditAmount,customerId])
+  }
+  
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+}
 
 
 //Unique Constraint Failed (errno:19)

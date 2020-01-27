@@ -1,6 +1,6 @@
 // window.$ = window.jQuery = require('jquery');
 require('datatables.net-dt')();
-let data=[],datatable;
+var billData=[],billIdArray=[],datatable,totalBill=0;
 function renderSuggestions()
 {
     autoComplete("PlayerName", allplayers)
@@ -109,23 +109,28 @@ function autoComplete(input, allplayers) {
 
 function generateBill()
 {
+    totalBill=0
     customerName= $('#PlayerName').val()
     currentPlayerId = getId(customerName)
     ipc.send('generate-bill',currentPlayerId);
     ipc.once('generated-bill', (event, bill) => 
     {
-        data=[]
+        billData=[]
+        billIdArray=[]
         for (let i = 0; i < bill.length; i++) {
-        data.push(bill[i])
+            billData.push(bill[i])
+            billIdArray.push(bill[i].billId)
+            totalBill+=bill[i].price;
         }
-        datatable.clear().rows.add(data).draw();
-        
+        datatable.clear().rows.add(billData).draw();
+        // $("#totalBill").innerText(totalBill+ " PKR")
+        $("#totalBill").html(totalBill+ " PKR")
     })
 
 }
 $(document).ready(function () {
     datatable=$('#example').DataTable({
-        data: data,
+        data: billData,
         "columns": [{
                 data: "item"
             },
@@ -151,4 +156,22 @@ function getId(name)
         }
     }
     return null;
+}
+
+function amountReceived()
+{
+    let received=$("#amountReceived").val()
+    let remaining;
+    console.log(received)
+    if(received==totalBill)
+    {
+        ipc.send('pay-bill',"paid",0,currentPlayerId,...billIdArray)
+        
+    }
+    else
+    {
+        remaining=totalBill-received;
+        ipc.send('pay-bill',"Partial Paid",remaining,currentPlayerId,...billIdArray)
+        
+    }
 }
