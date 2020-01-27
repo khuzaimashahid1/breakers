@@ -21,19 +21,19 @@ global.sharedObj = {
 
 function createWindow(){
     win = new BrowserWindow({
-        fullscreen:true,
+        fullscreen:false,
         webPreferences: {
             nativeWindowOpen: true,
             nodeIntegration: true,
         }
     });
-
+    win.maximize();
     win.loadURL(url.format({
         pathname : path.join(__dirname,"./views/Index.html"),
         protocol: "file",
         slashes: "true"
     }))
-
+    
     win.on("closed", ()=> {
         win= null;
 
