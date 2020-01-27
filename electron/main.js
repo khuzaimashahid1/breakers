@@ -107,6 +107,16 @@ ipc.on('add-order-others',function(event,gameId,customerId,categoryName,itemName
     connections.addOrderOthers(currentDate,gameId,customerId,categoryName,itemName,amount);
 })
 
+//Pay Bill
+ipc.on('pay-bill',function(event,status,creditAmount,customerId,...billIdArray){
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const currentDate = yyyy + '-' + mm + '-' + dd;
+    connections.payBill(currentDate,status,creditAmount,customerId,...billIdArray);
+})
+
 //End Game
 ipc.on('end-game',function(event,gameId,amount,loserId1,loserId2)
 {
@@ -170,7 +180,8 @@ ipc.on('generate-bill',function(event,customerId)
                         finalResult.push({
                             item:result[i][j].gameType+" Game ( Table "+result[i][j].tableNo+" )",
                             price:result[i][j].amount,
-                            time_quantity:result[i][j].startTime
+                            time_quantity:result[i][j].startTime,
+                            billId:result[i][j].billId
                         })
                     }
                     else if(result[i][j].revenueDescription)
@@ -180,7 +191,8 @@ ipc.on('generate-bill',function(event,customerId)
                             finalResult.push({
                                 item:result[i][j].revenueDescription+" ( Table "+result[i][j].tableNo+" )",
                                 price:result[i][j].amount,
-                                time_quantity:1
+                                time_quantity:1,
+                                billId:result[i][j].billId
                             })
                         }
                         else
@@ -188,7 +200,8 @@ ipc.on('generate-bill',function(event,customerId)
                             finalResult.push({
                                 item:result[i][j].revenueDescription,
                                 price:result[i][j].amount,
-                                time_quantity:1
+                                time_quantity:1,
+                                billId:result[i][j].billId
                             })
                         }
                     }
@@ -199,7 +212,8 @@ ipc.on('generate-bill',function(event,customerId)
                             finalResult.push({
                                 item:result[i][j].itemName+" ( Table "+result[i][j].tableNo+" )",
                                 price:result[i][j].amount,
-                                time_quantity:result[i][j].quantity
+                                time_quantity:result[i][j].quantity,
+                                billId:result[i][j].billId
                             })
                         }
                         else
@@ -207,7 +221,8 @@ ipc.on('generate-bill',function(event,customerId)
                             finalResult.push({
                                 item:result[i][j].itemName,
                                 price:result[i][j].amount,
-                                time_quantity:result[i][j].quantity
+                                time_quantity:result[i][j].quantity,
+                                billId:result[i][j].billId
                             })
                         }
                         

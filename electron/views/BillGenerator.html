@@ -78,7 +78,7 @@
               </table>
 
             <div class="main-block">
-                <label for="" style="
+                <label  style="
                            margin-left: 33%;
                            height: 40px;
                            width: 20%;
@@ -87,7 +87,7 @@
                            font-style: oblique;
                            color: black;
                             ">Bill: </label>
-                <label for="" style="
+                <label id="totalBill" style="
                           margin-left: 2%;
                           height: 40px;
                           width: 20%;
@@ -108,14 +108,14 @@
                             ">Paid: </label>
 
 
-                <input type="text" style="
+                <input id="amountReceived" type="text" style="
                           margin-left: 2%;
                           height: 30px;
                           width: 100px;
                           padding: 10px;
                           font-size: 25px;
                           font-style: oblique;
-                          color: black;" name="lname" placeholder="0.0$"><br>
+                          color: black;" name="lname" placeholder="0.0 PKR"><br>
                 <br />
                 <br />
                 <div style="margin-bottom: 5%;">
@@ -123,7 +123,7 @@
                         <button 
                             id="btnAmountReceived" 
                             class="w3-button" 
-                            onclick="" 
+                            onclick="amountReceived()" 
                             style="margin-left: 2%;
                                 height: 40px;
                                 width: 20%;
