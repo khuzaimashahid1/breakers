@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../CSS/AccountsManagement.css">
     <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="../CSS/modal.css">
     <link rel="stylesheet" href="../CSS/index.css">
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
 </head>
@@ -22,8 +21,8 @@
           </div>
         </div> -->
         
-        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Fade')">Expense Summary</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openModal()">Add Expense</button>
+        <button class="w3-bar-item w3-button tablink w3-white" onclick="openLink(event, 'Fade')">Expense Summary</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom')">Add Expense</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Left')">Revenue</button>
     </div>
 
@@ -31,7 +30,7 @@
 
         <div 
           id="Fade" 
-          class="w3-container city " 
+          class="w3-container city w3-animate-zoom" 
           style="
             background-color: white;
             opacity: 0.8;">
@@ -64,7 +63,7 @@
 
         <div 
           id="Left" 
-          class="w3-container city w3-animate-left" 
+          class="w3-container city w3-animate-zoom" 
           style="
             display:none; 
             background-color: white;
@@ -94,57 +93,40 @@
           
             </div>
         </div>
-  <!-- CREATING MODAL STRUCTURE -->
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
+  <!-- CREATING ADD EXPENSE -->
 
-      <div id="AddNewExpense" class="w3-container">
-        <div class="main-block">
-          <h1>Add New Expense</h1>
-          <form>
-            <div class="info" style="
-                      background: rgba(0, 0, 0, 1);
-                     ">
-              <input id="expenseDescription" type="text" name="name" placeholder="Expense Description" required style="
-                      color: white;
-                      background: rgba(0, 0, 0, 0.9);
-                      width: 100%; 
-                      margin-left: 20%; 
-                      margin-right: 20%;
-                      padding-left: 30px;
-                      ">
-              <br />
-              <select id="expenseTypeSelect" 
-              
-                  style="
-                    width: 100%; 
-                    margin-left: 20%; 
-                    margin-right: 20%;
-                    padding-left: 30px;">
-                <option value="text" disabled selected>Select Expense Type</option>
-                <option id="expenseClub" value="text" >Club Expense</option>
-                <option id="expenseKitchen" value="text" >Kitchen Expense</option>
-                <!-- <option id="expenseClub" value="text" disabled selected>Select Expense Type</option> -->
-            </select>
-            <br />
-              <br />
-              <input type="text" placeholder="Amount" id="Number" required style="
-                        color: white;
-                        background: rgba(0, 0, 0, 0.9);
-                        width: 100%; 
-                        margin-left: 20%; 
-                        margin-right: 20%;
-                        padding-left: 30px;">
+  <div id="Zoom" class="w3-container city w3-animate-zoom"
+        style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
 
+        <div class="w3-container category">
+            <h1
+                style="
+                    width: 100%;
+                    text-align: center;">Add Expense</h1
+                >
+                <div class="dataform">
+                    <input class="input" id="expenseDescription"  type="text" name="name" placeholder="Expense Description" required>
+                    <br />
+                    <br />
+                    <select class="select" id="expenseTypeSelect">
+                      <option value="text" disabled selected>Select Expense Type</option>
+                      <option id="expenseClub" value="text" >Club Expense</option>
+                      <option id="expenseKitchen" value="text" >Kitchen Expense</option>
+                  </select>
+                    <br />
+                    <br />
+                    <input class="input" id="Amount"  type="text" name="name" placeholder="Amount"
+                        required>
+                    
+                    <br />
+                    <br />
+                
+                <button type="button" class="btn" onclick="addExpense()">Add Expense</button>
             </div>
-            <button type="button" class="btnModal" onclick="addExpense()">Add Expense</button>
-          </form>
+             
         </div>
-      </div>
-    </div>
 
-  </div>
+    </div>
     <script src="../js/AccountsManagement.js"></script>
     <!-- <script src="../js/Customer.js"></script> -->
 
