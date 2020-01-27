@@ -1,10 +1,16 @@
+var customerName,drinkStock,cigaretteStock,drinkFilter,cigaretteFilter;
 populateStock();
 
-function renderSuggestions() {
-    console.log("Working")
+function renderSuggestionsKitchen() {
     autoComplete("customerNameKitchen", allplayers)
-    autoComplete("customerNameDrink", allplayers)
-    autoComplete("customerNameCigarette", allplayers)
+}
+
+function renderSuggestionsDrinks() {
+    autoComplete("customerNameDrinks", allplayers)
+}
+
+function renderSuggestionsCigarette() {
+    autoComplete("customerNameCigarettes", allplayers)
 }
 
 //Switching Order Type
@@ -39,7 +45,7 @@ function populateStock() {
     ipc.send('get-cigs');
     ipc.on('Cigarette Stock', (event, cigStock) => 
     {
-        let cigaretteStock=cigStock
+        cigaretteStock=cigStock
         for (let i = 0; i < cigaretteStock.length; i++) {
             $("select#cigaretteSelectOrder").append($("<option>")
                 .val(cigaretteStock[i].inventoryId)
@@ -52,7 +58,7 @@ function populateStock() {
         }
         $("select#cigaretteSelectOrder").change(function () {
             var selectedCigarette = $(this).children("option:selected").val();
-            const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
+            cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
             $("#cigarettePriceOrder").val(cigaretteFilter[0].itemAmount)
         });
     })
@@ -61,7 +67,7 @@ function populateStock() {
     ipc.send('get-drinks');
     ipc.on('Drinks Stock', (event, drinks) => 
     {
-        let drinkStock=drinks;
+        drinkStock=drinks;
         for (let i = 0; i < drinkStock.length; i++) {
             $("select#drinkSelectOrder").append($("<option>")
                 .val(drinkStock[i].inventoryId)
@@ -74,7 +80,7 @@ function populateStock() {
         }
         $("select#drinkSelectOrder").change(function () {
             var selectedDrink = $(this).children("option:selected").val();
-            const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
+            drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
             $("#drinkPriceOrder").val(drinkFilter[0].itemAmount)
         });
     })
@@ -187,20 +193,90 @@ function kitchenOrder()
 
     var kitchenItem= $("#kitchenOrderItem").val()
     var kitchenPrice= $('#kitchenOrderPrice').val()
-    var customerName= $('#customerNameKitchen').val()
-    // console.log(players)
-    getId(customerName)
-    // ipc.send('add-order-others',"Walk-In",currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
+    customerName= $('#customerNameKitchen').val()
+    currentPlayerId = getId(customerName)
+    if(kitchenItem!=""&&kitchenOrder!=""&&customerName!="")
+    {
+        if(currentPlayerId!=null)
+        {
+            ipc.send('add-order-others',"Walk-In",currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
+            currentPlayerId=null
+        }
+        else
+        {
+            ipc.send('error-dialog',"Customer not in database");
+        }
+    }
+    else
+    {
+        ipc.send('error-dialog',"Empty field(s)");
+    }
        
+}
+
+function drinkOrder()
+{
+    customerName= $('#customerNameDrinks').val()
+    let selectedDrink = $("select#DrinkSelectOrder").children("option:selected").val();
+    const drinkFilter=drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
+    let inventoryId=drinkFilter[0].inventoryId;
+    let price=drinkFilter[0].itemAmount;
+    let quantity=1;
+    currentPlayerId = getId(customerName)
+    if(selectedDrink!="")
+    {
+        if(currentPlayerId!=null)
+        {
+            ipc.send('add-order',inventoryId,"Walk-In",currentPlayerId,quantity,price)
+            currentPlayerId=null
+        }
+        else
+        {
+            ipc.send('error-dialog',"Customer not in database");
+        }
+    }
+    else
+    {
+        ipc.send('error-dialog',"Empty field(s)");
+    }  
+}
+
+
+function cigarettesOrder()
+{
+    customerName =  $("#cutomerNameCigarettes").val()
+    var selectedCigarette = $("select#CigaretteSelectOrder").children("option:selected").val();
+    const cigaretteFilter=cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
+    let inventoryId=cigaretteFilter[0].inventoryId;
+    let price=cigaretteFilter[0].itemAmount;
+    currentPlayerId = getId(customerName)
+    let quantity=1;
+    if(selectedCigarette!=""&& customerName!="")
+    {
+        if(currentPlayerId!=null)
+        {
+            ipc.send('add-order',inventoryId,"Walk-In",currentPlayerId,quantity,price)
+            currentPlayerId=null
+        }
+        else
+        {
+            ipc.send('error-dialog',"Customer not in database");
+        }
+    }
+    else
+    {
+        ipc.send('error-dialog',"Empty field(s)");
+    }  
 }
 
 function getId(name)
 {
     for(var i=0; i<allplayers.length;i++)
     {
-        if(allplayers.customerName[i]===name)
+        if(allplayers[i].customerName===name)
         {
-            console.log(allplayers)
+            return allplayers[i].customerId
         }
     }
+    return null;
 }
