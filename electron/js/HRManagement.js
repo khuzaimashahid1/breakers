@@ -33,42 +33,48 @@ function addAdvance()
 var data = [];
 var jsonData;
 
-for (let i = 0; i < jsonData.length; i++) {
-    data.push(jsonData[i])
-}
+
+    //Get Cigarettes from Main Process IPC
+    ipc.send('employee');
+    ipc.on('employee Data', (event, employeeData) => 
+    {
+         jsonData=employeeData;
+
+        console.log(jsonData)
+        for (let i = 0; i < jsonData.length; i++) {
+            data.push(jsonData[i])
+        }
+    })
+
+
+
+
 
 console.log(data)
+
 
 $(document).ready(function () {
     $('#example').dataTable({
         data: data,
         "columns": [{
-                data: "EmployeeName"
+                data: "employeeName"
             },
             {
-                data: "EmployeeDesignation"
+                data: "employeeDesignation"
             },
             {
-                data: "EmployeePhone"
+                data: "employeePhone"
             },
             {
-                data: "EmployeeAddress"
+                data: "employeeAddress"
             },
             {
-                data: "EmployeeSalary"
+                data: "employeeSalary"
             },
             {
-                data: "Advance"
+                data: "employeeAdvance"
             }
         ]
     })
 });
 
-$(document).ready(function () {
-      //Get Cigarettes from Main Process IPC
-      ipc.send('employee');
-      ipc.on('employee Data', (event, employeeData) => 
-      {
-           jsonData=employeeData;
-      })
-});
