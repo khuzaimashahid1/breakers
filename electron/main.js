@@ -170,6 +170,7 @@ ipc.on('generate-bill',function(event,customerId)
 {
     connections.generateBill(customerId).then(result=>
         {
+            console.log(result)
             let finalResult=[];
             for(let i=0;i<result.length;i++)
             {
@@ -178,7 +179,7 @@ ipc.on('generate-bill',function(event,customerId)
                     if(result[i][j].gameType)
                     {
                         finalResult.push({
-                            item:result[i][j].gameType+" Game ( Table "+result[i][j].tableNo+" )",
+                            item:result[i][j].revenueDescription+" ( Table "+result[i][j].tableNo+" )",
                             price:result[i][j].amount,
                             time_quantity:result[i][j].startTime,
                             billId:result[i][j].billId
@@ -230,6 +231,7 @@ ipc.on('generate-bill',function(event,customerId)
                 }
 
             }
+            console.log(finalResult)
             event.sender.send("generated-bill",finalResult)
             
         })

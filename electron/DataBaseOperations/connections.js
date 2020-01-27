@@ -332,9 +332,10 @@ module.exports.generateBill =  async(customerId) =>
     console.log('Connected to the breakers database.');
   });
   
-  sql1='SELECT Bill.billId,Bill.amount,Game.gameType,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Bill.status="unpaid" and Bill.customerId='+customerId;
+  sql1='SELECT Bill.billId,Bill.amount,Game.gameType,Revenue.revenueDescription,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Revenue.revenueName ="Games Sale" AND Bill.status="unpaid" and Bill.customerId='+customerId;
   sql2='SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Bill JOIN Revenue USING (revenueId)  JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId) LEFT JOIN Game on Game.gameId=Revenue.gameId WHERE Bill.customerId='+customerId+' and Bill.status="unpaid" UNION ALL SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Game  LEFT JOIN (Revenue JOIN Bill USING (revenueId) JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId)) using (gameId) WHERE Game.gameId IS NULL and Bill.status="unpaid" and Bill.customerId='+customerId;
   sql3='Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Bill JOIN Revenue using(revenueId) LEFT JOIN Game using(gameId) WHERE Bill.customerId='+customerId+' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and Bill.status="unpaid" UNION ALL Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Game LEFT JOIN Revenue using(gameId) JOIN Bill using(revenueId) WHERE Bill.customerId='+customerId+' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and(Revenue.gameId IS NULL) and Bill.status="unpaid"'
+
   var tab1=await selectStatementMultipleRowsTogether(db,sql1).then(rows=>
       {
         return rows;
@@ -376,10 +377,13 @@ module.exports.payBill=(currentDate,status,creditAmount,customerId,...billIdArra
       db.run('UPDATE Bill SET status=?,updateDate=? WHERE billId=?',[status,currentDate,billIdArray[i]])
     }
 
-  //If Partial paid add into creditAmount
+  //If Partial paid add into creditAmount and CreditManagement
   if(status==="Partial Paid")
   {
+    const today = new Date();
+    const clearingTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     db.run('UPDATE Customer SET updateDate=?,creditAmount=((SELECT creditAmount FROM Customer WHERE customerId=?)+?) WHERE customerId=?',[currentDate,customerId,creditAmount,customerId])
+    db.run('Insert into CreditManagement(createDate,amount,clearingTime,customerId) values(?,?,?,?)',[currentDate,creditAmount,clearingTime,customerId])
   }
   
 
@@ -435,7 +439,7 @@ module.exports.endGame = (createDate,updateDate,gameId,amount,loserId1,loserId2,
       db.serialize(() => {
         // Queries scheduled here will be serialized.
         db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=?,amount=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,amount,gameId])
-        .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,((SELECT gameType from Game WHERE gameId=?)||" Sale"),?,(SELECT tableNo from Game WHERE gameId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Games"),?)',[createDate,gameId,amount,gameId,gameId])
+        .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,"Games Sale",?,((SELECT gameType from Game WHERE gameId=?)||" Game"),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Games"),?)',[createDate,amount,gameId,gameId])
         .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,loserId1,amount], (err) => {
           if (err !== null) 
           reject(err);
@@ -459,7 +463,7 @@ module.exports.endGame = (createDate,updateDate,gameId,amount,loserId1,loserId2,
     db.serialize(() => {
       // Queries scheduled here will be serialized.
       db.run('UPDATE Game SET updateDate=?,status="completed",loserId1=?,loserId2=?,endTime=?,amount=? WHERE gameId=?',[updateDate,loserId1,loserId2,endTime,amount,gameId])
-      .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,((SELECT gameType from Game WHERE gameId=?)||" Sale"),?,(SELECT tableNo from Game WHERE gameId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Games"),?)',[createDate,gameId,amount,gameId,gameId])
+      .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,"Games Sale",?,((SELECT gameType from Game WHERE gameId=?)||" Game"),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Games"),?)',[createDate,amount,gameId,gameId])
       .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,loserId1,amount/2])
       .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,loserId2,amount/2], (err) => {
         if (err !== null) 
@@ -546,38 +550,6 @@ module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDat
     db.run('Insert into customer ( customerName,customerAddress,customerPhone, createDate ) values (?,?,?,?)', [customerName,customerAddress,customerPhone,createDate], (err) => {
         if (err !== null) 
         reject(err);
-        else 
-        {
-          db.close((err) => {
-            if (err) {
-              return console.error(err.message);
-            }
-            console.log('Close the database connection.');
-          });
-          resolve(true);
-        }
-    });
-  });
-}
-
-//Devare Customer
-module.exports.devareCustomer=(customerId)=>
-{
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log('Connected to the breakers database.');
-  });
-
-  console.log("devare")
-  return new Promise(function(resolve, reject) {
-    db.run('Devare from customer where customerId=?', [customerId], (err) => {
-        if (err !== null){
-          reject(err);
-          console.log("error in 222")
-        } 
-        
         else 
         {
           db.close((err) => {

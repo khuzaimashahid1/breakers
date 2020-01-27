@@ -302,6 +302,18 @@ function compareAndStartGame(gameType,playersCount)
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
+    if(gameType==="single")
+    {
+        gameType="Single"
+    }
+    else if(gameType==="double")
+    {
+        gameType="Double"
+    }
+    else if(gameType==="century")
+    {
+        gameType="Century"
+    }
     ipc.send('start-game',tableNumber,status,gameType,...playersArray,startTime,createDate)
     remote.getCurrentWindow().close()
                     
