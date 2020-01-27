@@ -88,7 +88,7 @@ module.exports.createTables = () =>
       .run('CREATE TABLE IF NOT EXISTS Revenue(revenueId INTEGER PRIMARY KEY AUTOINCREMENT,revenueName text, revenueAmount int, revenueDescription text , createDate text,updateDate text, revenueCategoryId int,inventoryManagementId int, gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(revenueCategoryId) REFERENCES RevenueCategory(revenueCategoryId))')
       .run('CREATE TABLE IF NOT EXISTS Account(accountId INTEGER PRIMARY KEY AUTOINCREMENT,accountName text,accountDescription text, amount int,createDate text,updateDate text)')
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
-      .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeeCNIC text,employeeDesignation text, employeeSalary int, createDate text,updateDate text)')
+      .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int, createDate text,updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int,salaryNote text, salaryDue int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
       .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
     });
@@ -141,6 +141,36 @@ module.exports.getCustomers =  async() =>
     resolve(rows);
    });
 }
+
+//Get All Employees in Stock
+module.exports.getEmployees =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select * from Employee';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
 
 //Get All Cigarettes in Stock
 module.exports.getCigarettes =  async() =>
@@ -301,8 +331,9 @@ module.exports.generateBill =  async(customerId) =>
     console.log('Connected to the breakers database.');
   });
   
-  sql1='SELECT Bill.amount,Game.gameType,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Bill.status="unpaid" and Bill.customerId='+customerId;
-  sql2='SELECT Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Bill JOIN Revenue USING (revenueId)  JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId) LEFT JOIN Game on Game.gameId=Revenue.gameId WHERE Bill.customerId='+customerId+' and Bill.status="unpaid" UNION ALL SELECT Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Game  LEFT JOIN (Revenue JOIN Bill USING (revenueId) JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId)) using (gameId) WHERE Game.gameId IS NULL and Bill.status="unpaid" and Bill.customerId='+customerId;
+  sql1='SELECT Bill.billId,Bill.amount,Game.gameType,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Bill.status="unpaid" and Bill.customerId='+customerId;
+  sql2='SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Bill JOIN Revenue USING (revenueId)  JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId) LEFT JOIN Game on Game.gameId=Revenue.gameId WHERE Bill.customerId='+customerId+' and Bill.status="unpaid" UNION ALL SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Game  LEFT JOIN (Revenue JOIN Bill USING (revenueId) JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId)) using (gameId) WHERE Game.gameId IS NULL and Bill.status="unpaid" and Bill.customerId='+customerId;
+  sql3='Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Bill JOIN Revenue using(revenueId) LEFT JOIN Game using(gameId) WHERE Bill.customerId='+customerId+' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and Bill.status="unpaid" UNION ALL Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Game LEFT JOIN Revenue using(gameId) JOIN Bill using(revenueId) WHERE Bill.customerId='+customerId+' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and(Revenue.gameId IS NULL) and Bill.status="unpaid"'
   var tab1=await selectStatementMultipleRowsTogether(db,sql1).then(rows=>
       {
         return rows;
@@ -311,6 +342,10 @@ module.exports.generateBill =  async(customerId) =>
       {
         return rows;
       })
+  var tab3=await selectStatementMultipleRowsTogether(db,sql3).then(rows=>
+      {
+        return rows;
+      })    
   
       
   db.close((err) => {
@@ -319,7 +354,7 @@ module.exports.generateBill =  async(customerId) =>
     }
     console.log('Close the database connection.');
   });
-  return Promise.all([tab1, tab2]);
+  return Promise.all([tab1, tab2,tab3]);
 }
 
 
@@ -451,7 +486,7 @@ module.exports.addOrderOthers = (createDate,gameId,customerId,categoryName,itemN
   
   db.serialize(() => {
     // Queries scheduled here will be serialized.
-    db.run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,(?||" Sale"),?,?,(Select revenueCategoryId from RevenueCategory where revenueCategoryName=?),?)',[createDate,categoryName,itemName,amount,categoryName,gameId])
+    db.run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,gameId) values (?,(?||" Sale"),?,?,(Select revenueCategoryId from RevenueCategory where revenueCategoryName=?),?)',[createDate,categoryName,amount,itemName,categoryName,gameId])
     .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount])
     });
 

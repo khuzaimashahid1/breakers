@@ -13,18 +13,23 @@
 </head>
 
 <body>
-
-
-
     <div>
-
-        <div id="Fade" class="w3-container city" style="margin-right: 5%;
-                        margin-left: 5%; margin-top: 2%; margin-bottom: 2%; background: #ffff; opacity:0.8;">
-            <h1 style="width:100%; 
-            text-align: center;
-            margin-top: 10px;">Generate Invoice</h1>
+        <div id="Fade" 
+            class="w3-container city" 
+            style="
+                margin-right: 5%;
+                margin-left: 5%; 
+                margin-top: 2%; 
+                margin-bottom: 2%; 
+                background: #ffff; 
+                opacity:0.8;">
+        <h1 
+            style="
+                width:100%; 
+                text-align: center;
+                margin-top: 10px;">Generate Invoice</h1>
             <div class="w3-bar">
-                <input id="PlayerName" class="w3-bar-item" type="text" name="name" placeholder="Player Name" style="margin-left: 30%;
+                <input id="PlayerName" onkeypress="renderSuggestions()" class="w3-bar-item" type="text" name="name" placeholder="Player Name" style="margin-left: 30%;
                            height: 40px;
                            width: 20%;
                            padding: 10px;
@@ -32,7 +37,7 @@
                            border-radius: 10px;
                            background: white;  ">
 
-                <button id="btnGenerateBill" class="w3-button" onclick="" style="margin-left: 2%;
+                <button id="btnGenerateBill" class="w3-button" onclick="generateBill();" style="margin-left: 2%;
                         height: 40px;
                         width: 20%;
                         margin-right: 20%;
@@ -54,53 +59,7 @@
             </div>
 
 
-            <!-- <table class="fixed_header">
-                <thead style="width: 750px;">
-                    <tr>
-                        <th style="width: 250px;">Item Name</th>
-                        <th style="width: 250px;">Time || Quantity</th>
-                        <th style="width: 250px;">Price</th>
-                    </tr>
-                </thead>
-                <tbody style="width: 750px;">
-                    <tr>
-                        <td id="billTableCell-1">Cell 1</td>
-                        <td id="billTableCell-2">Cell 2</td>
-                        <td id="billTableCell-3">Cell 3</td>
-                    </tr>
-                    <tr>
-                        <td id="billTableCell-1">Cell 1</td>
-                        <td id="billTableCell-2">Cell 2</td>
-                        <td id="billTableCell-3">Cell 3</td>
-                    </tr>
-                    <tr>
-                        <td id="billTableCell-1">Cell 1</td>
-                        <td id="billTableCell-2">Cell 2</td>
-                        <td id="billTableCell-3">Cell 3</td>
-                    </tr>
-                    <tr>
-                        <td id="billTableCell-1">Cell 1</td>
-                        <td id="billTableCell-2">Cell 2</td>
-                        <td id="billTableCell-3">Cell 3</td>
-                    </tr>
-                    <tr>
-                        <td id="billTableCell-1">Cell 1</td>
-                        <td id="billTableCell-2">Cell 2</td>
-                        <td id="billTableCell-3">Cell 3</td>
-                    </tr>
-                    <tr>
-                        <td id="billTableCell-1">Cell 1</td>
-                        <td id="billTableCell-2">Cell 2</td>
-                        <td id="billTableCell-3">Cell 3</td>
-                    </tr>
-                    <tr>
-                        <td id="billTableCell-1">Cell 1</td>
-                        <td id="billTableCell-2">Cell 2</td>
-                        <td id="billTableCell-3">Cell 3</td>
-                    </tr>
-                </tbody>
-            </table> -->
-
+           
             <table id="example" class="display" style="width:100%;  overflow: auto;">
                 <thead>
                   <tr>

@@ -1,7 +1,6 @@
 require('datatables.net-dt')();
 
 
-
 //Switching Customer Management Type
 function openLink(evt, animName) {
   var i, x, tablinks;
@@ -11,10 +10,10 @@ function openLink(evt, animName) {
   }
   tablinks = document.getElementsByClassName("tablink");
   for (i = 0; i < x.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" w3-green", "");
+    tablinks[i].className = tablinks[i].className.replace(" w3-white", "");
   }
   document.getElementById(animName).style.display = "block";
-  evt.currentTarget.className += " w3-green";
+  evt.currentTarget.className += " w3-white";
 }
 
 

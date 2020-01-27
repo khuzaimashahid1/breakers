@@ -123,7 +123,7 @@ function populateStock() {
         $("select#CigaretteSelect").change(function () {
             var selectedCigarette = $(this).children("option:selected").val();
             const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-            $("#cigarettePrice").val(cigaretteFilter[0].itemAmount)
+            $("#CigarettePrice").val(cigaretteFilter[0].itemAmount)
         });
     })
    
@@ -141,7 +141,7 @@ function populateStock() {
         $("select#DrinkSelect").change(function () {
             var selectedDrink = $(this).children("option:selected").val();
             const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-            $("#drinkPrice").val(drinkFilter[0].itemAmount)
+            $("#DrinkPrice").val(drinkFilter[0].itemAmount)
         });
     })
 
@@ -156,7 +156,7 @@ function drinksOrder()
     let inventoryId=drinkFilter[0].inventoryId;
     let price=drinkFilter[0].itemAmount;
     let gameId=currentGame.gameId;
-    let quantity=1;
+    let quantity=$("#DrinkQuantity").val()
     ipc.send('add-order',inventoryId,gameId,currentPlayerId,quantity,price)
        
 }
@@ -169,7 +169,7 @@ function cigarettesOrder()
     let inventoryId=cigaretteFilter[0].inventoryId;
     let price=cigaretteFilter[0].itemAmount;
     let gameId=currentGame.gameId;
-    let quantity=1;
+    let quantity=$("#CigaretteQuantity").val()
     ipc.send('add-order',inventoryId,gameId,currentPlayerId,quantity,price)
        
 }

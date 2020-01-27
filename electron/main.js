@@ -21,19 +21,19 @@ global.sharedObj = {
 
 function createWindow(){
     win = new BrowserWindow({
-        fullscreen:true,
+        fullscreen:false,
         webPreferences: {
             nativeWindowOpen: true,
             nodeIntegration: true,
         }
     });
-
+    win.maximize();
     win.loadURL(url.format({
         pathname : path.join(__dirname,"./views/Index.html"),
         protocol: "file",
         slashes: "true"
     }))
-
+    
     win.on("closed", ()=> {
         win= null;
 
@@ -128,6 +128,17 @@ ipc.on('end-game',function(event,gameId,amount,loserId1,loserId2)
     
 })
 
+
+//Get Employees Data
+ipc.on('employee',function(event)
+{
+    connections.getEmployees().then(rows => {
+        event.sender.send("employee Data", rows);
+    });
+})
+
+
+
 //Get Cigarette Stock
 ipc.on('get-cigs',function(event)
 {
@@ -150,7 +161,6 @@ ipc.on('generate-bill',function(event,customerId)
     connections.generateBill(customerId).then(result=>
         {
             let finalResult=[];
-            // console.log(result);
             for(let i=0;i<result.length;i++)
             {
                 for(let j=0;j<result[i].length;j++)
@@ -162,6 +172,25 @@ ipc.on('generate-bill',function(event,customerId)
                             price:result[i][j].amount,
                             time_quantity:result[i][j].startTime
                         })
+                    }
+                    else if(result[i][j].revenueDescription)
+                    {
+                        if(result[i][j].tableNo)
+                        {
+                            finalResult.push({
+                                item:result[i][j].revenueDescription+" ( Table "+result[i][j].tableNo+" )",
+                                price:result[i][j].amount,
+                                time_quantity:1
+                            })
+                        }
+                        else
+                        {
+                            finalResult.push({
+                                item:result[i][j].revenueDescription,
+                                price:result[i][j].amount,
+                                time_quantity:1
+                            })
+                        }
                     }
                     else
                     {

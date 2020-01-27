@@ -15,7 +15,7 @@
 
     <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
         <h5 class="w3-bar-item" width=20%>Order Type</h5>
-        <button class="w3-bar-item w3-button tablink w3-green" onclick="openLink(event, 'Fade')">Kitchen</button>
+        <button class="w3-bar-item w3-button tablink w3-white" onclick="openLink(event, 'Fade')">Kitchen</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Left')">Drinks</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Top')">Cigarettes</button>
     </div>
@@ -32,12 +32,12 @@
             <div id="kitchenOrder" class="w3-container category">
                 <h1>Kitchen Order</h1>
                 <div class="main-block">
-                    <form>
-                        <input type="text" id="customerNameKitchen" value="" onkeypress="renderSuggestions()" placeholder="Enter Customer Name" style="width:100%; margin-left:20%; margin-right:50%;"/>
+                    <form action="/">
+                        <input type="text" id="customerNameKitchen" value="" onkeypress="renderSuggestionsKitchen()" placeholder="Enter Customer Name" />
                         <br/>
-                        <input id="kitchenOrderItem" value="" type="text" name="name" placeholder="Order Item" style="width:100%; margin-left:20%; margin-right:50%;">
+                        <input id="kitchenOrderItem" value="" type="text" placeholder="Order Item" >
                         <br/>
-                        <input id="kitchenOrderPrice" value="" type="text" name="name" placeholder="Price" style="width:100%; margin-left:20%; margin-right:50%;">
+                        <input id="kitchenOrderPrice" value="" type="number" placeholder="Price" >
                         <button type="button"  id="kitchenOrderAdd" onclick="kitchenOrder()" class="btnModal">Add to Bill</button>
                     </form>
                 </div>
@@ -75,14 +75,14 @@
                 <h1>Drinks Order</h1>
                 <div class="main-block">
                     <form>
-                        <input type="text" id="customerNameDrinks" placeholder="Enter Customer Name" onkeypress="renderSuggestions()"/>
+                        <input type="text" id="customerNameDrinks" value="" onkeypress="renderSuggestionsDrinks()" placeholder="Enter Customer Name"/>
                         <br/>
                         <select id=drinkSelectOrder>
                             <option value="number" disabled selected>Select Drink</option>
                         </select>
                         <br />
-                        <input id="drinkPriceOrder" type="text" name="name" placeholder="Price"><br />
-                        <button id="drinkOrderAdd" class="btnModal">Add to bill</button>
+                        <input id="drinkPriceOrder" type="text" placeholder="Price"><br />
+                        <button type="button" onclick="drinkOrder()" class="btnModal">Add to bill</button>
                     </form>
                 </div>
                 <h3 id="remainingStock">In Stock:</h3>
@@ -146,7 +146,7 @@
                 <h1>Cigarette Order</h1>
                 <div class="main-block">
                     <form>
-                        <input type="text" id="customerNameCigarette" onkeypress="renderSuggestions()" placeholder="Enter Customer Name" />
+                        <input type="text" id="customerNameCigarettes" onkeypress="renderSuggestionsCigarette()" placeholder="Enter Customer Name" />
                         <br/>
                         <select id=cigaretteSelectOrder>
                             <option value="number" disabled selected>Select Cigarette</option>

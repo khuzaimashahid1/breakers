@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../CSS/HRManagement.css">
     <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="../CSS/modal.css">
+    <!-- <link rel="stylesheet" href="../CSS/modal.css"> -->
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
 </head>
 
@@ -13,36 +13,34 @@
     <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
         <h5 class="w3-bar-item" width=20%>HR Management</h5>
         <button class="w3-bar-item w3-button tablink w3-white" onclick="openLink(event, 'Fade')">All Employees</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openModal('addEmployee')">Add Employee</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openModal('addSalary')">Add Salary</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openModal('addAdvance')">Add Advance</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom')">Add Employee</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom1')">Add Salary</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom2')">Add Advance</button>
     </div>
 
     <div style="margin-left:15%">
 
-        <div id="Fade" class="w3-container city " style="background-color: white;opacity: 0.8;">
+        <div id="Fade" class="w3-container city w3-animate-zoom" style="background-color: white;opacity: 0.8;">
 
             <h1 style="
             width: 100%;
             text-align: center;">All Employees</h1>
             <!-- BELOW IS THE DATA TABLE FOR EXPENSE DETAILS -->
-            <table id="Expene" class="display" style="width:100%;  overflow: auto;">
+            <table id="example" class="display" style="width:100%;  overflow: auto;">
                 <thead>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
+                        <th>Name</th>
                         <th>Post</th>
                         <th>Phone</th>
                         <th>Address</th>
                         <th>Basic Pay</th>
-                        <th>Advance</th>               
-             
+                        <th>Advance</th>
+
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
+                        <th>Name</th>
                         <th>Post</th>
                         <th>Phone</th>
                         <th>Address</th>
@@ -55,234 +53,113 @@
         </div>
 
     </div>
-    <!-- CREATING MODAL STRUCTURE -->
-    <div id="addEmployee" class="modal">
-        <div class="modal-addEmployee">
-            <span id="addEmployeeClose" class="close">&times;</span>
 
-            <div id="AddNewEmployee" class="w3-container">
-                <div class="main-block">
-                    <h1>Add New Employee</h1>
-                    <form>
-                        <div 
-                            class="info" 
-                            style="
-                                background: rgba(0, 0, 0, 1);
-                                ">
-                        <input 
-                            id="employeeFirstName" 
-                            type="text" 
-                            name="name" 
-                            placeholder="First Name"
-                            required style="
-                                color: white;
-                                background: rgba(0, 0, 0, 0.9);
-                                width: 100%; 
-                                margin-left: 20%; 
-                                margin-right: 20%;
-                                padding-left: 30px;
-                                ">
-                            <br />
-                        <input 
-                            id="employeeLastName" 
-                            type="text" 
-                            name="name" 
-                            placeholder="Last Name"
-                            required style="
-                                color: white;
-                                background: rgba(0, 0, 0, 0.9);
-                                width: 100%; 
-                                margin-left: 20%; 
-                                margin-right: 20%;
-                                padding-left: 30px;
-                                ">
-                        <br />
-                        <input 
-                            id="employeeDesignation" 
-                            type="text" 
-                            name="name" 
-                            placeholder="Employee Designation"
-                            required style="
-                                color: white;
-                                background: rgba(0, 0, 0, 0.9);
-                                width: 100%; 
-                                margin-left: 20%; 
-                                margin-right: 20%;
-                                padding-left: 30px;
-                                ">
-                        <br />
-                        <input 
-                            id="employeeCNIC" 
-                            type="text" 
-                            name="name" 
-                            placeholder="CNIC Number (Without '-')"
-                            required style="
-                                color: white;
-                                background: rgba(0, 0, 0, 0.9);
-                                width: 100%; 
-                                margin-left: 20%; 
-                                margin-right: 20%;
-                                padding-left: 30px;
-                                ">
-                        <br />
-                        <input 
-                            id="employeeAddress" 
-                            type="text" 
-                            name="name" 
-                            placeholder="Address"
-                            required style="
-                                color: white;
-                                background: rgba(0, 0, 0, 0.9);
-                                width: 100%; 
-                                margin-left: 20%; 
-                                margin-right: 20%;
-                                padding-left: 30px;
-                                ">
-                        <br />  
-                        <input 
-                            id="employeePhone" 
-                            type="tel" 
-                            name="name" 
-                            placeholder="Phone Number"
-                            required style="
-                                color: white;
-                                background: rgba(0, 0, 0, 0.9);
-                                width: 100%; 
-                                margin-left: 20%; 
-                                margin-right: 20%;
-                                padding-left: 30px;
-                                ">
-                         <br /> 
-                         <input 
-                            id="employeeBasicPay" 
-                            type="number" 
-                            name="name" 
-                            placeholder="Basic Pay"
-                            required style="
-                                color: white;
-                                background: rgba(0, 0, 0, 0.9);
-                                width: 100%; 
-                                margin-left: 20%; 
-                                margin-right: 20%;
-                                padding-left: 30px;
-                                ">
-                        <br />
-                        </div>
-                        <button type="button" class="btnModal" onclick="addEmployee()">Register New Employee</button>
-                    </form>
-                </div>
+    <!-- ADD EMPLOYEE SECTION -->
+    <div id="Zoom" class="w3-container city w3-animate-zoom"
+        style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
+
+        <div class="w3-container category">
+            <h1
+                style="
+                    width: 100%;
+                    text-align: center;">Add Employee</h1
+                >
+                <div class="dataform">
+                    <input class="input" id="employeeFirstName"  type="text" name="name" placeholder="First Name" required>
+                    <br />
+                    <br />
+                    <input class="input" id="employeeLastName" type="text" name="name" placeholder="Last Name" required >
+                    <br />
+                    <br />
+                    <input class="input" id="employeeDesignation"  type="text" name="name" placeholder="Employee Designation"
+                        required>
+                    <br />
+                    <br />
+                    <input class="input" id="employeeCNIC"  type="text" name="name" placeholder="CNIC Number (Without '-')"
+                        required >
+                    <br />
+                    <br />
+                    
+                    <input class="input" id="employeeAddress"  type="text" name="name" placeholder="Address" required >
+                    <br />
+                    <br />
+                    <input class="input" id="employeePhone" type="tel" name="name" placeholder="Phone Number" required >
+                    <br />
+                    <br />
+                    <input class="input" id="employeeBasicPay"  type="number" name="name" placeholder="Basic Pay" required
+                        >
+                    <br />
+                    <br />
+                
+                <button type="button" class="btn" onclick="addEmployee()">Register New Employee</button>
             </div>
+             
         </div>
 
     </div>
+    <!-- ADD SALARY SECTION -->
+    <div id="Zoom1" class="w3-container city w3-animate-zoom"
+        style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
 
-    <div id="addSalary" class="modal">
-        <div class="modal-addSalary ">
-            <span id="addSalaryClose" class="close">&times;</span>
-
-            <div id="AddNewsalary" class="w3-container">
-                <div class="main-block">
-                    <h1>Salary Invoice</h1>
-                    <form>
-                        <div class="info" style="
-                      background: rgba(0, 0, 0, 1);
-                     ">
-
-                            <select 
-                                id="employeeSelect"
-                                style="
-                                    width: 100%; 
-                                    margin-left: 20%; 
-                                    margin-right: 20%;
-                                    padding-left: 30px;">
-                                <option value="text" disabled selected>Select Employee</option>   
-                            </select>
-                            <br />
-                            <input 
-                                id="salaryAmount" 
-                                type="number" 
-                                name="name" 
-                                placeholder="SalaryAmount"
-                                required style="
-                                    color: white;
-                                    background: rgba(0, 0, 0, 0.9);
-                                    width: 100%; 
-                                    margin-left: 20%; 
-                                    margin-right: 20%;
-                                    padding-left: 30px;
-                                    ">
-                            <br />
-                            <input 
-                                id="advanceDeductionAmount"
-                                type="text" 
-                                placeholder="Advance Deduction Amount" 
-                                id="Number" 
-                                required 
-                                style="
-                                    color: white;
-                                    background: rgba(0, 0, 0, 0.9);
-                                    width: 100%; 
-                                    margin-left: 20%; 
-                                    margin-right: 20%;
-                                    padding-left: 30px;">
-
-                        </div>
-                        <button type="button" class="btnModal" onclick="addSalary()">Salary Paid</button>
-                    </form>
-                </div>
+        <div class="w3-container category">
+            <h1
+                style="
+                    width: 100%;
+                    text-align: center;">Add Employee</h1
+                >
+                <div class="dataform" style="
+                        background: white;
+                        ">
+                    <select class="select" id="employeeSelect">
+                        <option value="text" disabled selected>Select Employee</option>
+                    </select>
+                    <br />
+                    <br />
+                    <input class="input" id="salaryAmount" type="number" name="name" placeholder="SalaryAmount" required>
+                    <br />
+                    <br />
+                    <input class="input" id="advanceDeductionAmount" type="number" placeholder="Advance Deduction Amount" required >
+                    <br />
+                    <br />
+                   
+                <button type="button" class="btn" onclick="addSalary()">Salary Paid</button>
             </div>
+             
         </div>
 
     </div>
+    <!-- ADD ADVANCE SECTION -->
+    <div id="Zoom2" class="w3-container city w3-animate-zoom"
+        style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
 
-    <!--   CREATING MODAL FOR ADVANCE-->
-    <div id="addAdvance" class="modal">
-        <div class="modal-addAdvance">
-            <span id="addAdvanceClose" class="close">&times;</span>
-
-            <div id="AddNewAdvance" class="w3-container">
-                <div class="main-block">
-                    <h1>Advance Invoice</h1>
-                    <form>
-                        <div class="info" style="
-                      background: rgba(0, 0, 0, 1);
-                     ">
-
-                            <select 
-                                id="employeeSelect"
-                                style="
-                                    width: 100%; 
-                                    margin-left: 20%; 
-                                    margin-right: 20%;
-                                    padding-left: 30px;">
-                                <option value="text" disabled selected>Select Employee</option>   
-                            </select>
-                            <br />
-                            <input 
-                                id="advanceAmount"
-                                type="text" 
-                                placeholder="Advance Amount" 
-                                id="Number" 
-                                required 
-                                style="
-                                    color: white;
-                                    background: rgba(0, 0, 0, 0.9);
-                                    width: 100%; 
-                                    margin-left: 20%; 
-                                    margin-right: 20%;
-                                    padding-left: 30px;">
-
-                        </div>
-                        <button type="button" class="btnModal" onclick="addAdvance()">Advance Paid</button>
-                    </form>
-                </div>
+        <div class="w3-container category">
+            <h1
+                style="
+                    width: 100%;
+                    text-align: center;">Add Employee</h1
+                >
+                <div class="dataform" style="
+                        background: white;
+                        ">
+                    <select class="select" id="employeeSelect">
+                        <option value="text" disabled selected>Select Employee</option>
+                    </select>
+                    <br />
+                    <br />
+                    <input class="input" id="advanceAmount" type="number" name="name" placeholder="Advance Amount" required>
+                    <br />
+                    <br />
+                    
+                   
+                <button type="button" class="btn" onclick="addAdvance()">Advance Paid</button>
             </div>
+             
         </div>
 
     </div>
-    <script src="../js/HRManagement.js"></script>
     <!-- <script src="../js/Customer.js"></script> -->
 
 </body>
+<script src="../js/HRManagement.js"></script>
 
 </html>
