@@ -269,6 +269,7 @@ function cigarettesOrder()
     }  
 }
 
+
 function getId(name)
 {
     for(var i=0; i<allplayers.length;i++)
