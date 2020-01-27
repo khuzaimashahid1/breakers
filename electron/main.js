@@ -144,6 +144,53 @@ ipc.on('get-drinks',function(event)
     });
 })
 
+//Get Bill For Customer
+ipc.on('generate-bill',function(event,customerId)
+{
+    connections.generateBill(customerId).then(result=>
+        {
+            let finalResult=[];
+            // console.log(result);
+            for(let i=0;i<result.length;i++)
+            {
+                for(let j=0;j<result[i].length;j++)
+                {
+                    if(result[i][j].gameType)
+                    {
+                        finalResult.push({
+                            item:result[i][j].gameType+" Game ( Table "+result[i][j].tableNo+" )",
+                            price:result[i][j].amount,
+                            time_quantity:result[i][j].startTime
+                        })
+                    }
+                    else
+                    {
+                        if(result[i][j].tableNo)
+                        {
+                            finalResult.push({
+                                item:result[i][j].itemName+" ( Table "+result[i][j].tableNo+" )",
+                                price:result[i][j].amount,
+                                time_quantity:result[i][j].quantity
+                            })
+                        }
+                        else
+                        {
+                            finalResult.push({
+                                item:result[i][j].itemName,
+                                price:result[i][j].amount,
+                                time_quantity:result[i][j].quantity
+                            })
+                        }
+                        
+                    }
+                }
+
+            }
+            event.sender.send("generated-bill",finalResult)
+            
+        })
+})
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed',()=>{

@@ -1,8 +1,14 @@
 // window.$ = window.jQuery = require('jquery');
 require('datatables.net-dt')();
-
-
 var data = [];
+ipc.send('generate-bill',1);
+ipc.on('generated-bill', (event, bill) => 
+{
+    for (let i = 0; i < bill.length; i++) {
+        data.push(bill[i])
+    }
+})
+
 var jsonData = [{
         item: "Single Game",
         time_quantity: "2",
@@ -23,9 +29,7 @@ var jsonData = [{
 
 
 ]
-for (let i = 0; i < jsonData.length; i++) {
-    data.push(jsonData[i])
-}
+
 
 console.log(data)
 

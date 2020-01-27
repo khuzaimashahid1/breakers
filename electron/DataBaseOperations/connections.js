@@ -291,6 +291,38 @@ module.exports.getOngoingGames =  async() =>
 }
 
 
+//Generate Bill
+module.exports.generateBill =  async(customerId) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql1='SELECT Bill.amount,Game.gameType,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Bill.status="unpaid" and Bill.customerId='+customerId;
+  sql2='SELECT Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Bill JOIN Revenue USING (revenueId)  JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId) LEFT JOIN Game on Game.gameId=Revenue.gameId WHERE Bill.customerId='+customerId+' and Bill.status="unpaid" UNION ALL SELECT Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Game  LEFT JOIN (Revenue JOIN Bill USING (revenueId) JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId)) using (gameId) WHERE Game.gameId IS NULL and Bill.status="unpaid" and Bill.customerId='+customerId;
+  var tab1=await selectStatementMultipleRowsTogether(db,sql1).then(rows=>
+      {
+        return rows;
+      })
+  var tab2=await selectStatementMultipleRowsTogether(db,sql2).then(rows=>
+      {
+        return rows;
+      })
+  
+      
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return Promise.all([tab1, tab2]);
+}
+
+
 
 //Unique Constraint Failed (errno:19)
 module.exports.runDuplicateInsertQuery = () =>
