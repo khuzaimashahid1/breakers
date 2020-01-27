@@ -271,7 +271,6 @@ function cigarettesOrder()
     }  
 }
 
-
 function getId(name)
 {
     for(var i=0; i<allplayers.length;i++)
@@ -282,4 +281,28 @@ function getId(name)
         }
     }
     return null;
+}
+
+function drinkAddInventory()
+{
+    newDrinkName = $('#drinkNewName').val();
+    newDrinkPrice = $('#drinkNewPrice').val();
+    addInventoryItem(newDrinkName,newDrinkPrice);
+}
+
+function cigaretteAddInventory()
+{
+    newCigaretteName = $('#drinkNewName').val();
+    newCigarettePrice = $('#drinkNewPrice').val();
+    addInventoryItem(newCigaretteName,newCigarettePrice);
+}
+
+function addInventoryItem(name, price)
+{
+    //Add to Inventory Code here with IPC
+}
+
+function populateSummary()
+{
+    //populate summary tabs for kitchen, drinks and cigarettes
 }
