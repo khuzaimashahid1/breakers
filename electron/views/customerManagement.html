@@ -110,9 +110,9 @@
             <div class="main-block">
                 <form style="
                 margin-left: 10%; ">
-                    <input id="clearCustomer" type="text" placeholder="Enter Customer Name" /><br/>
+                    <input id="clearCustomer" onkeypress="renderSuggestions();" type="text" placeholder="Enter Customer Name" /><br/>
                     <input type="clearAmount" placeholder="Enter Cleared Amount" />
-                    <button class="btnModal" type="button">Clear Amount</button>
+                    <button onkeypress="clearCredit();" class="btnModal" type="button">Clear Amount</button>
                 </form>
             </div>
         </div>
