@@ -143,6 +143,61 @@ module.exports.getCustomers =  async() =>
    });
 }
 
+
+
+//Get Creditors
+module.exports.getCreditors =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select customerName,creditAmount,customerId from Customer WHERE creditAmount>0';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Clear Credit
+module.exports.clearCredit =  (currentDate,customerId,clearedAmount) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  const today = new Date();
+  const clearingTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  db.run('UPDATE Customer SET updateDate=?,creditAmount=((SELECT creditAmount FROM Customer WHERE customerId=?)-?) WHERE customerId=?',[currentDate,customerId,clearedAmount,customerId])
+  db.run('Insert into CreditManagement(createDate,amount,clearingTime,customerId) values(?,?,?,?)',[currentDate,-clearedAmount,clearingTime,customerId])
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  
+}
+
 //Get All Employees in Stock
 module.exports.getEmployees =  async() =>
 {

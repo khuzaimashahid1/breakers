@@ -67,6 +67,7 @@ ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone
             {
                 getAllCustomers();
                 getAllOngoingGames();
+                
             }
             
         });
@@ -117,6 +118,16 @@ ipc.on('pay-bill',function(event,status,creditAmount,customerId,...billIdArray){
     connections.payBill(currentDate,status,creditAmount,customerId,...billIdArray);
 })
 
+//Clear Credit
+ipc.on('clear-credit',function(event,customerId,clearedAmount){
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const currentDate = yyyy + '-' + mm + '-' + dd;
+    connections.clearCredit(currentDate,customerId,clearedAmount);
+})
+
 //End Game
 ipc.on('end-game',function(event,gameId,amount,loserId1,loserId2)
 {
@@ -138,6 +149,13 @@ ipc.on('end-game',function(event,gameId,amount,loserId1,loserId2)
     
 })
 
+//Get Creditors
+ipc.on('get-creditors',function(event)
+{
+    connections.getCreditors().then(rows => {
+        event.sender.send("creditors", rows);
+    });
+})
 
 //Get Employees Data
 ipc.on('employee',function(event)
@@ -299,7 +317,7 @@ function getAllOngoingGames()
                     global.sharedObj.games[i]=null;
                 }
             }
-            win.webContents.send('Reload', 'New Game Started!')    
+            win.webContents.send('Reload', 'New Data')    
         })
             
 }
