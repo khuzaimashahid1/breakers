@@ -1,5 +1,12 @@
+//Imports and Declarations
 require('datatables.net-dt')();
+var creditorTable,customersTable,creditorsArray=[],customersArray=[];
 
+//Function Calls for intialization
+initializeTables();
+ipc.on('Reload', (event, message) => {
+  getCustomers()
+})
 
 //Switching Customer Management Type
 function openLink(evt, animName) {
@@ -17,6 +24,32 @@ function openLink(evt, animName) {
 }
 
 
+//Fetching Creditors From DB
+function getCreditors()
+{
+  ipc.send('get-creditors');
+  ipc.once('creditors',(event,creditors)=>
+  {
+    for(let i=0;i<creditors.length;i++)
+    {
+      creditorsArray.push(creditors[i])
+    }
+    creditorTable.clear().rows.add(creditorsArray).draw();
+  })
+}
+
+//Getting Customers
+function getCustomers()
+{
+  customersArray=[]
+  allplayers = remote.getGlobal('sharedObj').allplayers;
+  for (let i = 0; i < allplayers.length; i++) 
+  {
+    customersArray.push(allplayers[i])
+  }
+  customersTable.clear().rows.add(customersArray).draw();
+}
+
 //Functions For adding Customer
 function addCustomer() {
   let customerName = $('#uname').val();
@@ -30,10 +63,6 @@ function addCustomer() {
   ipc.send('add-customer', customerName, customerAddress, customerPhone, createDate)
 }
 
-var data = []
-for (let i = 0; i < allplayers.length; i++) {
-  data.push(allplayers[i])
-}
 
 // Edit record
 $('#customersTable').on('click', 'a.editor_edit', function (e) {
@@ -53,37 +82,72 @@ $('#customersTable').on('click', 'a.editor_remove', function (e) {
 });
 
 
-$(document).ready(function () {
-  $('#customersTable').dataTable({
-    data: data,
-    "columns": [
-      { data: "customerId" },
-      { data: "customerName" },
-      { data: "customerAddress" },
-      { data: "customerPhone" },
-      { data: "createDate" },
-      {
-        data: null,
-        className: "center",
-        defaultContent: '<a href="abc" id="Edit" class="editor_edit">Edit</a> / <a href="" class="editor_remove">Delete</a>'
-      }
-    ]
+//Initialize DataTables
+function initializeTables()
+{
+  $(document).ready(function () {
+    customersTable=$('#customersTable').DataTable({
+      data: customersArray,
+      "columns": [
+        { data: "customerId" },
+        { data: "customerName" },
+        { data: "customerAddress" },
+        { data: "customerPhone" },
+        { data: "createDate" },
+        {
+          data: null,
+          className: "center",
+          defaultContent: '<a href="abc" id="Edit" class="editor_edit">Edit</a> / <a href="" class="editor_remove">Delete</a>'
+        }
+      ]
+    })
+    creditorTable=$('#creditorsTable').DataTable({
+      data: creditorsArray,
+      "columns": [{
+              data: "customerId"
+          },
+          {
+              data: "customerName"
+          },
+          {
+              data: "creditAmount"
+          }
+  
+      ]
   })
-});
-
+  getCreditors();
+  getCustomers();
+  });
+  
+}
 
 function clearCredit()
 {
-  customerName= $('#clearCustomer').val();
-  clearAmount=$('#clearAmount').val();
+  let customerName= $('#clearCustomer').val();
+  let clearAmount=$('#clearAmount').val();
   if(customerName!=''&& clearAmount!='')
   {
-
+    console.log(getId(customerName))
+    console.log(clearAmount)
+    ipc.send('clear-credit',getId(customerName),clearAmount)
   }
   else
   {
     ipc.send('error-dialog',"Empty field(s)");
   }
+}
+
+//Get Customer Id from name
+function getId(name)
+{
+    for(var i=0; i<allplayers.length;i++)
+    {
+        if(allplayers[i].customerName===name)
+        {
+            return allplayers[i].customerId
+        }
+    }
+    return null;
 }
 
 //Render Suggestion for autocompletion
@@ -192,6 +256,5 @@ function autoComplete(input, allplayers) {
       closeAllLists(e.target);
   });
 }
-
 
 

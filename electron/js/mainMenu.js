@@ -1,7 +1,6 @@
 setStatusAndEventListeners();
 startTimer();
 ipc.on('Reload', (event, message) => {
-    console.log(message)
     setStatusAndEventListeners();
     startTimer();
   })
@@ -56,36 +55,24 @@ function setStatusAndEventListeners()
     for(let i=0;i<totalTables;i++)
     {
         let currentTable=i+1;
-        let statusField=document.getElementById("s"+currentTable);
-        let tableButton=document.getElementById("tab"+currentTable);
-        statusField.innerHTML=remote.getGlobal('sharedObj').status[i];
+        $('#s'+currentTable).html(remote.getGlobal('sharedObj').status[i]);
         if(remote.getGlobal('sharedObj').status[i]!=='Vacant')
         {
-            tableButton.innerText='End Game';
+            $( "#tab"+currentTable ).html('End Game');
             $( "#tab"+currentTable ).off();
             $( "#tab"+currentTable ).click(function() {
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openEndGame();
               });
-            // tableButton.addEventListener('click',function(event)
-            // {
-            //     remote.getGlobal('sharedObj').tableNumber = currentTable;
-            //     openEndGame();
-            // })
         }
         else
         {
-            tableButton.innerText='Start Game';
+            $( "#tab"+currentTable ).html('Start Game');
             $( "#tab"+currentTable ).off();
             $( "#tab"+currentTable ).click(function() {
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openStartGame();
               });
-            // tableButton.addEventListener('click',function(event)
-            // {
-            //     remote.getGlobal('sharedObj').tableNumber = currentTable;
-            //     openStartGame();
-            // })
         }
         
     }
@@ -116,11 +103,11 @@ function startTimer()
                 hours= Math.abs(today.getHours()-startTime[0]);
                 min=Math.abs(today.getMinutes()-startTime[1]);
                 sec=Math.abs(today.getSeconds()-startTime[2]);
-                timerField=document.getElementById("timer"+(i+1));
-                var newTimer = timerField.cloneNode(true);
-                timerField.parentNode.replaceChild(newTimer, timerField);
-                newTimer.innerText=hours+":"+min+":"+sec;
-                renderTime(newTimer,hours,min,sec);
+                timerField="#timer"+(i+1)
+                let newTimerField=$(timerField).clone()
+                $(timerField).replaceWith(newTimerField);
+                $(newTimerField).html(hours+":"+min+":"+sec)
+                renderTime(newTimerField,hours,min,sec);
                 
             }
             else
@@ -128,20 +115,20 @@ function startTimer()
                 hours= Math.abs(24-startTime[0]+today.getHours());
                 min=Math.abs(60-startTime[1]+today.getMinutes());
                 sec=Math.abs(60-startTime[2]+today.getSeconds());
-                timerField=document.getElementById("timer"+(i+1));
-                var newTimer = timerField.cloneNode(true);
-                timerField.parentNode.replaceChild(newTimer, timerField);
-                newTimer.innerText=hours+":"+min+":"+sec;
-                renderTime(newTimer,hours,min,sec);
+                timerField="#timer"+(i+1)
+                let newTimerField=$(timerField).clone()
+                $(timerField).replaceWith(newTimerField);
+                $(newTimerField).html(hours+":"+min+":"+sec)
+                renderTime(newTimerField,hours,min,sec);
             }
             
         }
         else
         {
-            timerField=document.getElementById("timer"+(i+1));
-            var newTimer = timerField.cloneNode(true);
-            timerField.parentNode.replaceChild(newTimer, timerField);
-            newTimer.innerText=0+":"+0+":"+0;
+            timerField="#timer"+(i+1)
+            let newTimerField=$(timerField).clone()
+                $(timerField).replaceWith(newTimerField);
+                $(newTimerField).html(0+":"+0+":"+0)
         }
     }
 }
@@ -161,7 +148,7 @@ function renderTime(timerField,hour,min,sec)
             min=0;
         }
         
-        timerField.innerText=hour+":"+min+":"+sec;
+        $(timerField).html(hour+":"+min+":"+sec);
       }
       
       setInterval(intervalFunc, 1000);

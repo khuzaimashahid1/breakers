@@ -87,7 +87,7 @@ function populatePlayers() {
                 '<button id="btnAddExtra" class="btnAddExtra"  onClick="modalScript('+currentPlayers[i].customerId+')">Add Extra</button>' +
                 '</div>' +
                 '</div>');
-            if(currentGame.gameType==="double")
+            if(currentGame.gameType==="Double")
             {
                 if(i==0 || i ==2)
                 {
@@ -197,7 +197,7 @@ function miscOrder()
 //End Game (Iron Man Dies)
 function endGame()
 {
-    if(currentGame.gameType==="single" || currentGame.gameType==="century")
+    if(currentGame.gameType==="Single" || currentGame.gameType==="Century")
     {
         var loser = $("select#loserSelect").children("option:selected").val();
         console.log(loser)

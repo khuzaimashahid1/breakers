@@ -1,4 +1,4 @@
-var customerName,drinkStock,cigaretteStock,drinkFilter,cigaretteFilter;
+var drinkStock=[],cigaretteStock=[];
 populateStock();
 
 function renderSuggestionsKitchen() {
@@ -43,7 +43,7 @@ function populateStock() {
     
     //Get Cigarettes from Main Process IPC
     ipc.send('get-cigs');
-    ipc.on('Cigarette Stock', (event, cigStock) => 
+    ipc.once('Cigarette Stock', (event, cigStock) => 
     {
         cigaretteStock=cigStock
         for (let i = 0; i < cigaretteStock.length; i++) {
@@ -65,7 +65,7 @@ function populateStock() {
    
     //Get Drinks from Main Process IPC
     ipc.send('get-drinks');
-    ipc.on('Drinks Stock', (event, drinks) => 
+    ipc.once('Drinks Stock', (event, drinks) => 
     {
         drinkStock=drinks;
         for (let i = 0; i < drinkStock.length; i++) {
@@ -193,13 +193,13 @@ function kitchenOrder()
 
     var kitchenItem= $("#kitchenOrderItem").val()
     var kitchenPrice= $('#kitchenOrderPrice').val()
-    customerName= $('#customerNameKitchen').val()
+    let customerName= $('#customerNameKitchen').val()
     currentPlayerId = getId(customerName)
     if(kitchenItem!=""&&kitchenOrder!=""&&customerName!="")
     {
         if(currentPlayerId!=null)
         {
-            ipc.send('add-order-others',"Walk-In",currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
+            ipc.send('add-order-others',null,currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
             currentPlayerId=null
         }
         else
@@ -216,8 +216,8 @@ function kitchenOrder()
 
 function drinkOrder()
 {
-    customerName= $('#customerNameDrinks').val()
-    let selectedDrink = $("select#DrinkSelectOrder").children("option:selected").val();
+    let customerName= $('#customerNameDrinks').val()
+    let selectedDrink = $("select#drinkSelectOrder").children("option:selected").val();
     const drinkFilter=drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
     let inventoryId=drinkFilter[0].inventoryId;
     let price=drinkFilter[0].itemAmount;
@@ -227,7 +227,7 @@ function drinkOrder()
     {
         if(currentPlayerId!=null)
         {
-            ipc.send('add-order',inventoryId,"Walk-In",currentPlayerId,quantity,price)
+            ipc.send('add-order',inventoryId,null,currentPlayerId,quantity,price)
             currentPlayerId=null
         }
         else
@@ -244,18 +244,20 @@ function drinkOrder()
 
 function cigarettesOrder()
 {
-    customerName =  $("#cutomerNameCigarettes").val()
-    var selectedCigarette = $("select#CigaretteSelectOrder").children("option:selected").val();
+    let customerName =  $("#customerNameCigarettes").val()
+    var selectedCigarette = $("select#cigaretteSelectOrder").children("option:selected").val();
     const cigaretteFilter=cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
     let inventoryId=cigaretteFilter[0].inventoryId;
     let price=cigaretteFilter[0].itemAmount;
+    console.log(customerName)
+    console.log(cigaretteFilter[0])
     currentPlayerId = getId(customerName)
     let quantity=1;
     if(selectedCigarette!=""&& customerName!="")
     {
         if(currentPlayerId!=null)
         {
-            ipc.send('add-order',inventoryId,"Walk-In",currentPlayerId,quantity,price)
+            ipc.send('add-order',inventoryId,null,currentPlayerId,quantity,price)
             currentPlayerId=null
         }
         else
