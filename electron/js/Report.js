@@ -1,40 +1,38 @@
 
 require('datatables.net-dt')();
 var data = [];
-var jsonData = [{
+var jsonData = 
+[
+    {
         Date: "1-06-2020",
+        Kitchen: "2000",
         Drinks: "2000",
+        Cigarettes: "5600",
+        Tables: "5600",
         Credit_Clear: "200",
-        Cigarette: "5600",
         Grand_Total: "24000",
         Net_Total: "22000",
-        Over: "250",
-        Cash: "21000"
     },
     {
-        Date: "1-07-2020",
+        Date: "1-06-2020",
+        Kitchen: "2000",
         Drinks: "2000",
+        Cigarettes: "5600",
+        Tables: "5600",
         Credit_Clear: "200",
-        Cigarette: "5600",
         Grand_Total: "24000",
         Net_Total: "22000",
-        Over: "250",
-        Cash: "21000"
     },
     {
-        Date: "1-08-2020",
+        Date: "1-06-2020",
+        Kitchen: "2000",
         Drinks: "2000",
+        Cigarettes: "5600",
+        Tables: "5600",
         Credit_Clear: "200",
-        Cigarette: "5600",
         Grand_Total: "24000",
         Net_Total: "22000",
-        Over: "250",
-        Cash: "21000"
-
     }
-
-
-
 ]
 for (let i = 0; i < jsonData.length; i++) {
     data.push(jsonData[i])
@@ -51,25 +49,25 @@ $(document).ready(function () {
                 data: "Date"
             },
             {
+                data: "Kitchen"
+            },
+            {
                 data: "Drinks"
             },
             {
-                data: "Credit_Clear"
+                data: "Cigarettes"
             },
             {
-                data: "Cigarette"
+                data: "Tables"
+            },
+            {
+                data: "Credit_Clear"
             },
             {
                 data: "Grand_Total"
             },
             {
                 data: "Net_Total"
-            },
-            {
-                data: "Over"
-            },
-            {
-                data: "Cash"
             }
         ]
     })
