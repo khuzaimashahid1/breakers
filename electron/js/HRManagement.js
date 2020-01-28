@@ -32,7 +32,7 @@ function addEmployee()
     
     ipc.send('add-employee', employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate);
     getEmployees();
-    startup();
+    
     // win.reload();
     // var newUrl = "HRManagement.html";
     // win.location.href = newUrl;
@@ -45,16 +45,15 @@ function addSalary()
     let employeeId = $("select#employeeSelect").children("option:selected").val();
     let salaryAmount = $('#salaryAmount').val();
     let advanceDeductionAmount = $('#advanceDeductionAmount').val();
-
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
     
-    ipc.send('add-salary', employeeId, salaryAmount, advanceDeductionAmount,createDate);
+    ipc.send('add-employee-salary', employeeId, salaryAmount, advanceDeductionAmount,createDate);
     getEmployees();
-    startup();
+   
 }
 
 // Add Employee Advance function 
@@ -62,16 +61,10 @@ function addAdvance()
 {
     let employeeId = $("select#employeeSelectAdvance").children("option:selected").val();
     let advanceAmount = $('#advanceAmount').val();
-    
-    const today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    const createDate = yyyy + '-' + mm + '-' + dd;
-    
-    ipc.send('add-salary', employeeId, advanceAmount, createDate);
+      
+    ipc.send('add-employee-advance', employeeId, advanceAmount);
     getEmployees();
-    startup();
+    
 }
 
 var data = [];
@@ -91,13 +84,13 @@ function getEmployees(){
             
             // for employee salary drop down
             $("select#employeeSelect").append($("<option>")
-            .val(jsonData[i].emmployeeId)
+            .val(jsonData[i].employeeId)
             .html(jsonData[i].employeeName)
         );
 
             // for employee advance drop down
             $("select#employeeSelectAdvance").append($("<option>")
-            .val(jsonData[i].emmployeeId)
+            .val(jsonData[i].employeeId)
             .html(jsonData[i].employeeName)
         );
 
@@ -112,9 +105,7 @@ getEmployees();
 console.log(data)
 
 
-
-// $(document).ready(function () {
-function startup() {
+$(document).ready(function () {
     console.log("datatables")
 
     $('#example').dataTable({
@@ -143,8 +134,6 @@ function startup() {
             }
         ]
     })
-}
 
-$(document).ready(startup);
-// });
+});
 
