@@ -110,7 +110,8 @@
             <div class="main-block">
                 <form style="
                 margin-left: 10%; ">
-                    <input id="clearCustomer" onkeypress="renderSuggestions();" type="text" placeholder="Enter Customer Name" /><br/>
+                    <input id="clearCustomer" onkeypress="renderSuggestions();" type="text"
+                        placeholder="Enter Customer Name" /><br />
                     <input id="clearAmount" placeholder="Enter Cleared Amount" />
                     <button onclick="clearCredit()" class="btnModal" type="button">Clear Amount</button>
                 </form>
@@ -123,30 +124,66 @@
         style="display: none; background-color:white; opacity:0.7; margin-left:15%;">
 
         <div class="w3-container category">
-            <h1>Credit History</h1>
-            <div class="main-block" >
-                <table id="customersTable" class="display" style="width:100%;  overflow: auto;">
+            <div>
+                <h1 style="
+                width:100%; 
+                text-align: center;
+                margin-top: 10px;">Credit Clear History</h1>
+                <div class="w3-bar">
+                    <input id="customerCreditName" onkeypress="renderSuggestionsSummary();" class="w3-bar-item" type="text"
+                        name="name" placeholder="Player Name" style="margin-left: 30%;
+                           height: 40px;
+                           width: 20%;
+                           padding: 10px;
+                           border: 2px solid black;
+                           border-radius: 10px;
+                           background: white;  ">
+
+                    <button id="btnGenerateSummary" class="w3-button" onclick="generateBill();" style="margin-left: 2%;
+                        height: 40px;
+                        width: 20%;
+                        margin-right: 20%;
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: white;
+                        border-radius: 10px;
+                        border: 2px solid black;
+                        background: green;
+                         ">Generate Summary</button>
+                </div>
+
+                <div id="clearSummary" class="w3-container category">
+
+                    <h1 style="width:100%; 
+                           text-align: center;
+                           margin-top: 10px;">Bill Details</h1>
+
+                </div>
+
+
+
+                <table id="example" class="display" style="width:100%;  overflow: auto;">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Date</th>
                             <th>Customer Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
                             <th>Credit Amount</th>
-                            <th>Clear Amount</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Id</th>
-                            <th>Date</th>
                             <th>Customer Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
                             <th>Credit Amount</th>
-                            <th>Clear Amount</th>
                         </tr>
                     </tfoot>
                 </table>
+
             </div>
         </div>
+    </div>
 
     </div>
 

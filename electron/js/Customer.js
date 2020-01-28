@@ -156,6 +156,12 @@ function renderSuggestions()
   autoComplete("clearCustomer", allplayers)
 }
 
+//Render Suggestion for autocompletion credit summary
+function renderSuggestionsSummary()
+{
+  autoComplete("customerCreditName", allplayers)
+}
+
 //Autosuggest for Credit Clear
 function autoComplete(input, allplayers) {
   var inp = document.getElementById(input);
