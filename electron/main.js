@@ -59,6 +59,22 @@ ipc.on('start-game',function(event, tableNumber, status, gameType, id1, id2,id3,
     
 })
 
+//Add Employee
+ipc.on('add-employee',function(event, employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate){
+    connections.addEmployee(employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate).then(result=>
+        {
+            if(result===true)
+            {
+                getAllCustomers();
+                getAllOngoingGames();
+                // win.webContents.send('Reload', 'New Data')    
+                dialog.showErrorBox("Success","New Employee Added")
+            }
+            
+        });
+    
+})
+
 //Add Customer
 ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone,createDate){
     connections.addCustomer(customerName,customerAddress,customerPhone,createDate).then(result=>

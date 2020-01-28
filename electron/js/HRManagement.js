@@ -17,24 +17,68 @@ function openLink(evt, animName) {
 
 function addEmployee()
 {
+    let employeeName = $('#employeeName').val();
+    let employeeDesignation = $('#employeeDesignation').val();
+    let employeeCNIC = $('#employeeCNIC').val();
+    let employeeAddress = $('#employeeAddress').val();
+    let employeePhone = $('#employeePhone').val();
+    let employeeBasicPay = $('#employeeBasicPay').val();
+
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const createDate = yyyy + '-' + mm + '-' + dd;
+    
+    ipc.send('add-employee', employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate);
+    getEmployees();
+    startup();
+    // win.reload();
+    // var newUrl = "HRManagement.html";
+    // win.location.href = newUrl;
 
 }
 
+// Add Employee Salary function 
 function addSalary()
 {
+    let employeeId = $("select#employeeSelect").children("option:selected").val();
+    let salaryAmount = $('#salaryAmount').val();
+    let advanceDeductionAmount = $('#advanceDeductionAmount').val();
+
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const createDate = yyyy + '-' + mm + '-' + dd;
     
+    ipc.send('add-salary', employeeId, salaryAmount, advanceDeductionAmount,createDate);
+    getEmployees();
+    startup();
 }
 
+// Add Employee Advance function 
 function addAdvance()
 {
+    let employeeId = $("select#employeeSelectAdvance").children("option:selected").val();
+    let advanceAmount = $('#advanceAmount').val();
     
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const createDate = yyyy + '-' + mm + '-' + dd;
+    
+    ipc.send('add-salary', employeeId, advanceAmount, createDate);
+    getEmployees();
+    startup();
 }
 
 var data = [];
 var jsonData;
 
-
-    //Get Cigarettes from Main Process IPC
+function getEmployees(){
+    //Get Employees from Main Process IPC
     ipc.send('employee');
     ipc.once('employee Data', (event, employeeData) => 
     {
@@ -42,20 +86,40 @@ var jsonData;
 
         console.log(jsonData)
         for (let i = 0; i < jsonData.length; i++) {
+            // converting json to array for datatables
             data.push(jsonData[i])
+            
+            // for employee salary drop down
+            $("select#employeeSelect").append($("<option>")
+            .val(jsonData[i].emmployeeId)
+            .html(jsonData[i].employeeName)
+        );
+
+            // for employee advance drop down
+            $("select#employeeSelectAdvance").append($("<option>")
+            .val(jsonData[i].emmployeeId)
+            .html(jsonData[i].employeeName)
+        );
+
         }
+
     })
+}
 
 
-
-
+getEmployees();
 
 console.log(data)
 
 
-$(document).ready(function () {
+
+// $(document).ready(function () {
+function startup() {
+    console.log("datatables")
+
     $('#example').dataTable({
         data: data,
+        retrieve: true,
         "columns": [{
                 data: "employeeName"
             },
@@ -69,6 +133,9 @@ $(document).ready(function () {
                 data: "employeeAddress"
             },
             {
+                data: "employeeCNIC"
+            },
+            {
                 data: "employeeSalary"
             },
             {
@@ -76,5 +143,8 @@ $(document).ready(function () {
             }
         ]
     })
-});
+}
+
+$(document).ready(startup);
+// });
 
