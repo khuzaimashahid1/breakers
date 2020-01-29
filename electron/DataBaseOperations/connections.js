@@ -90,7 +90,7 @@ module.exports.createTables = () =>
       .run('CREATE TABLE IF NOT EXISTS Account(accountId INTEGER PRIMARY KEY AUTOINCREMENT,accountName text,accountDescription text, amount int,createDate text,updateDate text)')
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
       .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int DEFAULT 0, createDate text,updateDate text)')
-      .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int,salaryNote text, salaryDue int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
+      .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
       .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
     });
 
@@ -680,7 +680,7 @@ module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
 }
 
 //Add Salary of Employee
-module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAmount,createDate) =>
+module.exports.paySalaryEmployee = (employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount,createDate) =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -689,12 +689,11 @@ module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAm
     console.log('Connected to the breakers database.');
   });
 
-
-  console.log("employeeId"+employeeId)
     return new Promise(function(resolve, reject) {
       db.serialize(() => {
         // Queries scheduled here will be serialized.
-        db.run('Insert into Salary (salaryAmount, createDate, employeeId) values(?,?,?)',[salaryAmount,createDate,employeeId])
+        db.run('Insert into Salary (salaryAmount,salaryMonth, createDate, employeeId) values(?,?,?,?)',[salaryAmount,salaryMonth,createDate,employeeId])
+        .run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Salary Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),?,?)',[createDate,employeeId,salaryNote,salaryAmount])
         .run('UPDATE Employee SET employeeAdvance = ((Select employeeAdvance from Employee where employeeId=?)-?) WHERE employeeId =?', [employeeId,advanceDeductionAmount, employeeId], (err) => {
           if (err !== null) 
           console.log(err)

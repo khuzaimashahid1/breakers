@@ -96,11 +96,12 @@ ipc.on('add-employee-advance',function(event, employeeId, advanceAmount){
 })
 
 
-//Add Employee Salary
-ipc.on('add-employee-salary', function (event, employeeId, salaryAmount, advanceDeductionAmount, createDate) {
-    connections.addSalaryEmployee(employeeId, salaryAmount, advanceDeductionAmount, createDate).then(result => {
+//Pay Employee Salary
+ipc.on('pay-employee-salary', function (event, employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount, createDate) {
+    connections.paySalaryEmployee(employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount, createDate).then(result => {
         if (result === true) {
             dialog.showErrorBox("Success", "Salary Added")
+            event.sender.send('Reload Employees','Salary Paid');
         }
 
     });
