@@ -836,3 +836,34 @@ module.exports.getExpenseCategory =  async() =>
     resolve(rows);
    });
 }
+
+
+
+//Get Revenue
+module.exports.getRevenue =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select Revenue.revenueId, Revenue.revenueName, Revenue.revenueDescription, Revenue.revenueAmount, Revenue.createDate, RevenueCategory.revenueCategoryName as revenueCategory  from Revenue JOIN  RevenueCategory USING(revenueCategoryId)';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}

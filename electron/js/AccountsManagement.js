@@ -1,14 +1,15 @@
 require('datatables.net-dt')();
 
-var expenseTable,expenseArray=[];
+var expenseTable,revenueTable,expenseArray=[],revenueArray=[];
 
 //Function Calls for intialization
 initializeTables();
 getExpenseCategory();
 
-ipc.once('Reload', (event, message) => {
-    getCustomers();
+ipc.on('Reload', (event, message) => {
+    getExpense();
     getExpenseCategory();
+    getRevenue();
   })
 
   
@@ -54,6 +55,22 @@ function getExpenseCategory()
   })
 }
 
+
+//Fetching Revenue From DB
+function getRevenue()
+{
+
+  ipc.send('get-revenue');
+  ipc.once('revenue',(event,revenue)=>
+  {
+    for(let i=0;i<revenue.length;i++)
+    {
+        revenueArray.push(revenue[i])
+    }
+    revenueTable.clear().rows.add(revenueArray).draw();
+    console.log(revenueArray);
+  })
+}
 
 function openModal()
 {
@@ -126,32 +143,7 @@ function tabItem(category) {
     document.getElementById(category).style.display = "block";
 }
 
-var data = [];
-var revenueData = [{
-        Date: "1-06-2020",
-        Name: "Single Game",
-        Description: "snooker game",
-        Amount: "150"
-    },
-    {
-        Date: "1-07-2020",
-        Name: "Cigarette",
-        Description: "Marlboro",
-        Amount: "300"
-    },
-    {
-        Date: "1-08-2020",
-        Name: "Double Game",
-        Description: "snooker game",
-        Amount: "300"
-    }
 
-]
-for (let i = 0; i < revenueData.length; i++) {
-    data.push(revenueData[i])
-}
-
-console.log(data)
 
 //Initialize DataTables
 function initializeTables()
@@ -159,27 +151,30 @@ function initializeTables()
 $(document).ready(function () {
 
     
-
-    // Revenue
-    $('#Revenue').DataTable({
-        data: data,
-        "columns": [{
-                data: "Date"
+    // Revenue DataTable
+    revenueTable=$('#Revenue').DataTable({
+        data: revenueArray,
+        "columns": [
+            {
+                data: "revenueName"
             },
             {
-                data: "Name"
+                data: "revenueCategory"
             },
             {
-                data: "Description"
+                data: "revenueDescription"
             },
             {
-                data: "Amount"
+                data: "revenueAmount"
+            },
+            {
+                data: "createDate"
             }
            
         ]
     })
 
-    // Expense
+    // Expense DataTable
     expenseTable=$('#Expense').DataTable({
         data: expenseArray,
         "columns": [
@@ -204,6 +199,7 @@ $(document).ready(function () {
     })
 
     getExpense();
+    getRevenue();
 
 });
 
