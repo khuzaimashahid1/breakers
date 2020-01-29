@@ -747,3 +747,32 @@ module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDat
     });
   });
 }
+
+
+//Add Expense
+module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDate)=>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  return new Promise(function(resolve, reject) {
+    db.run('Insert into Expense ( expenseName,expenseDescription,expenseAmount,createDate ) values (?,?,?,?)', [expenseName,expenseDescription,expenseAmount,createDate], (err) => {
+        if (err !== null) 
+        reject(err);
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
+  });
+}
