@@ -619,6 +619,76 @@ module.exports.addEmployee=(employeeName, employeeDesignation, employeeCNIC, emp
   });
 }
  
+//Add Advance of Employee
+module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  return new Promise(function(resolve, reject) {
+    db.run('UPDATE Employee SET employeeAdvance =? WHERE employeeId =?', [advanceAmount, employeeId], (err) => {
+        if (err !== null){
+          console.error(err.message);
+          // reject(err);
+        } 
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
+  });
+}
+
+//Add Salary of Employee
+module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAmount,createDate) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+
+  console.log("employeeId"+employeeId)
+    return new Promise(function(resolve, reject) {
+      db.serialize(() => {
+        // Queries scheduled here will be serialized.
+        db.run('Insert into Salary (salaryAmount, createDate, employeeId) values(?,?,?)',[salaryAmount,createDate,employeeId])
+        .run('UPDATE Employee SET employeeAdvance = (Select employeeAdvance from Employee where employeeId=?)-? WHERE employeeId =?', [employeeId,advanceDeductionAmount, employeeId], (err) => {
+          if (err !== null) 
+          console.log(err)
+          else 
+          {
+            db.close((err) => {
+              if (err) {
+                return console.error(err.message);
+              }
+              console.log('Close the database connection.');
+            });
+            resolve(true);
+          }
+      });
+     })
+    });
+  }
+ 
+
+
+
+
+
+
+
 //Add Customer
 module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDate)=>
 {

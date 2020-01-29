@@ -65,15 +65,40 @@ ipc.on('add-employee',function(event, employeeName, employeeDesignation, employe
         {
             if(result===true)
             {
-                getAllCustomers();
-                getAllOngoingGames();
-                // win.webContents.send('Reload', 'New Data')    
                 dialog.showErrorBox("Success","New Employee Added")
             }
             
         });
     
 })
+
+//Add Employee
+ipc.on('add-employee-advance',function(event, employeeId, advanceAmount){
+    connections.addAdvanceEmployee(employeeId, advanceAmount).then(result=>
+        {
+            if(result===true)
+            {  
+                dialog.showErrorBox("Success","Advance Amount Added")
+            }
+            
+        });
+    
+})
+
+
+//Add Employee Salary
+ipc.on('add-employee-salary',function(event, employeeId, salaryAmount, advanceDeductionAmount,createDate){
+    connections.addSalaryEmployee(employeeId, salaryAmount, advanceDeductionAmount,createDate).then(result=>
+        {
+            if(result===true)
+            {  
+                dialog.showErrorBox("Success","Salary Added")
+            }
+            
+        });
+    
+})
+
 
 //Add Customer
 ipc.on('add-customer',function(event, customerName,customerAddress,customerPhone,createDate){
