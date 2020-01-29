@@ -21,8 +21,26 @@ function openModal()
     }
 }
 
-function addExpense(){
-    
+function addExpense()
+{
+    let expenseName = $('#expenseName').val();
+    let expenseDescription = $('#expenseDescription').val();
+    let expenseAmount = $('#expenseAmount').val();
+    console.log(expenseName+expenseDescription+expenseAmount)
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const createDate = yyyy + '-' + mm + '-' + dd;
+
+    if(expenseName!=''&&expenseDescription!=''&&expenseAmount)
+    {
+        ipc.send('add-expense', expenseName,expenseDescription,expenseAmount,createDate)
+    }
+    else
+    {
+        ipc.send('error-dialog', "Empty Field(s)")
+    }
 }
 
 

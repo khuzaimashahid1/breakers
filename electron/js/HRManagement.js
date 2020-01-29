@@ -1,4 +1,9 @@
 require('datatables.net-dt')();
+var employeeTable,employeeData=[];
+initializeTables();
+ipc.on('Reload Employees', (event, message) => {
+    getEmployees()
+  })
 
 function openLink(evt, animName) {
     var i, x, tablinks;
@@ -31,11 +36,7 @@ function addEmployee()
     const createDate = yyyy + '-' + mm + '-' + dd;
     
     ipc.send('add-employee', employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate);
-    getEmployees();
-    startup();
-    // win.reload();
-    // var newUrl = "HRManagement.html";
-    // win.location.href = newUrl;
+    
 
 }
 
@@ -45,16 +46,15 @@ function addSalary()
     let employeeId = $("select#employeeSelect").children("option:selected").val();
     let salaryAmount = $('#salaryAmount').val();
     let advanceDeductionAmount = $('#advanceDeductionAmount').val();
-
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
     
-    ipc.send('add-salary', employeeId, salaryAmount, advanceDeductionAmount,createDate);
+    ipc.send('add-employee-salary', employeeId, salaryAmount, advanceDeductionAmount,createDate);
     getEmployees();
-    startup();
+   
 }
 
 // Add Employee Advance function 
@@ -62,89 +62,86 @@ function addAdvance()
 {
     let employeeId = $("select#employeeSelectAdvance").children("option:selected").val();
     let advanceAmount = $('#advanceAmount').val();
-    
-    const today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    const createDate = yyyy + '-' + mm + '-' + dd;
-    
-    ipc.send('add-salary', employeeId, advanceAmount, createDate);
+      
+    ipc.send('add-employee-advance', employeeId, advanceAmount);
     getEmployees();
-    startup();
+    
 }
 
-var data = [];
-var jsonData;
-
+//Function For Getting Employees
 function getEmployees(){
+    employeeData=[]
+    //Remove previous Select Option
+    $('select#employeeSelect')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="text" disabled selected>Select Employee</option>');
+    $('select#employeeSelectAdvance')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="text" disabled selected>Select Employee</option>');
+    
+    
     //Get Employees from Main Process IPC
     ipc.send('employee');
-    ipc.once('employee Data', (event, employeeData) => 
+    ipc.once('employee Data', (event, employees) => 
     {
-         jsonData=employeeData;
-
-        console.log(jsonData)
-        for (let i = 0; i < jsonData.length; i++) {
+        for (let i = 0; i < employees.length; i++) {
             // converting json to array for datatables
-            data.push(jsonData[i])
-            
+            employeeData.push(employees[i])
             // for employee salary drop down
             $("select#employeeSelect").append($("<option>")
-            .val(jsonData[i].emmployeeId)
-            .html(jsonData[i].employeeName)
+            .val(employees[i].employeeId)
+            .html(employees[i].employeeName)
         );
 
             // for employee advance drop down
             $("select#employeeSelectAdvance").append($("<option>")
-            .val(jsonData[i].emmployeeId)
-            .html(jsonData[i].employeeName)
+            .val(employees[i].employeeId)
+            .html(employees[i].employeeName)
         );
-
         }
+        employeeTable.clear().rows.add(employeeData).draw();
 
     })
 }
 
-
-getEmployees();
-
-console.log(data)
-
-
-
-// $(document).ready(function () {
-function startup() {
-    console.log("datatables")
-
-    $('#example').dataTable({
-        data: data,
-        retrieve: true,
-        "columns": [{
-                data: "employeeName"
-            },
-            {
-                data: "employeeDesignation"
-            },
-            {
-                data: "employeePhone"
-            },
-            {
-                data: "employeeAddress"
-            },
-            {
-                data: "employeeCNIC"
-            },
-            {
-                data: "employeeSalary"
-            },
-            {
-                data: "employeeAdvance"
-            }
-        ]
-    })
+// Initialize Datatables
+function initializeTables()
+{
+    $(document).ready(function () {
+        console.log("datatables")
+    
+        employeeTable=$('#example').DataTable({
+            data: employeeData,
+            retrieve: true,
+            "columns": [{
+                    data: "employeeName"
+                },
+                {
+                    data: "employeeDesignation"
+                },
+                {
+                    data: "employeePhone"
+                },
+                {
+                    data: "employeeAddress"
+                },
+                {
+                    data: "employeeCNIC"
+                },
+                {
+                    data: "employeeSalary"
+                },
+                {
+                    data: "employeeAdvance"
+                }
+            ]
+        })
+        getEmployees();
+    });
+    
+    
 }
-
-$(document).ready(startup);
-// });
-

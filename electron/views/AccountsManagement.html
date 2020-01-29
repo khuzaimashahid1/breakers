@@ -105,17 +105,18 @@
                     text-align: center;">Add Expense</h1
                 >
                 <div class="dataform">
-                    <input class="input" id="expenseDescription"  type="text" name="name" placeholder="Expense Description" required>
+                    <input class="input" id="expenseName"  type="text" name="name" placeholder="Expense Name" required>
                     <br />
                     <br />
-                    <select class="select" id="expenseTypeSelect">
-                      <option value="text" disabled selected>Select Expense Type</option>
-                      <option id="expenseClub" value="text" >Club Expense</option>
-                      <option id="expenseKitchen" value="text" >Kitchen Expense</option>
+                    <select class="select" id="expenseDescription">
+                      <option value="" disabled selected>Select Expense Type</option>
+                      <option id="expenseOut" value="Out Expense" >Out Expense</option>
+                      <option id="expenseClub" value="Club Expense" >Club Expense</option>
+                      <option id="expenseKitchen" value="Kitchen Expense" >Kitchen Expense</option>
                   </select>
                     <br />
                     <br />
-                    <input class="input" id="Amount"  type="text" name="name" placeholder="Amount"
+                    <input class="input" id="expenseAmount"  type="text" name="name" placeholder="Amount"
                         required>
                     
                     <br />
