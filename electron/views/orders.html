@@ -79,7 +79,7 @@
                     <hr />
                     <br />
                     <br />
-                    <label>Total Sale:</label>
+                    <h3 class="h3">Total Sale:</h3>
                 </div> 
                 </div>
             </div>
@@ -122,11 +122,13 @@
                 </div>
                 
             </div>
-            <!-- Kitchen Summary Tab -->
+            <!-- Drinks Summary Tab -->
             <div id="drinkSummary" class="w3-container category" style="display:none">
                 <div class="main-block">
-                    <h2>Drinks Sale Summary Table</h2>
-                    <table>
+                    <h2 
+                        style="text-align: center;">Drinks Sale Summary Table</h2>
+                   <div class="dataform">
+                 <table>
                         <tr>
                             <th>Cutomer Name</th>
                             <th>Table Number</th>
@@ -137,37 +139,51 @@
                     <hr />
                     <br />
                     <br />
-                    <label>Total Sale:</label>
+                    <h3 class="h3">Total Sale:</h3>
+
+                </div>
                 </div>
             </div>
             <div id="drinkNew" class="w3-container category" style="display:none">
-                <h1>Add New Drink To Inventory</h1>
-                <div class="main-block">
+                <h1
+                    style="text-align: center;">Add New Drink To Inventory</h1
+                    >
+                <div class="dataform">
                     <form>
-                        <input id="drinkNewName" type="text" placeholder="Enter Drink Name" /><br />
-                        <input id="drinkNewPrice" type="number" placeholder="Enter Drink Price" /><br />
-                        <button onclick="drinkAddInventory();" class="btnModal">Add Drink to Inventory!</button>
+                        <input class="input" id="drinkNewName" type="text" placeholder="Enter Drink Name" />
+                        <br />
+                        <br />
+                        <input class="input"  id="drinkNewPrice" type="number" placeholder="Enter Drink Price" />
+                        <br />
+                        <br />
+                        <button class="btn"  onclick="drinkAddInventory();" class="btnModal">Add Drink to Inventory!</button>
                     </form>
                 </div>
             </div>
 
             <div id="drinkStock" class="w3-container category" style="display:none">
-                <h1>Add Stock to Inventory</h1>
-                <div class="main-block">
+                <h1 style="text-align: center;">Add Stock to Inventory</h1>
+                <div class="dataform">
+                    
                     <form>
-                        <select id=drinkSelectStock>
+                        <select class="select" id=drinkSelectStock>
                             <option value="number" disabled selected>Select Drink</option>
                         </select>
                         <br />
-                        <input id="drinkStockQuantity" type="number" placeholder="Quantity" />
-                        <button id="drinkStockAdd" class="btnModal">Add to Inventory</button>
+                        <br />
+                        <input class="input" id="drinkStockQuantity" type="number" placeholder="Quantity" />
+                        <br />
+                        <br />
+                        <button class="btn" id="drinkStockAdd" class="btnModal">Add to Inventory</button>
                     </form>
-                </div>
-                <h3 id="remainingStock">In Stock:</h3>
+                    <br />
+                    <br />
+                <h3 class="h3" id="remainingStock" >In Stock:</h3>
+            </div>
             </div>
         </div>
 
-        <div id="Top" class="w3-container city w3-animate-top" style="display:none">
+        <div id="Top" class="w3-container city w3-animate-top" style="display:none; background-color: white; opacity: 0.8;">
             <h1>Cigarettes Order</h1>
             <div class="w3-bar w3-black">
                 <button class="w3-bar-item w3-button" onclick="tabItem('cigaretteOrder')">Add Cigarettes Order</button>
@@ -178,25 +194,36 @@
 
 
             <div id="cigaretteOrder" class="w3-container category">
-                <h1>Cigarette Order</h1>
-                <div class="main-block">
+                <h1
+                    style="text-align: center;">Cigarette Order</h1
+                    >
+                <div class="dataform">
                     <form>
-                        <input type="text" id="customerNameCigarettes" onkeypress="renderSuggestionsCigarette()" placeholder="Enter Customer Name" />
+                        <input class="input" type="text" id="customerNameCigarettes" onkeypress="renderSuggestionsCigarette()" placeholder="Enter Customer Name" />
                         <br/>
-                        <select id=cigaretteSelectOrder>
+                        <br/>
+                        <select class="select" id=cigaretteSelectOrder>
                             <option value="number" disabled selected>Select Cigarette</option>
                         </select>
                         <br />
-                        <input id="cigarettePriceOrder" type="text" name="name" placeholder="Price"><br />
-                        <button type="button" id="cigaretteOrderAdd" onclick="cigarettesOrder()" class="btnModal">Add to bill</button>
+                        <br />
+                        <input class="input" id="cigarettePriceOrder" type="text" name="name" placeholder="Price">
+                        <br />
+                        <br />
+                        <button class="btn" type="button" id="cigaretteOrderAdd" onclick="cigarettesOrder()" class="btnModal">Add to bill</button>
                     </form>
+                    <br/>
+                    <br/>
+                    <h3 id="remainingStock">In Stock:</h3>
                 </div>
-                <h3 id="remainingStock">In Stock:</h3>
+              
             </div>
 
             <div id="cigaretteSummary" class="w3-container category" style="display:none">
-                <div class="main-block">
-                    <h2>Cigarette Sale Summary Table</h2>
+                <h2 
+                    style="text-align: center;">Cigarette Sale Summary Table</h2>
+                <div class="dataform">
+                    
                     <table>
                         <tr>
                             <th>Cutomer Name</th>
@@ -208,33 +235,45 @@
                     <hr />
                     <br />
                     <br />
-                    <label>Total Sale:</label>
+                    <h3 class="h3">Total Sale:</h3>
                 </div>
             </div>
             <div id="cigaretteNew" class="w3-container category" style="display:none">
-                <h1>Add New Cigarette To Inventory</h1>
-                <div class="main-block">
+                <h1
+                    style="text-align: center;">Add New Cigarette To Inventory</h1
+                    >
+                <div class="dataform">
                     <form>
-                        <input id="cigaretteNewName" type="text" placeholder="Enter Drink Name" /><br />
-                        <input id="cigaretteNewPrice" type="number" placeholder="Enter Drink Price" /><br />
-                        <button onclick="cigaretteAddInventory();" class="btnModal">Add Cigarette to Inventory!</button>
+                        <input class="input" id="cigaretteNewName" type="text" placeholder="Enter Drink Name" />
+                        <br />
+                        <br/>
+                        <input class="input" id="cigaretteNewPrice" type="number" placeholder="Enter Drink Price" />
+                        <br/>
+                        <br />
+                        <button class="btn" onclick="cigaretteAddInventory();" >Add Cigarette to Inventory!</button>
                     </form>
                 </div>
             </div>
 
             <div id="cigaretteStock" class="w3-container category" style="display:none">
-                <h1>Add Stock to Inventory</h1>
-                <div class="main-block">
+                <h1
+                    style="text-align: center;">Add Stock to Inventory</h1
+                    >
+                <div class="dataform">
                     <form>
-                        <select id=cigaretteSelectStock>
+                        <select class="select" id=cigaretteSelectStock>
                             <option value="number" disabled selected>Select Cigarette</option>
                         </select>
                         <br />
-                        <input id="cigaretteStockQuantity" type="number" placeholder="Quantity" />
-                        <button id="cigaretteStockAdd" class="btnModal">Add to Inventory</button>
+                        <br />
+                        <input class="input" id="cigaretteStockQuantity" type="number" placeholder="Quantity" />
+                        <br />
+                        <br />
+                        <button id="cigaretteStockAdd" class="btn">Add to Inventory</button>
                     </form>
+                    <h3 class="h3" id="remainingStock">In Stock:</h3>
                 </div>
-                <h3 id="remainingStock">In Stock:</h3>
+                
             </div>
         </div>
     </div>
