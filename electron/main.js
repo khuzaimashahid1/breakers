@@ -123,8 +123,8 @@ ipc.on('add-customer', function (event, customerName, customerAddress, customerP
 
 
 //Add Expense
-ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseAmount, createDate) {
-    connections.addExpense(expenseName, expenseDescription, expenseAmount, createDate).then(result => {
+ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseAmount, createDate,expenseCategoryId) {
+    connections.addExpense(expenseName, expenseDescription, expenseAmount, createDate,expenseCategoryId).then(result => {
         if (result === true) {
             const options = {
                 title: "Success",
@@ -136,6 +136,21 @@ ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseA
 
     });
 
+})
+
+
+//Get Expense
+ipc.on('get-expense', function (event) {
+    connections.getExpense().then(rows => {
+        event.sender.send("expense", rows);
+    });
+})
+
+//Get Expense Category
+ipc.on('get-expense-category', function (event) {
+    connections.getExpenseCategory().then(rows => {
+        event.sender.send("expenseCategory", rows);
+    });
 })
 
 //Delete Customer

@@ -1,4 +1,60 @@
 require('datatables.net-dt')();
+
+var expenseTable,expenseArray=[];
+
+//Function Calls for intialization
+initializeTables();
+getExpenseCategory();
+
+ipc.once('Reload', (event, message) => {
+    getCustomers();
+    getExpenseCategory();
+  })
+
+  
+//Fetching Expense From DB
+function getExpense()
+{
+
+  ipc.send('get-expense');
+  ipc.once('expense',(event,expense)=>
+  {
+    for(let i=0;i<expense.length;i++)
+    {
+        expenseArray.push(expense[i])
+    }
+    expenseTable.clear().rows.add(expenseArray).draw();
+    console.log(expenseArray);
+  })
+}
+
+//Fetching Expense From DB
+function getExpenseCategory()
+{
+
+    //Remove previous Select Option
+    $('select#expenseCategory')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="text" disabled selected>Select Expense Catergory</option>');
+
+  ipc.send('get-expense-category');
+  ipc.once('expenseCategory',(event,expenseCategory)=>
+  {
+    for(let i=0;i<expenseCategory.length;i++)
+    {
+        // for expense category drop down
+        $("select#expenseCategory").append($("<option>")
+        .val(expenseCategory[i].expenseCategoryId)
+        .html(expenseCategory[i].expenseCategoryName)
+        );
+    }
+    console.log(expenseCategory);
+  })
+}
+
+
 function openModal()
 {
     // Get the modal
@@ -26,6 +82,8 @@ function addExpense()
     let expenseName = $('#expenseName').val();
     let expenseDescription = $('#expenseDescription').val();
     let expenseAmount = $('#expenseAmount').val();
+    let expenseCategoryId = $("select#expenseCategory").children("option:selected").val();
+
     console.log(expenseName+expenseDescription+expenseAmount)
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -33,9 +91,9 @@ function addExpense()
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
 
-    if(expenseName!=''&&expenseDescription!=''&&expenseAmount)
+    if(expenseName!=''&&expenseAmount)
     {
-        ipc.send('add-expense', expenseName,expenseDescription,expenseAmount,createDate)
+        ipc.send('add-expense', expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId)
     }
     else
     {
@@ -95,10 +153,15 @@ for (let i = 0; i < revenueData.length; i++) {
 
 console.log(data)
 
-
+//Initialize DataTables
+function initializeTables()
+{
 $(document).ready(function () {
+
+    
+
     // Revenue
-    $('#Revenue').dataTable({
+    $('#Revenue').DataTable({
         data: data,
         "columns": [{
                 data: "Date"
@@ -117,23 +180,31 @@ $(document).ready(function () {
     })
 
     // Expense
-    $('#Expense').dataTable({
-        data: data,
-        "columns": [{
-                data: "Date"
+    expenseTable=$('#Expense').DataTable({
+        data: expenseArray,
+        "columns": [
+
+            {
+                data: "expenseName"
             },
             {
-                data: "Name"
+                data: "expenseCategory"
             },
             {
-                data: "Description"
+                data: "expenseDescription"
             },
             {
-                data: "Amount"
+                data: "expenseAmount"
+            },
+            {
+                data: "createDate"
             }
            
         ]
     })
+
+    getExpense();
+
 });
 
-
+}
