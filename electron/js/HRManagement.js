@@ -1,4 +1,9 @@
 require('datatables.net-dt')();
+var employeeTable,employeeData=[];
+initializeTables();
+ipc.on('Reload Employees', (event, message) => {
+    getEmployees()
+  })
 
 function openLink(evt, animName) {
     var i, x, tablinks;
@@ -31,11 +36,7 @@ function addEmployee()
     const createDate = yyyy + '-' + mm + '-' + dd;
     
     ipc.send('add-employee', employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate);
-    getEmployees();
     
-    // win.reload();
-    // var newUrl = "HRManagement.html";
-    // win.location.href = newUrl;
 
 }
 
@@ -67,73 +68,80 @@ function addAdvance()
     
 }
 
-var data = [];
-var jsonData;
-
+//Function For Getting Employees
 function getEmployees(){
+    employeeData=[]
+    //Remove previous Select Option
+    $('select#employeeSelect')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="text" disabled selected>Select Employee</option>');
+    $('select#employeeSelectAdvance')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="text" disabled selected>Select Employee</option>');
+    
+    
     //Get Employees from Main Process IPC
     ipc.send('employee');
-    ipc.once('employee Data', (event, employeeData) => 
+    ipc.once('employee Data', (event, employees) => 
     {
-         jsonData=employeeData;
-
-        console.log(jsonData)
-        for (let i = 0; i < jsonData.length; i++) {
+        for (let i = 0; i < employees.length; i++) {
             // converting json to array for datatables
-            data.push(jsonData[i])
-            
+            employeeData.push(employees[i])
             // for employee salary drop down
             $("select#employeeSelect").append($("<option>")
-            .val(jsonData[i].employeeId)
-            .html(jsonData[i].employeeName)
+            .val(employees[i].employeeId)
+            .html(employees[i].employeeName)
         );
 
             // for employee advance drop down
             $("select#employeeSelectAdvance").append($("<option>")
-            .val(jsonData[i].employeeId)
-            .html(jsonData[i].employeeName)
+            .val(employees[i].employeeId)
+            .html(employees[i].employeeName)
         );
-
         }
+        employeeTable.clear().rows.add(employeeData).draw();
 
     })
 }
 
-
-getEmployees();
-
-console.log(data)
-
-
-$(document).ready(function () {
-    console.log("datatables")
-
-    $('#example').dataTable({
-        data: data,
-        retrieve: true,
-        "columns": [{
-                data: "employeeName"
-            },
-            {
-                data: "employeeDesignation"
-            },
-            {
-                data: "employeePhone"
-            },
-            {
-                data: "employeeAddress"
-            },
-            {
-                data: "employeeCNIC"
-            },
-            {
-                data: "employeeSalary"
-            },
-            {
-                data: "employeeAdvance"
-            }
-        ]
-    })
-
-});
-
+// Initialize Datatables
+function initializeTables()
+{
+    $(document).ready(function () {
+        console.log("datatables")
+    
+        employeeTable=$('#example').DataTable({
+            data: employeeData,
+            retrieve: true,
+            "columns": [{
+                    data: "employeeName"
+                },
+                {
+                    data: "employeeDesignation"
+                },
+                {
+                    data: "employeePhone"
+                },
+                {
+                    data: "employeeAddress"
+                },
+                {
+                    data: "employeeCNIC"
+                },
+                {
+                    data: "employeeSalary"
+                },
+                {
+                    data: "employeeAdvance"
+                }
+            ]
+        })
+        getEmployees();
+    });
+    
+    
+}

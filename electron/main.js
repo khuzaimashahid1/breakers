@@ -66,6 +66,7 @@ ipc.on('add-employee',function(event, employeeName, employeeDesignation, employe
             if(result===true)
             {
                 dialog.showErrorBox("Success","New Employee Added")
+                event.sender.send('Reload Employees','New Employee Added');
             }
             
         });
@@ -79,6 +80,7 @@ ipc.on('add-employee-advance',function(event, employeeId, advanceAmount){
             if(result===true)
             {  
                 dialog.showErrorBox("Success","Advance Amount Added")
+                event.sender.send('Reload Employees','Advance Changed');
             }
             
         });
@@ -195,6 +197,14 @@ ipc.on('get-creditors',function(event)
 {
     connections.getCreditors().then(rows => {
         event.sender.send("creditors", rows);
+    });
+})
+
+//Get Credit History
+ipc.on('get-credit-history',function(event,customerId)
+{
+    connections.getCreditHistory(customerId).then(rows => {
+        event.sender.send("creditor-history", rows);
     });
 })
 

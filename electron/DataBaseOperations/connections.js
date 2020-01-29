@@ -89,7 +89,7 @@ module.exports.createTables = () =>
       .run('CREATE TABLE IF NOT EXISTS Revenue(revenueId INTEGER PRIMARY KEY AUTOINCREMENT,revenueName text, revenueAmount int, revenueDescription text , createDate text,updateDate text, revenueCategoryId int,inventoryManagementId int, gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(revenueCategoryId) REFERENCES RevenueCategory(revenueCategoryId))')
       .run('CREATE TABLE IF NOT EXISTS Account(accountId INTEGER PRIMARY KEY AUTOINCREMENT,accountName text,accountDescription text, amount int,createDate text,updateDate text)')
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
-      .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int, createDate text,updateDate text)')
+      .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int DEFAULT 0, createDate text,updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int,salaryNote text, salaryDue int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
       .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
     });
@@ -156,6 +156,37 @@ module.exports.getCreditors =  async() =>
   });
   
   sql='Select customerName,creditAmount,customerId from Customer WHERE creditAmount>0';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+
+//Get Cred Clear History
+module.exports.getCreditHistory =  async(customerId) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='SELECT Customer.customerName,CreditManagement.createDate,CreditManagement.clearingTime,CreditManagement.amount FROM Customer JOIN CreditManagement using (customerId) WHERE customerId='+customerId;
   
   
   var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
@@ -629,7 +660,7 @@ module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
     console.log('Connected to the breakers database.');
   });
   return new Promise(function(resolve, reject) {
-    db.run('UPDATE Employee SET employeeAdvance =? WHERE employeeId =?', [advanceAmount, employeeId], (err) => {
+    db.run('UPDATE Employee SET employeeAdvance =((Select employeeAdvance FROM Employee where employeeId=?)+?) WHERE employeeId =?', [employeeId,advanceAmount, employeeId], (err) => {
         if (err !== null){
           console.error(err.message);
           // reject(err);
@@ -664,7 +695,7 @@ module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAm
       db.serialize(() => {
         // Queries scheduled here will be serialized.
         db.run('Insert into Salary (salaryAmount, createDate, employeeId) values(?,?,?)',[salaryAmount,createDate,employeeId])
-        .run('UPDATE Employee SET employeeAdvance = (Select employeeAdvance from Employee where employeeId=?)-? WHERE employeeId =?', [employeeId,advanceDeductionAmount, employeeId], (err) => {
+        .run('UPDATE Employee SET employeeAdvance = ((Select employeeAdvance from Employee where employeeId=?)-?) WHERE employeeId =?', [employeeId,advanceDeductionAmount, employeeId], (err) => {
           if (err !== null) 
           console.log(err)
           else 
