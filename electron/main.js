@@ -68,25 +68,31 @@ ipc.on('start-game', function (event, tableNumber, status, gameType, id1, id2, i
 })
 
 //Add Employee
-ipc.on('add-employee', function (event, employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate) {
-    connections.addEmployee(employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate).then(result => {
-        if (result === true) {
-            dialog.showErrorBox("Success", "New Employee Added")
-        }
-
-    });
-
+ipc.on('add-employee',function(event, employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate){
+    connections.addEmployee(employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate).then(result=>
+        {
+            if(result===true)
+            {
+                dialog.showErrorBox("Success","New Employee Added")
+                event.sender.send('Reload Employees','New Employee Added');
+            }
+            
+        });
+    
 })
 
 //Add Employee
-ipc.on('add-employee-advance', function (event, employeeId, advanceAmount) {
-    connections.addAdvanceEmployee(employeeId, advanceAmount).then(result => {
-        if (result === true) {
-            dialog.showErrorBox("Success", "Advance Amount Added")
-        }
-
-    });
-
+ipc.on('add-employee-advance',function(event, employeeId, advanceAmount){
+    connections.addAdvanceEmployee(employeeId, advanceAmount).then(result=>
+        {
+            if(result===true)
+            {  
+                dialog.showErrorBox("Success","Advance Amount Added")
+                event.sender.send('Reload Employees','Advance Changed');
+            }
+            
+        });
+    
 })
 
 
@@ -206,6 +212,14 @@ ipc.on('end-game', function (event, gameId, amount, loserId1, loserId2) {
 ipc.on('get-creditors', function (event) {
     connections.getCreditors().then(rows => {
         event.sender.send("creditors", rows);
+    });
+})
+
+//Get Credit History
+ipc.on('get-credit-history',function(event,customerId)
+{
+    connections.getCreditHistory(customerId).then(rows => {
+        event.sender.send("creditor-history", rows);
     });
 })
 

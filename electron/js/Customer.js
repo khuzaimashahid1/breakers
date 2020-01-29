@@ -1,6 +1,6 @@
 //Imports and Declarations
 require('datatables.net-dt')();
-var creditorTable,customersTable,creditorsArray=[],customersArray=[];
+var creditorTable,customersTable,creditClearTable,creditClearArray=[],creditorsArray=[],customersArray=[];
 
 //Function Calls for intialization
 initializeTables();
@@ -36,6 +36,26 @@ function getCreditors()
     }
     creditorTable.clear().rows.add(creditorsArray).draw();
   })
+}
+
+//Fetching Creditors From DB
+function getCreditHistory() {
+  console.log("in Credit History")
+  let customerName = $('#customerCreditName').val();
+  let customerId = getId(customerName);
+  if (customerId === null) {
+    ipc.send('error-dialog', 'Customer Not in Database')
+  }
+  else {
+    creditClearArray = []
+    ipc.send('get-credit-history', customerId);
+    ipc.once('creditor-history', (event, creditHistory) => {
+      for (let i = 0; i < creditHistory.length; i++) {
+        creditClearArray.push(creditHistory[i])
+      }
+      creditClearTable.clear().rows.add(creditClearArray).draw();
+    })
+  }
 }
 
 //Getting Customers
@@ -115,6 +135,23 @@ function initializeTables()
   
       ]
   })
+  creditClearTable=$('#creditClear').DataTable({
+    data: creditClearArray,
+    "columns": [{
+            data: "customerName"
+        },
+        {
+            data: "createDate"
+        },
+        {
+            data: "clearingTime"
+        },
+        {
+          data: "amount"
+      }
+
+    ]
+})
   getCreditors();
   getCustomers();
   });
