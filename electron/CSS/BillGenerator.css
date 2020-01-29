@@ -5,7 +5,39 @@ td{
 tr{
     width: 750px;
 }
+.autocomplete-items {
+  position: absolute;
+  margin-left: 28%;
+  /* border: 1px solid #d4d4d4; */
+  /* border-bottom: none;
+border-top: none; */
+  /* z-index: 99;
+/*position the autocomplete items to be the same width as the container:*/
+  /* top: 100%;
+left: 0;
+right: 0;  */
+}
+.autocomplete-items div{
 
+  margin-top: 1%;
+ 
+  /* margin-left: 76%;
+  margin-top: -10px; */
+  width: 190px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+}
+ /*when hovering an item:*/
+ .autocomplete-items div:hover {
+  background-color: #4CAF50;
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: #4CAF50 !important;
+  color: black;
+}
 .fixed_header{
     margin-top: -10px;
     margin-left: 18%;

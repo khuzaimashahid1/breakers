@@ -3,7 +3,7 @@ require('datatables.net-dt')();
 var billData=[],billIdArray=[],datatable,totalBill=0;
 function renderSuggestions()
 {
-    autoComplete("PlayerName", allplayers)
+        autoComplete("PlayerName", allplayers)
 }
 
 //Autocomplete Customer Name Field

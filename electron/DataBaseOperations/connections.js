@@ -749,7 +749,7 @@ module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDat
 
 
 //Add Expense
-module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDate)=>
+module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId)=>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -759,7 +759,7 @@ module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDa
   });
 
   return new Promise(function(resolve, reject) {
-    db.run('Insert into Expense ( expenseName,expenseDescription,expenseAmount,createDate ) values (?,?,?,?)', [expenseName,expenseDescription,expenseAmount,createDate], (err) => {
+    db.run('Insert into Expense ( expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId ) values (?,?,?,?,?)', [expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId], (err) => {
         if (err !== null) 
         reject(err);
         else 
@@ -774,4 +774,65 @@ module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDa
         }
     });
   });
+}
+
+
+
+//Get Expense Category
+module.exports.getExpense =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select Expense.expenseId, Expense.expenseName, Expense.expenseDescription, Expense.expenseAmount, Expense.createDate, ExpenseCategory.expenseCategoryName as expenseCategory  from Expense JOIN  ExpenseCategory USING(expenseCategoryId)';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Get Expense
+module.exports.getExpenseCategory =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='SELECT ExpenseCategory.expenseCategoryId, ExpenseCategory.expenseCategoryName FROM ExpenseCategory';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
 }
