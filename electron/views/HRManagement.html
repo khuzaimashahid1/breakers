@@ -16,6 +16,7 @@
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom')">Add Employee</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom1')">Pay Salary</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom2')">Advance Salary</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom3')">Salary History</button>
     </div>
 
     <div style="margin-left:15%">
@@ -178,6 +179,48 @@
                     
                    
                 <button type="button" class="btn" onclick="addAdvance()">Add Advance</button>
+            </div>
+             
+        </div>
+
+    </div>
+
+    <!-- ADD ADVANCE SECTION -->
+    <div id="Zoom3" class="w3-container city w3-animate-zoom"
+        style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
+
+        <div class="w3-container category">
+            <h1
+                style="
+                    width: 100%;
+                    text-align: center;">Salary History</h1
+                >
+                <div class="dataform">
+                    <select class="select" id="employeeSelectAdvance">
+                        <option value="text" disabled selected>Select Employee</option>
+                    </select>
+                    <br />
+                    <br />
+                    <table id="salaryHistory" class="display" style="width:100%;  overflow: auto;">
+                        <thead>
+                          <tr>
+                            <th>Employee Name</th>
+                            <th>Salary Month</th>
+                            <th>Salary Amount</th>
+                            <th>Salary Date</th>
+
+                          </tr>
+                        </thead>
+                        <tfoot>
+                          <tr>
+                            <th>Employee Name</th>
+                            <th>Salary Month</th>
+                            <th>Salary Amount</th>
+                            <th>Salary Date</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+ 
             </div>
              
         </div>
