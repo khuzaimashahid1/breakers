@@ -680,7 +680,7 @@ module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
 }
 
 //Add Salary of Employee
-module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAmount,createDate) =>
+module.exports.paySalaryEmployee = (employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount,createDate) =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -689,12 +689,11 @@ module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAm
     console.log('Connected to the breakers database.');
   });
 
-
-  console.log("employeeId"+employeeId)
     return new Promise(function(resolve, reject) {
       db.serialize(() => {
         // Queries scheduled here will be serialized.
-        db.run('Insert into Salary (salaryAmount, createDate, employeeId) values(?,?,?)',[salaryAmount,createDate,employeeId])
+        db.run('Insert into Salary (salaryAmount,salaryMonth, createDate, employeeId) values(?,?,?,?)',[salaryAmount,salaryMonth,createDate,employeeId])
+        .run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Salary Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),?,?)',[createDate,employeeId,salaryNote,salaryAmount])
         .run('UPDATE Employee SET employeeAdvance = ((Select employeeAdvance from Employee where employeeId=?)-?) WHERE employeeId =?', [employeeId,advanceDeductionAmount, employeeId], (err) => {
           if (err !== null) 
           console.log(err)

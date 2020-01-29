@@ -1,7 +1,7 @@
 require('datatables.net-dt')();
 var employeeTable,employeeData=[];
 initializeTables();
-ipc.on('Reload Employees', (event, message) => {
+ipc.once('Reload Employees', (event, message) => {
     getEmployees()
   })
 
@@ -40,20 +40,22 @@ function addEmployee()
 
 }
 
-// Add Employee Salary function 
-function addSalary()
+// Pay Employee Salary function 
+function paySalary()
 {
     let employeeId = $("select#employeeSelect").children("option:selected").val();
+    let salaryMonth = $("select#monthSelect").children("option:selected").html();
+    console.log(salaryMonth)
     let salaryAmount = $('#salaryAmount').val();
+    let salaryNote = $('#salaryNote').val();
     let advanceDeductionAmount = $('#advanceDeductionAmount').val();
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
+    ipc.send('pay-employee-salary', employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount,createDate);
     
-    ipc.send('add-employee-salary', employeeId, salaryAmount, advanceDeductionAmount,createDate);
-    getEmployees();
    
 }
 
@@ -67,7 +69,7 @@ function addAdvance()
     getEmployees();
     
 }
- 
+
 //Function For Getting Employees
 function getEmployees(){
     employeeData=[]
@@ -141,6 +143,18 @@ function initializeTables()
             ]
         })
         getEmployees();
+
+        $( "#employeeSelect" ).change(function() {
+            let selectedValue=$("#employeeSelect").val();
+            let selectedEmployee=employeeData.filter(employee=>(employee.employeeId==selectedValue))
+            $("#basicSalary").val(selectedEmployee[0].employeeSalary);
+            $("#advanceTaken").val(selectedEmployee[0].employeeAdvance);
+          });
+          $( "#employeeSelectAdvance" ).change(function() {
+            let selectedValue=$("#employeeSelectAdvance").val();
+            let selectedEmployee=employeeData.filter(employee=>(employee.employeeId==selectedValue))
+            $("#advanceTakenAdvance").val(selectedEmployee[0].employeeAdvance);
+          });
     });
     
     

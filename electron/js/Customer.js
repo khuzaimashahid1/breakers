@@ -4,7 +4,7 @@ var creditorTable,customersTable,creditClearTable,creditClearArray=[],creditorsA
 
 //Function Calls for intialization
 initializeTables();
-ipc.on('Reload', (event, message) => {
+ipc.once('Reload', (event, message) => {
   getCustomers()
 })
 

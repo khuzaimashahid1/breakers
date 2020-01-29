@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../CSS/orders.css">
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
+</head>
+
+<body>
+    <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
+        <h5 class="w3-bar-item" width=20%>Orders Management</h5>
+        <button class="w3-bar-item w3-button tablink w3-white" onclick="openLink(event, 'Fade')">Kitchen</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Fade1')">Drinks</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom1')">Cigetettes</button>
+    </div>
+
+    <div style="margin-left:15%">
+
+        <div id="Fade" class="w3-container city w3-animate-zoom" style="background-color: white;opacity: 0.8;">
+
+            <h1 style="
+            width: 100%;
+            text-align: center;">Kitchen Management</h1>
+            <div class="buttonscolumns">
+                <button class="w3-bar-item w3-button tablink btnlink w3-black"
+                    onclick="buttonTab(event,'tabKitchenSummary','tabAddKitchenOrder',2)">Add kitchen Order</button>
+                <button class="w3-bar-item w3-button tablink btnlink"
+                    onclick="buttonTab(event,'tabAddKitchenOrder', 'tabKitchenSummary',2)">Kitchen Summary</button>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD KITCHEN ORDER SECTION -->
+    <div id="tabAddKitchenOrder" class="w3-container city "
+        style="display: block; background-color:white; opacity:0.8; margin-left:15%;">
+
+        <div class="w3-container category">
+            <h1 style="
+                width: 100%;
+                text-align: center;
+                color: black;">Add New Kitchen Order</h1>
+            <div class="dataform">
+                <input class="input" id="customerNameKitchen" value="" onkeypress="renderSuggestionsKitchen()"
+                    type="text" name="name" placeholder="Customer Name" required>
+                <br />
+                <br />
+                <input class="input" id="kitchenOrderItem" type="text" name="name" placeholder="Order Item" required>
+                <br />
+                <br />
+                <input class="input" id="kitchenOrderPrice" type="number" name="name" placeholder="Price" required>
+                <br />
+                <br />
+
+                <button type="button" id="kitchenOrderAdd" onclick="kitchenOrder()" class="btnModal">Add to
+                    Bill</button>
+            </div>
+
+        </div>
+    </div>
+    <!-- KITCHEN SUMMARY SECTION -->
+    <div id="tabKitchenSummary" class="w3-container city"
+        style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
+        <div id="kitchenSummary" class="w3-container category">
+            <h1 style="
+                    width: 100%;
+                    text-align: center;">kitchen Summary</h1>
+            <div class="dataform">
+                <table>
+                    <tr>
+                        <th>Cutomer Name</th>
+                        <th>Table Number</th>
+                        <th>Ordered Item</th>
+                        <th>Price</th>
+                    </tr>
+                </table>
+                <br />
+                <br />
+                <label>Total Sale:</label>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- DRINKS MANAGEMENT SECTION -->
+    <div style="margin-left:15%">
+
+        <div id="Fade1" class="w3-container city w3-animate-zoom"
+            style="display: none; background-color: white;opacity: 0.8;">
+
+            <h1 style="
+        width: 100%;
+        text-align: center;">Drinks Inventory Management</h1>
+            <div class="dmbuttonscolumns">
+                <button class="w3-bar-item w3-button tablink btnlink w3-black"
+                    onclick="drinksTabnavigator('tabAddDrinkOrder',event)">Add Drink Order</button>
+                <button class="w3-bar-item w3-button tablink btnlink "
+                    onclick="drinksTabnavigator('tabDrinkSummary',event)">Drinks Summary</button>
+                <button class="w3-bar-item w3-button tablink btnlink"
+                    onclick="drinksTabnavigator('tabAddNewDrink',event)">Add New Drink</button>
+                <button class="w3-bar-item w3-button tablink btnlink"
+                    onclick="drinksTabnavigator('tabAddDrinkStock',event)">Add Stock</button>
+            </div>
+
+
+
+        </div>
+        <!-- ADD DRINK ORDER SECTION -->
+        <div id="tabAddDrinkOrder" class="w3-container city "
+            style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
+
+            <div class="w3-container category">
+                <h1 style="
+                    width: 100%;
+                    text-align: center;
+                    color: black;">Add New Drink Order</h1>
+                <div class="dataform">
+                    <input class="input" type="text" id="customerNameDrinks" value="" onkeypress="renderSuggestionsDrinks()"
+                        placeholder="Enter Customer Name" />
+                    <br />
+                    <select class="select" id=drinkSelectOrder>
+                        <option value="number" disabled selected>Select Drink</option>
+                    </select>
+                    <br />
+                    <br />
+                    <input class="input" id="drinkPriceOrder" type="text" placeholder="Price">
+                    <br />
+                    <br />
+                    <button class="btn" type="button" onclick="drinkOrder()" class="btnModal">Add to bill</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ADD DRINK ORDER SECTION -->
+        <div id="tabDrinkSummary" class="w3-container city "
+            style="display: block; background-color:white; opacity:0.8; margin-left:15%;">
+
+            <div class="w3-container category">
+                <h1 style="
+         width: 100%;
+         text-align: center;
+         color: black;">Add New Kitchen Order</h1>
+                <div class="dataform">
+                    <input type="text" id="customerNameDrinks" value="" onkeypress="renderSuggestionsDrinks()"
+                        placeholder="Enter Customer Name" />
+                    <br />
+                    <select id=drinkSelectOrder>
+                        <option value="number" disabled selected>Select Drink</option>
+                    </select>
+                    <br />
+                    <br />
+                    <input id="drinkPriceOrder" type="text" placeholder="Price">
+                    <br />
+                    <br />
+                    <button type="button" onclick="drinkOrder()" class="btnModal">Add to bill</button>
+
+                    <button type="button" id="kitchenOrderAdd" onclick="kitchenOrder()" class="btnModal">Add to
+                        Bill</button>
+                </div>
+
+            </div>
+            <!-- DRINKS SUMMARY SECTION -->
+            <div id="tabDrinkSummary" class="w3-container city"
+                style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
+                <div id="drinkSummary" class="w3-container category">
+                    <h1 style="
+              width: 100%;
+              text-align: center;">Drink Summary</h1>
+                    <div class="dataform">
+                        <table>
+                            <tr>
+                                <th>Cutomer Name</th>
+                                <th>Table Number</th>
+                                <th>Ordered Item</th>
+                                <th>Price</th>
+                            </tr>
+                        </table>
+                        <br />
+                        <br />
+                        <label>Total Sale:</label>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- <script src="../js/Customer.js"></script> -->
+
+</body>
+<script src="../js/placeOrder.js"></script>
+
+</html>
