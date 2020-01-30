@@ -90,7 +90,7 @@ module.exports.createTables = () =>
       .run('CREATE TABLE IF NOT EXISTS Account(accountId INTEGER PRIMARY KEY AUTOINCREMENT,accountName text,accountDescription text, amount int,createDate text,updateDate text)')
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
       .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int DEFAULT 0, createDate text,updateDate text)')
-      .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int,salaryNote text, salaryDue int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
+      .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
       .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
     });
 
@@ -680,7 +680,7 @@ module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
 }
 
 //Add Salary of Employee
-module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAmount,createDate) =>
+module.exports.paySalaryEmployee = (employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount,createDate) =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -689,12 +689,11 @@ module.exports.addSalaryEmployee = (employeeId, salaryAmount, advanceDeductionAm
     console.log('Connected to the breakers database.');
   });
 
-
-  console.log("employeeId"+employeeId)
     return new Promise(function(resolve, reject) {
       db.serialize(() => {
         // Queries scheduled here will be serialized.
-        db.run('Insert into Salary (salaryAmount, createDate, employeeId) values(?,?,?)',[salaryAmount,createDate,employeeId])
+        db.run('Insert into Salary (salaryAmount,salaryMonth, createDate, employeeId) values(?,?,?,?)',[salaryAmount,salaryMonth,createDate,employeeId])
+        .run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Salary Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),?,?)',[createDate,employeeId,salaryNote,salaryAmount])
         .run('UPDATE Employee SET employeeAdvance = ((Select employeeAdvance from Employee where employeeId=?)-?) WHERE employeeId =?', [employeeId,advanceDeductionAmount, employeeId], (err) => {
           if (err !== null) 
           console.log(err)
@@ -750,7 +749,7 @@ module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDat
 
 
 //Add Expense
-module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDate)=>
+module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId)=>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -760,7 +759,7 @@ module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDa
   });
 
   return new Promise(function(resolve, reject) {
-    db.run('Insert into Expense ( expenseName,expenseDescription,expenseAmount,createDate ) values (?,?,?,?)', [expenseName,expenseDescription,expenseAmount,createDate], (err) => {
+    db.run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount) values (?,?,(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryId=?),?,?)',[createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount], (err) => {
         if (err !== null) 
         reject(err);
         else 
@@ -775,4 +774,96 @@ module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDa
         }
     });
   });
+}
+
+
+
+//Get Expense Category
+module.exports.getExpense =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select Expense.expenseId, Expense.expenseName, Expense.expenseDescription, Expense.expenseAmount, Expense.createDate, ExpenseCategory.expenseCategoryName as expenseCategory  from Expense JOIN  ExpenseCategory USING(expenseCategoryId)';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Get Expense
+module.exports.getExpenseCategory =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='SELECT ExpenseCategory.expenseCategoryId, ExpenseCategory.expenseCategoryName FROM ExpenseCategory';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+
+//Get Revenue
+module.exports.getRevenue =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select Revenue.revenueId, Revenue.revenueName, Revenue.revenueDescription, Revenue.revenueAmount, Revenue.createDate, RevenueCategory.revenueCategoryName as revenueCategory  from Revenue JOIN  RevenueCategory USING(revenueCategoryId)';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
 }

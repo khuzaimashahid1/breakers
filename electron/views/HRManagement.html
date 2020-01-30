@@ -14,8 +14,9 @@
         <h5 class="w3-bar-item" width=20%>HR Management</h5>
         <button class="w3-bar-item w3-button tablink w3-white" onclick="openLink(event, 'Fade')">All Employees</button>
         <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom')">Add Employee</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom1')">Add Salary</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom2')">Add Advance</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom1')">Pay Salary</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom2')">Advance Salary</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Zoom3')">Salary History</button>
     </div>
 
     <div style="margin-left:15%">
@@ -96,7 +97,7 @@
         </div>
 
     </div>
-    <!-- ADD SALARY SECTION -->
+    <!-- PAY SALARY SECTION -->
     <div id="Zoom1" class="w3-container city w3-animate-zoom"
         style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
 
@@ -114,14 +115,41 @@
                     </select>
                     <br />
                     <br />
-                    <input class="input" id="salaryAmount" type="number" name="name" placeholder="SalaryAmount" required>
+                    <select class="select" id="monthSelect">
+                        <option value="text" disabled selected>Select Month</option>
+                        <option value="text"  >January</option>
+                        <option value="text"  >February</option>
+                        <option value="text"  >March</option>
+                        <option value="text"  >April</option>
+                        <option value="text"  >May</option>
+                        <option value="text"  >June</option>
+                        <option value="text"  >July</option>
+                        <option value="text" >August</option>
+                        <option value="text" >September</option>
+                        <option value="text" >October</option>
+                        <option value="text" >November</option>
+                        <option value="text" >December</option>
+
+                    </select>
+                    <br />
+                    <br />
+                    <input class="input" id="basicSalary" type="number" name="name" disabled placeholder="Basic Salary" required>
+                    <br />
+                    <br />
+                    <input class="input" id="advanceTaken" type="number" name="name" disabled placeholder="Advance Taken" required>
+                    <br />
+                    <br />
+                    <input class="input" id="salaryAmount" type="number" name="name" placeholder="Salary Amount" required>
+                    <br />
+                    <br />
+                    <input class="input" id="salaryNote" type="text" name="name" placeholder="Salary Note" required>
                     <br />
                     <br />
                     <input class="input" id="advanceDeductionAmount" type="number" placeholder="Advance Deduction Amount" required >
                     <br />
                     <br />
                    
-                <button type="button" class="btn" onclick="addSalary()">Salary Paid</button>
+                <button type="button" class="btn" onclick="paySalary()">Salary Paid</button>
             </div>
              
         </div>
@@ -135,7 +163,7 @@
             <h1
                 style="
                     width: 100%;
-                    text-align: center;">Salary Advance</h1
+                    text-align: center;">Advance Salary</h1
                 >
                 <div class="dataform" style="
                         background: white;
@@ -145,12 +173,57 @@
                     </select>
                     <br />
                     <br />
+                    <input class="input" id="advanceTakenAdvance" type="number" name="name" disabled placeholder="Advance Taken" required>
+                    <br />
+                    <br />
                     <input class="input" id="advanceAmount" type="number" name="name" placeholder="Advance Amount" required>
                     <br />
                     <br />
                     
                    
                 <button type="button" class="btn" onclick="addAdvance()">Add Advance</button>
+            </div>
+             
+        </div>
+
+    </div>
+
+    <!-- ADD ADVANCE SECTION -->
+    <div id="Zoom3" class="w3-container city w3-animate-zoom"
+        style="display: none; background-color:white; opacity:0.8; margin-left:15%;">
+
+        <div class="w3-container category">
+            <h1
+                style="
+                    width: 100%;
+                    text-align: center;">Salary History</h1
+                >
+                <div class="dataform">
+                    <select class="select" id="employeeSelectAdvance">
+                        <option value="text" disabled selected>Select Employee</option>
+                    </select>
+                    <br />
+                    <br />
+                    <table id="salaryHistory" class="display" style="width:100%;  overflow: auto;">
+                        <thead>
+                          <tr>
+                            <th>Employee Name</th>
+                            <th>Salary Month</th>
+                            <th>Salary Amount</th>
+                            <th>Salary Date</th>
+
+                          </tr>
+                        </thead>
+                        <tfoot>
+                          <tr>
+                            <th>Employee Name</th>
+                            <th>Salary Month</th>
+                            <th>Salary Amount</th>
+                            <th>Salary Date</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+ 
             </div>
              
         </div>

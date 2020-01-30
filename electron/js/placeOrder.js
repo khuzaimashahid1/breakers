@@ -37,6 +37,21 @@ function tabItem(category) {
     }
     document.getElementById(category).style.display = "block";
 }
+//BUTTONS TAB NAVIGATOR IN MAIN CONTAINER
+function buttonTab(evt,closingTab,openingTab,numberOfButtons) {
+    var i;
+    document.getElementById(closingTab).style.display="none";
+    tablinks = document.getElementsByClassName("btnlink");
+    for (i = 0; i < numberOfButtons; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" w3-black", "");
+    }
+    evt.currentTarget.className += " w3-black";
+    document.getElementById(openingTab).style.display="block";
+
+   
+    // document.getElementById(category).style.display = "block";
+}
+
 
 //Populate All Stocks
 function populateStock() {

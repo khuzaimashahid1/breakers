@@ -18,11 +18,16 @@ body{
     border: 2px solid black;
     cursor: pointer;
   }
+
  
   /* Darker background on mouse-over */
   .btn:hover {
     background-color: white;
     color: green;
+  }
+  .autocomplete-items{
+    margin-left: 40%;
+    text-align: center;
   }
 .addCustomer {
     display: flex;

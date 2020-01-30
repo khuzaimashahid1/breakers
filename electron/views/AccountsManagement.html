@@ -37,12 +37,13 @@
 
             <h1 style="
             width: 100%;
-            text-align: center;">Expene Details</h1>
+            text-align: center;">Expense Details</h1>
             <!-- BELOW IS THE DATA TABLE FOR EXPENSE DETAILS -->
-            <table id="Expene" class="display" style="width:100%;  overflow: auto;">
+            <table id="Expense" class="display" style="width:100%;  overflow: auto;">
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Catergory</th>
                   <th>Description</th>
                   <th>Amount</th>
                   <th>Date</th>
@@ -51,6 +52,7 @@
               <tfoot>
                 <tr>
                   <th>Name</th>
+                  <th>Catergory</th>
                   <th>Description</th>
                   <th>Amount</th>
                   <th>Date</th>
@@ -75,18 +77,20 @@
             <table id="Revenue" class="display" style="width:100%;  overflow: auto;">
                 <thead>
                   <tr>
-                    <th>Date</th>
                     <th>Name</th>
+                    <th>Catergory</th>
                     <th>Description</th>
                     <th>Amount</th>
+                    <th>Date</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>Date</th>
                     <th>Name</th>
+                    <th>Catergory</th>
                     <th>Description</th>
                     <th>Amount</th>
+                    <th>Date</th>
                   </tr>
                 </tfoot>
               </table>
@@ -108,12 +112,12 @@
                     <input class="input" id="expenseName"  type="text" name="name" placeholder="Expense Name" required>
                     <br />
                     <br />
-                    <select class="select" id="expenseDescription">
-                      <option value="" disabled selected>Select Expense Type</option>
-                      <option id="expenseOut" value="Out Expense" >Out Expense</option>
-                      <option id="expenseClub" value="Club Expense" >Club Expense</option>
-                      <option id="expenseKitchen" value="Kitchen Expense" >Kitchen Expense</option>
-                  </select>
+                    <select class="select" id="expenseCategory">
+                      <option value="text" disabled selected>Select Expense Catergory</option>
+                    </select>
+                    <br />
+                    <br />
+                    <input class="input" id="expenseDescription"  type="text" name="name" placeholder="Expense Description" required>
                     <br />
                     <br />
                     <input class="input" id="expenseAmount"  type="text" name="name" placeholder="Amount"
