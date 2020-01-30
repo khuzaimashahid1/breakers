@@ -6,7 +6,7 @@ var expenseTable,revenueTable,expenseArray=[],revenueArray=[];
 initializeTables();
 getExpenseCategory();
 
-ipc.on('Reload', (event, message) => {
+ipc.once('Reload', (event, message) => {
     getExpense();
     getExpenseCategory();
     getRevenue();
@@ -142,7 +142,6 @@ function tabItem(category) {
     }
     document.getElementById(category).style.display = "block";
 }
-
 
 
 //Initialize DataTables
