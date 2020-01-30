@@ -107,6 +107,9 @@ function initializeTables()
 {
   $(document).ready(function () {
     customersTable=$('#customersTable').DataTable({
+      scrollY:'50vh',
+        scrollCollapse: true,
+        paging:true,
       data: customersArray,
       "columns": [
         { data: "customerId" },

@@ -44,6 +44,9 @@ console.log(data)
 
 $(document).ready(function () {
     $('#example').dataTable({
+        scrollY:'50vh',
+        scrollCollapse: true,
+        paging:true,
         data: data,
         "columns": [{
                 data: "Date"

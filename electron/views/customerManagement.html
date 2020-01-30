@@ -3,15 +3,11 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="../CSS/placeOrder.css"> -->
-    <!-- <link rel="stylesheet" href="../CSS/breakers.css"> -->
-    <!-- <link rel="stylesheet" href="../CSS/tableEnd.css"> -->
-    <link rel="stylesheet" href="../CSS/modal.css">
+    <link rel="stylesheet" href="../CSS/Customer.css">
     <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
     <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
 </head>
-
 <body>
 
     <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
@@ -26,7 +22,7 @@
     <div style="margin-left:15%">
 
         <div id="Fade" class="w3-container city" style="background-color:white; opacity:0.7;">
-            <h1>All Customers</h1>
+            <h1 style="text-align: center;">All Customers</h1>
 
             <div id="kitchenOrder" class="w3-container category">
             </div>
@@ -60,20 +56,23 @@
 
         <div class="w3-container category">
         </div>
-        <h1>Add Customer</h1>
-        <form style="
-                margin-left: 10%; ">
-            <div>
-                <input id="uname" type="text" name="name" placeholder="Customer Name" required>
+        <h1 style="text-align: center;">Add Customer</h1>
+       
+       <div class="dataform">
+        <form>
+                <input class="input" id="uname" type="text" placeholder="Customer Name" required>
                 <br />
-                <input id="address" type="text" name="name" placeholder="Address" required>
                 <br />
-                <input type="text" placeholder="+92-xxx-xxx-xxxx" id="phone" required>
-
-            </div>
-            <button type="button" class="btnModal" onclick="addCustomer()">Register</button>
+                <input class="input" id="address" type="text"  placeholder="Address" required>
+                <br />
+                <br />
+                <input class="input" type="text" placeholder="+92-xxx-xxx-xxxx" id="phone" required>
+                <br />
+                <br />
+            <button type="button" class="btn" onclick="addCustomer()">Register</button>
         </form>
     </div>
+</div>
 
     <div id="Top" class="w3-container city"
         style="display: none; background-color:white; opacity:0.7;  margin-left:15%">
@@ -106,14 +105,17 @@
         style="display: none; background-color:white; opacity:0.7; margin-left:15%">
 
         <div class="w3-container category">
-            <h1>Credit Clear</h1>
-            <div class="main-block">
-                <form style="
-                margin-left: 10%; ">
-                    <input id="clearCustomer" onkeypress="renderSuggestions();" type="text"
-                        placeholder="Enter Customer Name" /><br />
-                    <input id="clearAmount" placeholder="Enter Cleared Amount" />
-                    <button onclick="clearCredit()" class="btnModal" type="button">Clear Amount</button>
+            <h1 style="text-align: center;">Credit Clear</h1>
+            <div class="dataform">
+                <form >
+                    <input class="input" id="clearCustomer" onkeypress="renderSuggestions();" type="text"
+                        placeholder="Enter Customer Name" />
+                        <br />
+                        <br />
+                    <input class="input" id="clearAmount" placeholder="Enter Cleared Amount" />
+                    <br />
+                    <br />
+                    <button class="btn" onclick="clearCredit()" class="btnModal" type="button">Clear Amount</button>
                 </form>
             </div>
         </div>
@@ -143,6 +145,7 @@
                     <button id="btnGenerateSummary" class="w3-button" onclick="getCreditHistory();" style="margin-left: 2%;
                         height: 40px;
                         width: 20%;
+                        margin-top: 0.8%;
                         margin-right: 20%;
                         font-size: 14px;
                         font-weight: 600;
