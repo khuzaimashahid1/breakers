@@ -1,6 +1,6 @@
 setStatusAndEventListeners();
 startTimer();
-ipc.on('Reload', (event, message) => {
+ipc.once('Reload', (event, message) => {
     setStatusAndEventListeners();
     startTimer();
   })

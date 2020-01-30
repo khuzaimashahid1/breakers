@@ -83,7 +83,12 @@ ipc.on('add-employee',function(event, employeeName, employeeDesignation, employe
 
 //Add Employee
 ipc.on('add-employee-advance',function(event, employeeId, advanceAmount){
-    connections.addAdvanceEmployee(employeeId, advanceAmount).then(result=>
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const currentDate = yyyy + '-' + mm + '-' + dd;
+    connections.addAdvanceEmployee(currentDate,employeeId, advanceAmount).then(result=>
         {
             if(result===true)
             {  
@@ -154,8 +159,6 @@ ipc.on('get-expense-category', function (event) {
     });
 })
 
-<<<<<<< HEAD
-=======
 
 //Get Revenue
 ipc.on('get-revenue', function (event) {
@@ -164,7 +167,6 @@ ipc.on('get-revenue', function (event) {
     });
 })
 
->>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
 //Delete Customer
 ipc.on('delete-customer', function (event, customerId) {
     connections.deleteCustomer(customerId).then(result => {
@@ -257,7 +259,12 @@ ipc.on('employee', function (event) {
     });
 })
 
-
+//Get Salary History
+ipc.on('get-salary', function (event,employeeId) {
+    connections.getSalary(employeeId).then(rows => {
+        event.sender.send("salary", rows);
+    });
+})
 
 //Get Cigarette Stock
 ipc.on('get-cigs', function (event) {

@@ -85,7 +85,7 @@ module.exports.createTables = () =>
       .run('CREATE TABLE IF NOT EXISTS InventoryManagement(inventoryManagementId INTEGER PRIMARY KEY AUTOINCREMENT, createDate text,updateDate text,quantity REAL,inventoryId int,gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) ,FOREIGN KEY(inventoryId) REFERENCES Inventory(inventoryId))')
       .run('CREATE TABLE IF NOT EXISTS ExpenseCategory(expenseCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,expenseCategoryName text UNIQUE,createDate text,updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS RevenueCategory(revenueCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,revenueCategoryName text UNIQUE,createDate text,updateDate text)')
-      .run('CREATE TABLE IF NOT EXISTS Expense(expenseId INTEGER PRIMARY KEY AUTOINCREMENT,expenseName text, expenseAmount int, expenseDescription text , createDate text,updateDate text, expenseCategoryId int,inventoryManagementId int, gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(expenseCategoryId) REFERENCES ExpenseCategory(expenseCategoryId))')
+      .run('CREATE TABLE IF NOT EXISTS Expense(expenseId INTEGER PRIMARY KEY AUTOINCREMENT,expenseName text, expenseAmount int, expenseDescription text , createDate text,updateDate text, expenseCategoryId int,inventoryManagementId int, gameId int,employeeId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(expenseCategoryId) REFERENCES ExpenseCategory(expenseCategoryId),FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
       .run('CREATE TABLE IF NOT EXISTS Revenue(revenueId INTEGER PRIMARY KEY AUTOINCREMENT,revenueName text, revenueAmount int, revenueDescription text , createDate text,updateDate text, revenueCategoryId int,inventoryManagementId int, gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(revenueCategoryId) REFERENCES RevenueCategory(revenueCategoryId))')
       .run('CREATE TABLE IF NOT EXISTS Account(accountId INTEGER PRIMARY KEY AUTOINCREMENT,accountName text,accountDescription text, amount int,createDate text,updateDate text)')
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
@@ -156,6 +156,36 @@ module.exports.getCreditors =  async() =>
   });
   
   sql='Select customerName,creditAmount,customerId from Customer WHERE creditAmount>0';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Get Creditors
+module.exports.getSalary =  async(employeeId) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='SELECT Salary.salaryMonth,Salary.salaryAmount,Salary.createDate FROM Salary WHERE employeeId='+employeeId;
   
   
   var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
@@ -651,7 +681,7 @@ module.exports.addEmployee=(employeeName, employeeDesignation, employeeCNIC, emp
 }
  
 //Add Advance of Employee
-module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
+module.exports.addAdvanceEmployee=(currentDate,employeeId, advanceAmount)=>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -659,8 +689,11 @@ module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
     }
     console.log('Connected to the breakers database.');
   });
+  
   return new Promise(function(resolve, reject) {
-    db.run('UPDATE Employee SET employeeAdvance =((Select employeeAdvance FROM Employee where employeeId=?)+?) WHERE employeeId =?', [employeeId,advanceAmount, employeeId], (err) => {
+    db.serialize(() => {
+    db.run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount,employeeId) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Advance Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),"Advance Taken",?,?)',[  currentDate,employeeId,advanceAmount,employeeId])
+    .run('UPDATE Employee SET employeeAdvance =((Select employeeAdvance FROM Employee where employeeId=?)+?) WHERE employeeId =?', [employeeId,advanceAmount, employeeId], (err) => {
         if (err !== null){
           console.error(err.message);
           // reject(err);
@@ -677,6 +710,7 @@ module.exports.addAdvanceEmployee=(employeeId, advanceAmount)=>
         }
     });
   });
+})
 }
 
 //Add Salary of Employee
@@ -693,7 +727,7 @@ module.exports.paySalaryEmployee = (employeeId,salaryMonth, salaryAmount,salaryN
       db.serialize(() => {
         // Queries scheduled here will be serialized.
         db.run('Insert into Salary (salaryAmount,salaryMonth, createDate, employeeId) values(?,?,?,?)',[salaryAmount,salaryMonth,createDate,employeeId])
-        .run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Salary Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),?,?)',[createDate,employeeId,salaryNote,salaryAmount])
+        .run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount,employeeId) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Salary Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),?,?,?)',[createDate,employeeId,salaryNote,salaryAmount,employeeId])
         .run('UPDATE Employee SET employeeAdvance = ((Select employeeAdvance from Employee where employeeId=?)-?) WHERE employeeId =?', [employeeId,advanceDeductionAmount, employeeId], (err) => {
           if (err !== null) 
           console.log(err)
