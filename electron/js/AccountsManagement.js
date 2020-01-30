@@ -1,14 +1,25 @@
 require('datatables.net-dt')();
 
+<<<<<<< HEAD
 var expenseTable,expenseArray=[];
+=======
+var expenseTable,revenueTable,expenseArray=[],revenueArray=[];
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
 
 //Function Calls for intialization
 initializeTables();
 getExpenseCategory();
 
+<<<<<<< HEAD
 ipc.once('Reload', (event, message) => {
     getCustomers();
     getExpenseCategory();
+=======
+ipc.on('Reload', (event, message) => {
+    getExpense();
+    getExpenseCategory();
+    getRevenue();
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
   })
 
   
@@ -55,6 +66,25 @@ function getExpenseCategory()
 }
 
 
+<<<<<<< HEAD
+=======
+//Fetching Revenue From DB
+function getRevenue()
+{
+
+  ipc.send('get-revenue');
+  ipc.once('revenue',(event,revenue)=>
+  {
+    for(let i=0;i<revenue.length;i++)
+    {
+        revenueArray.push(revenue[i])
+    }
+    revenueTable.clear().rows.add(revenueArray).draw();
+    console.log(revenueArray);
+  })
+}
+
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
 function openModal()
 {
     // Get the modal
@@ -126,60 +156,54 @@ function tabItem(category) {
     document.getElementById(category).style.display = "block";
 }
 
-var data = [];
-var revenueData = [{
-        Date: "1-06-2020",
-        Name: "Single Game",
-        Description: "snooker game",
-        Amount: "150"
-    },
-    {
-        Date: "1-07-2020",
-        Name: "Cigarette",
-        Description: "Marlboro",
-        Amount: "300"
-    },
-    {
-        Date: "1-08-2020",
-        Name: "Double Game",
-        Description: "snooker game",
-        Amount: "300"
-    }
 
-]
-for (let i = 0; i < revenueData.length; i++) {
-    data.push(revenueData[i])
-}
+<<<<<<< HEAD
+=======
 
-console.log(data)
-
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
 //Initialize DataTables
 function initializeTables()
 {
 $(document).ready(function () {
 
     
+<<<<<<< HEAD
 
     // Revenue
     $('#Revenue').DataTable({
         data: data,
         "columns": [{
                 data: "Date"
+=======
+    // Revenue DataTable
+    revenueTable=$('#Revenue').DataTable({
+        data: revenueArray,
+        "columns": [
+            {
+                data: "revenueName"
             },
             {
-                data: "Name"
+                data: "revenueCategory"
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
             },
             {
-                data: "Description"
+                data: "revenueDescription"
             },
             {
-                data: "Amount"
+                data: "revenueAmount"
+            },
+            {
+                data: "createDate"
             }
            
         ]
     })
 
+<<<<<<< HEAD
     // Expense
+=======
+    // Expense DataTable
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
     expenseTable=$('#Expense').DataTable({
         data: expenseArray,
         "columns": [
@@ -204,7 +228,14 @@ $(document).ready(function () {
     })
 
     getExpense();
+<<<<<<< HEAD
 
 });
 
+=======
+    getRevenue();
+
+});
+
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
 }

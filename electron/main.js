@@ -154,6 +154,17 @@ ipc.on('get-expense-category', function (event) {
     });
 })
 
+<<<<<<< HEAD
+=======
+
+//Get Revenue
+ipc.on('get-revenue', function (event) {
+    connections.getRevenue().then(rows => {
+        event.sender.send("revenue", rows);
+    });
+})
+
+>>>>>>> eb0c20ba2c49dd6158b876ec4b2b625fc09e77b5
 //Delete Customer
 ipc.on('delete-customer', function (event, customerId) {
     connections.deleteCustomer(customerId).then(result => {
