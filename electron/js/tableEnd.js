@@ -8,6 +8,8 @@ let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
 let currentPlayerId;
 let currentPlayers = []
 let drinkStock,cigaretteStock;
+var table = document.getElementById("gameExpense");
+
 getCurrentPlayers();
 populatePlayers();
 populateStock();
@@ -27,6 +29,7 @@ function getCurrentPlayers() {
             }
         }
     });
+    console.log(currentGame)
 }
 
 //Render Modal
@@ -147,6 +150,23 @@ function populateStock() {
 
 }
 
+function getDrinks(){
+    ipc.send('get-table-drinks',tableNumber)
+    ipc.once('table-drinks',(event,tableDrinks)=>
+  {
+    for(let i=0;i<tableDrinks.length;i++)
+    {
+        var row = table.insertRow(0);
+        var orderItem = row.insertCell(0);
+        var orderType = row.insertCell(1);
+        var orderAmunt = row.insertCell(1);
+        orderItem.innerHTML = tableDrinks[i].item;
+        orderType.innerHTML = tableDrinks[i].type;
+        orderAmunt.innerHTML = tableDrinks[i].amount;
+    }
+    console.log(tableDrinks);
+  })
+}
 
 //Drinks Order
 function drinksOrder()
@@ -173,6 +193,8 @@ function cigarettesOrder()
     ipc.send('add-order',inventoryId,gameId,currentPlayerId,quantity,price)
        
 }
+
+
 
 //Kitchen Order
 function kitchenOrder()
