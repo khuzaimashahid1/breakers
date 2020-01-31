@@ -148,7 +148,8 @@ $(document).ready(function () {
     // Revenue DataTable
     revenueTable=$('#Revenue').DataTable({
         scrollY:'50vh',
-        scrollCollapse: true,
+        scrollX:'50vh',
+        scrollCollapse: false,
         paging:true,
         data: revenueArray,
         "columns": [

@@ -289,8 +289,8 @@ module.exports.getEmployees =  async() =>
 }
 
 
-//Get All Cigarettes in Stock
-module.exports.getCigarettes =  async() =>
+//Get All Inventory Items based on inventoryCategoryId
+module.exports.getInventory =  async(inventoryCategoryId) =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -299,7 +299,7 @@ module.exports.getCigarettes =  async() =>
     console.log('Connected to the breakers database.');
   });
   
-  sql='Select * from Inventory WHERE inventoryCategoryId=1 AND quantity>0';
+  sql='Select * from Inventory WHERE inventoryCategoryId='+inventoryCategoryId+' AND quantity>0';
   
   
   var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
@@ -812,7 +812,7 @@ module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDa
 
 
 
-//Get Expense Category
+//Get Expense
 module.exports.getExpense =  async() =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -842,7 +842,38 @@ module.exports.getExpense =  async() =>
 }
 
 
-//Get Expense
+
+//Get Inventory Category
+module.exports.getInventoryCategory =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='Select InventoryCategory.inventoryCategoryId, InventoryCategory.inventoryCategoryName from InventoryCategory';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Get Expense Category
 module.exports.getExpenseCategory =  async() =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="../CSS/placeOrder.css"> -->
+    <link rel="stylesheet" href="../CSS/orders.css">
+    <!-- <link rel="stylesheet" href="../CSS/breakers.css"> -->
+    <link rel="stylesheet" href="../CSS/tableEnd.css">
+    <!-- <link rel="stylesheet" href="../CSS/modal.css"> -->
+    <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
+    <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
+</head>
+
+<body>
+
+    <div class="w3-sidebar w3-bar-block w3-black w3-card" style="width:15%">
+        <h5 class="w3-bar-item" width=20%>Order Type</h5>
+        <button class="w3-bar-item w3-button tablink w3-white" onclick="openLink(event, 'Fade','kitchenOrder')">Kitchen</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Left','invetoryOrder')">Inventory Management</button>
+        <!-- <button class="w3-bar-item w3-button tablink" onclick="openLink(event, 'Top')">Cigarettes</button> -->
+    </div>
+
+    <div style="margin-left:15%">
+
+
+        <div id="Fade" class="w3-container city w3-animate-opacity" style="background-color: white; opacity: 0.8;">
+            <div class="navSubTabs">
+
+            </div>
+            <h1 style="text-align: center;">Kitchen</h1>
+            <div class="w3-bar w3-black">
+                <button class="w3-bar-item w3-button" onclick="tabItem('kitchenOrder')">Add Kitchen Order</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('kitchenSummary')">Kitchen Summary</button>
+            </div>
+
+            <div id="kitchenOrder" class="w3-container category">
+                <h1 style="text-align: center;
+                        color: black;">Kitchen Order</h1>
+                <div class="dataform">
+                    <form action="/">
+                        <input class="input" type="text" id="customerNameKitchen" value=""
+                            onkeypress="renderSuggestionsKitchen()" placeholder="Enter Customer Name" />
+                        <br />
+                        <br />
+                        <input class="input" id="kitchenOrderItem" value="" type="text" placeholder="Order Item">
+                        <br />
+                        <br />
+                        <input class="input" id="kitchenOrderPrice" value="" type="number" placeholder="Price">
+                        <br />
+                        <br />
+                        <button class="btn" type="button" id="kitchenOrderAdd" onclick="kitchenOrder()"
+                            class="btnModal">Add to Bill</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Kitchen Summary Tab -->
+            <div id="kitchenSummary" class="w3-container category" style="display:none">
+                <div class="main-block">
+                    <h2 style="text-align: center;
+                            color: black;">Kitchen Summary Table</h2>
+                        <table>
+                            <tr>
+                                <th>Cutomer Name</th>
+                                <th>Table Number</th>
+                                <th>Ordered Item</th>
+                                <th>Price</th>
+                            </tr>
+                        </table>
+                        <hr />
+                        <br />
+                        <br />
+                    
+                        <h3 class="h3">Total Sale:</h3>
+        
+                </div>
+            </div>
+        </div>
+
+        <div id="Left" class="w3-container city w3-animate-left"
+            style="display:none;background-color: white;opacity: 0.8;">
+            <h1 style="text-align: center;">Inventory Orders & Management</h1>
+            <div class="w3-bar w3-black">
+                <button class="w3-bar-item w3-button" onclick="tabItem('invetoryOrder')">Add Drinks Order</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('newInventoryItem')">Add New Drink</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('addItemStock')">Add Stock</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('inventorySummary')">Drinks Summary</button>
+            </div>
+
+            <div id="invetoryOrder" class="w3-container category">
+                <h1 style="text-align: center;">Place Order</h1>
+                <div class="dataform">
+                    <form>
+                        <input class="input" type="text" id="customerName" value=""
+                            onkeypress="renderSuggestionsDrinks()" placeholder="Enter Customer Name" />
+                        <br />
+                        <br />
+                        <select class="select" id=itemCategorySelector>
+                            <option value="number" disabled selected>Select Category</option>
+                            
+                        </select>
+                        <br />
+                        <br />
+                        <select class="select" id=itemSelector>
+                            <option value="number" disabled selected>Select Item</option>
+                        </select>
+                        <br />
+                        <br />
+                        <input class="input" id="itemPrice" type="text" placeholder="Price" readonly>
+                        <br />
+                        <br />
+                        <input class="input" id="itemQuantity" type="number" placeholder="Quantity">
+                        <br />
+                        <br />
+                        <button class="btn" type="button" onclick="placeOrder()">Add to bill</button>
+                    </form>
+                </div>
+
+            </div>
+            <!-- Drinks Summary Tab -->
+            <div id="inventorySummary" class="w3-container category" style="display:none; background-color: white;opacity: 0.8;">
+                    <h2 style="text-align: center;">Inventory Summary</h2>
+                <table id="inventorySummaryTable">
+                    <tr>
+                        <th>Cutomer Name</th>
+                        <th>Table Number</th>
+                        <th>Ordered Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </table>
+                <hr />
+            </div>
+        </div>
+        <div id="newInventoryItem" class="w3-container category" style="display:none;background-color: white;opacity: 0.8;">
+            <h1 style="text-align: center;">Add New Item To Inventory</h1>
+            <div class="dataform">
+                <form>
+                    <input class="input" id="newItemName" type="text" placeholder="Enter Item Name" />
+                    <br />
+                    <br />
+                    <input class="input" id="newItemPrice" type="number" placeholder="Enter Item Price" />
+                    <br />
+                    <br />
+                    <button class="btn" onclick="addItemTtoInventory();">Add to Inventory</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="addItemStock" class="w3-container category" style="display:none; background-color: white;opacity: 0.8;">
+            <h1 style="text-align: center;">Add Stock to Inventory</h1>
+            <div class="dataform">
+
+                <form>
+                    <select class="select" id=itemCategorySelector>
+                        <option value="number" disabled selected>Select Category</option>
+                        <option id="drinks">Drinks</option>
+                        <option id="cigarettes">Cigarettes</option>
+                    </select>
+                    <br />
+                    <br />
+                    <select class="select" id=itemSelector>
+                        <option value="number" disabled selected>Select Item</option>
+                    </select>
+                    <br />
+                    <br />
+                    <input class="input" id="itemStockQuantity" type="number" placeholder="Quantity" />
+                    <br />
+                    <br />
+                    <button class="btn" id="itemStockAdd">Add to Inventory</button>
+                </form>
+                <br />
+                <br />
+                <h3 class="h3" id="remainingStock">In Stock:</h3>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <script src="../js/InventoryManagement.js"></script>
+
+</body>
+
+</html>
