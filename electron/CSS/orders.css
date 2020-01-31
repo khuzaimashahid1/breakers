@@ -6,6 +6,31 @@
     width: 100%;   
     text-align: center;
 }
+.autocomplete-items {
+  position: absolute;
+  width: 32%;
+  margin-right: 40%;
+}
+
+.autocomplete-items div{
+
+  margin-top: 0.5%;
+  /* width: 100%; */
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+}
+ /*when hovering an item:*/
+ .autocomplete-items div:hover {
+  background-color: black;
+  color: white;
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: black !important;
+  color: white;
+}
 .dataform{
 
     margin-left: 25%;
