@@ -1,5 +1,40 @@
 var drinkStock=[],cigaretteStock=[];
-populateStock();
+// populateStock();
+getInventoryCategory();
+initializeListeners();
+
+//Function For Getting Invenory Categories
+function getInventoryCategory() {
+    let inventoryCategory = []
+    //Remove previous Select Option
+    // $('select#itemCategorySelector')
+    //     .find('option')
+    //     .remove()
+    //     .end()
+    //     .append('<option value="text" disabled selected>Select Employee</option>');
+    
+    
+    //Get Inventory Category from Main Process IPC
+    ipc.send('get-inventory-category');
+    ipc.once('inventoryCategory', (event, categories) => {
+        for (let i = 0; i < categories.length; i++) {
+            console.log(categories)
+            // converting json to array for datatables
+            inventoryCategory.push(categories[i])
+            // for employee salary drop down
+            $("select#itemCategorySelector").append($("<option>")
+                .val(categories[i].inventoryCategoryId)
+                .html(categories[i].inventoryCategoryName)
+            );
+
+            
+        }
+       
+    })
+}
+
+
+
 
 function renderSuggestionsKitchen() {
     autoComplete("customerNameKitchen", allplayers)
@@ -326,4 +361,38 @@ function addInventoryItem(name, price)
 function populateSummary()
 {
     //populate summary tabs for kitchen, drinks and cigarettes
+}
+
+//Initialize Listeners
+function initializeListeners()
+{
+$(document).ready(function () {
+
+    $('#itemSelector').change(function () {
+    $("#itemPrice").val($('#itemSelector').val())
+    })
+    
+   $('#itemCategorySelector').change(function () {
+    let selectedValue = $("#itemCategorySelector").val();
+    ipc.send('get-inventory',selectedValue);
+    ipc.once('Stock',(event,inventory)=>
+{
+    // Remove previous Select Option
+    $('select#itemSelector')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="text" disabled selected>Select Item</option>');
+    
+    for(let i=0;i<inventory.length;i++)
+    {
+        $("#itemSelector").append($("<option>")
+        .val(inventory[i].itemAmount)
+        .html(inventory[i].itemName)
+    );
+    }
+})
+});
+});
+
 }

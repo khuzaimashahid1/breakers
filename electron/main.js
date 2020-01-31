@@ -160,6 +160,13 @@ ipc.on('get-expense-category', function (event) {
 })
 
 
+//Get Inventory Category
+ipc.on('get-inventory-category', function (event) {
+    connections.getInventoryCategory().then(rows => {
+        event.sender.send("inventoryCategory", rows);
+    });
+})
+
 //Get Revenue
 ipc.on('get-revenue', function (event) {
     connections.getRevenue().then(rows => {
@@ -266,19 +273,19 @@ ipc.on('get-salary', function (event,employeeId) {
     });
 })
 
-//Get Cigarette Stock
-ipc.on('get-cigs', function (event) {
-    connections.getCigarettes().then(rows => {
-        event.sender.send("Cigarette Stock", rows);
+//Get Inventory
+ipc.on('get-inventory', function (event,inventoryCategoryId) {
+    connections.getInventory(inventoryCategoryId).then(rows => {
+        event.sender.send("Stock", rows);
     });
 })
 
-//Get Drinks Stock
-ipc.on('get-drinks', function (event) {
-    connections.getDrinks().then(rows => {
-        event.sender.send("Drinks Stock", rows);
-    });
-})
+// //Get Drinks Stock
+// ipc.on('get-drinks', function (event) {
+//     connections.getDrinks().then(rows => {
+//         event.sender.send("Drinks Stock", rows);
+//     });
+// })
 
 //Get Bill For Customer
 ipc.on('generate-bill', function (event, customerId) {
