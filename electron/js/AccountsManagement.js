@@ -12,20 +12,6 @@ ipc.once('Reload', (event, message) => {
     getRevenue();
 })
 
-
-//Get Expense ID
-function getExpenseId(expenseCategory)
-{
-    for(i=0;i<expenseArray.length;i++)
-    {
-        if(expenseArray[i].expenseCategoryName===expenseCategory)
-        {
-            return expenseArray[i].expenseCategoryId
-        }
-        else return null
-    }
-}
-
 //Fetching Expense From DB
 function getExpense() {
 
@@ -93,9 +79,9 @@ function openModal() {
 
 function addExpense() {
     let expenseName = $('#expenseName').val();
-    let expenseCategory = $('#expenseCategory').val();
     let expenseAmount = $('#expenseAmount').val();
-    // let expenseCategoryId = $("select#expenseCategory").children("option:selected").val();
+    let expenseDescription= $('#expenseDescription').val();
+    let expenseCategoryId = $("select#expenseCategory").children("option:selected").val();
 
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -103,10 +89,10 @@ function addExpense() {
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
 
-    expenseCategoryId = getExpenseId(expenseCategory)
+    if (expenseName != '' && expenseAmount!='') 
+    {
+        ipc.send('add-expense', expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId)
 
-    if (expenseName != '' && expenseAmount) {
-        // ipc.send('add-expense', expenseName, expenseCategory, expenseAmount, createDate, expenseCategoryId)
     }
     else {
         ipc.send('error-dialog', "Empty Field(s)")

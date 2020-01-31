@@ -130,7 +130,7 @@ ipc.on('add-customer', function (event, customerName, customerAddress, customerP
 
 //Add Expense
 ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseAmount, createDate,expenseCategoryId) {
-    connections.addExpense(expenseName, expenseDescription, expenseAmount, createDate,expenseCategoryId).then(result => {
+    connections.addExpense(expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId).then(result => {
         if (result === true) {
             const options = {
                 title: "Success",

@@ -793,7 +793,7 @@ module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDa
   });
 
   return new Promise(function(resolve, reject) {
-    db.run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount) values (?,?,(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryId=?),?,?)',[createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount], (err) => {
+    db.run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount) values (?,?,?,?,?)',[createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount], (err) => {
         if (err !== null) 
         reject(err);
         else 
