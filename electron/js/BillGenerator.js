@@ -130,6 +130,9 @@ function generateBill()
 }
 $(document).ready(function () {
     datatable=$('#example').DataTable({
+        scrollY:'50vh',
+        scrollCollapse: true,
+        paging:true,
         data: billData,
         "columns": [{
                 data: "item"

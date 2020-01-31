@@ -1,9 +1,9 @@
 require('datatables.net-dt')();
-var employeeTable,employeeData=[];
+var employeeTable,salaryTable,salaryData=[],employeeData=[];
 initializeTables();
 ipc.once('Reload Employees', (event, message) => {
     getEmployees()
-  })
+})
 
 function openLink(evt, animName) {
     var i, x, tablinks;
@@ -20,8 +20,7 @@ function openLink(evt, animName) {
 }
 
 
-function addEmployee()
-{
+function addEmployee() {
     let employeeName = $('#employeeName').val();
     let employeeDesignation = $('#employeeDesignation').val();
     let employeeCNIC = $('#employeeCNIC').val();
@@ -34,18 +33,16 @@ function addEmployee()
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
-    
+
     ipc.send('add-employee', employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate);
-    
+
 
 }
 
 // Pay Employee Salary function 
-function paySalary()
-{
+function paySalary() {
     let employeeId = $("select#employeeSelect").children("option:selected").val();
     let salaryMonth = $("select#monthSelect").children("option:selected").html();
-    console.log(salaryMonth)
     let salaryAmount = $('#salaryAmount').val();
     let salaryNote = $('#salaryNote').val();
     let advanceDeductionAmount = $('#advanceDeductionAmount').val();
@@ -54,32 +51,36 @@ function paySalary()
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
-    ipc.send('pay-employee-salary', employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount,createDate);
-    
-   
+    ipc.send('pay-employee-salary', employeeId, salaryMonth, salaryAmount, salaryNote, advanceDeductionAmount, createDate);
+
+
 }
 
 // Add Employee Advance function 
-function addAdvance()
-{
+function addAdvance() {
     let employeeId = $("select#employeeSelectAdvance").children("option:selected").val();
     let advanceAmount = $('#advanceAmount').val();
-      
+
     ipc.send('add-employee-advance', employeeId, advanceAmount);
-    getEmployees();
+    
     
 }
 
 //Function For Getting Employees
-function getEmployees(){
-    employeeData=[]
+function getEmployees() {
+    employeeData = []
     //Remove previous Select Option
     $('select#employeeSelect')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="text" disabled selected>Select Employee</option>');
+    $('select#employeeSelectAdvance')
     .find('option')
     .remove()
     .end()
     .append('<option value="text" disabled selected>Select Employee</option>');
-    $('select#employeeSelectAdvance')
+    $('select#employeeSelectSalary')
     .find('option')
     .remove()
     .end()
@@ -88,74 +89,115 @@ function getEmployees(){
     
     //Get Employees from Main Process IPC
     ipc.send('employee');
-    ipc.once('employee Data', (event, employees) => 
-    {
+    ipc.once('employee Data', (event, employees) => {
         for (let i = 0; i < employees.length; i++) {
             // converting json to array for datatables
             employeeData.push(employees[i])
             // for employee salary drop down
             $("select#employeeSelect").append($("<option>")
-            .val(employees[i].employeeId)
-            .html(employees[i].employeeName)
-        );
+                .val(employees[i].employeeId)
+                .html(employees[i].employeeName)
+            );
 
             // for employee advance drop down
             $("select#employeeSelectAdvance").append($("<option>")
             .val(employees[i].employeeId)
             .html(employees[i].employeeName)
         );
+        // for employee advance drop down
+        $("select#employeeSelectSalary").append($("<option>")
+        .val(employees[i].employeeId)
+        .html(employees[i].employeeName)
+    );
         }
+        
         employeeTable.clear().rows.add(employeeData).draw();
 
     })
 }
 
-// Initialize Datatables
-function initializeTables()
+//Get Salary History
+function getSalaryHistory(employeeId)
 {
-    $(document).ready(function () {
-        console.log("datatables")
     
+    salaryData=[]
+    //Get Salary from Main Process IPC
+    ipc.send('get-salary',employeeId);
+    ipc.once('salary', (event, salary) => 
+    {
+        for (let i = 0; i < salary.length; i++) {
+            // converting json to array for datatables
+            salaryData.push(salary[i])
+            
+        }
+        
+        salaryTable.clear().rows.add(salaryData).draw();
+
+    })
+}
+
+
+// Initialize Datatables
+function initializeTables() {
+    $(document).ready(function () {
         employeeTable=$('#example').DataTable({
             data: employeeData,
-            retrieve: true,
             "columns": [{
-                    data: "employeeName"
+                data: "employeeName"
+            },
+            {
+                data: "employeeDesignation"
+            },
+            {
+                data: "employeePhone"
+            },
+            {
+                data: "employeeAddress"
+            },
+            {
+                data: "employeeCNIC"
+            },
+            {
+                data: "employeeSalary"
+            },
+            {
+                data: "employeeAdvance"
+            }
+            ]
+        })
+        salaryTable=$('#salaryHistory').DataTable({
+            data: salaryData,
+            "columns": [
+                {
+                    data: "salaryMonth"
                 },
                 {
-                    data: "employeeDesignation"
+                    data: "salaryAmount"
                 },
                 {
-                    data: "employeePhone"
-                },
-                {
-                    data: "employeeAddress"
-                },
-                {
-                    data: "employeeCNIC"
-                },
-                {
-                    data: "employeeSalary"
-                },
-                {
-                    data: "employeeAdvance"
+                    data: "createDate"
                 }
             ]
         })
         getEmployees();
+        
 
-        $( "#employeeSelect" ).change(function() {
-            let selectedValue=$("#employeeSelect").val();
-            let selectedEmployee=employeeData.filter(employee=>(employee.employeeId==selectedValue))
+        $("#employeeSelect").change(function () {
+            let selectedValue = $("#employeeSelect").val();
+            let selectedEmployee = employeeData.filter(employee => (employee.employeeId == selectedValue))
             $("#basicSalary").val(selectedEmployee[0].employeeSalary);
             $("#advanceTaken").val(selectedEmployee[0].employeeAdvance);
-          });
-          $( "#employeeSelectAdvance" ).change(function() {
-            let selectedValue=$("#employeeSelectAdvance").val();
-            let selectedEmployee=employeeData.filter(employee=>(employee.employeeId==selectedValue))
+        });
+        $("#employeeSelectAdvance").change(function () {
+            let selectedValue = $("#employeeSelectAdvance").val();
+            let selectedEmployee = employeeData.filter(employee => (employee.employeeId == selectedValue))
             $("#advanceTakenAdvance").val(selectedEmployee[0].employeeAdvance);
           });
+          $( "#employeeSelectSalary" ).change(function() {
+            let selectedValue=$("#employeeSelectSalary").val();
+            getSalaryHistory(selectedValue)
+          });
     });
-    
-    
+
+
 }

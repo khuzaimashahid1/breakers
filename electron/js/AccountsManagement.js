@@ -6,7 +6,7 @@ var expenseTable, revenueTable, expenseArray = [], revenueArray = [];
 initializeTables();
 getExpenseCategory();
 
-ipc.on('Reload', (event, message) => {
+ipc.once('Reload', (event, message) => {
     getExpense();
     getExpenseCategory();
     getRevenue();
@@ -139,62 +139,68 @@ function tabItem(category) {
 }
 
 
-
 //Initialize DataTables
-function initializeTables() {
-    $(document).ready(function () {
+function initializeTables()
+{
+$(document).ready(function () {
 
+    
+    // Revenue DataTable
+    revenueTable=$('#Revenue').DataTable({
+        scrollY:'50vh',
+        scrollCollapse: true,
+        paging:true,
+        data: revenueArray,
+        "columns": [
+            {
+                data: "revenueName"
+            },
+            {
+                data: "revenueCategory"
+            },
+            {
+                data: "revenueDescription"
+            },
+            {
+                data: "revenueAmount"
+            },
+            {
+                data: "createDate"
+            }
+           
+        ]
+    })
 
-        // Revenue DataTable
-        revenueTable = $('#Revenue').DataTable({
-            data: revenueArray,
-            "columns": [
-                {
-                    data: "revenueName"
-                },
-                {
-                    data: "revenueCategory"
-                },
-                {
-                    data: "revenueDescription"
-                },
-                {
-                    data: "revenueAmount"
-                },
-                {
-                    data: "createDate"
-                }
+    // Expense DataTable
+    expenseTable=$('#Expense').DataTable({
+        scrollY:'50vh',
+        scrollCollapse: true,
+        paging:true,
+        data: expenseArray,
+        "columns": [
 
-            ]
-        })
+            {
+                data: "expenseName"
+            },
+            {
+                data: "expenseCategory"
+            },
+            {
+                data: "expenseDescription"
+            },
+            {
+                data: "expenseAmount"
+            },
+            {
+                data: "createDate"
+            }
+           
+        ]
+    })
 
-        // Expense DataTable
-        expenseTable = $('#Expense').DataTable({
-            data: expenseArray,
-            "columns": [
+    getExpense();
+    getRevenue();
 
-                {
-                    data: "expenseName"
-                },
-                {
-                    data: "expenseCategory"
-                },
-                {
-                    data: "expenseDescription"
-                },
-                {
-                    data: "expenseAmount"
-                },
-                {
-                    data: "createDate"
-                }
-
-            ]
-        })
-
-        getExpense();
-        getRevenue();
-
-    });
+});
 
 }
