@@ -5,8 +5,8 @@ function renderSuggestionsKitchen() {
     autoComplete("customerNameKitchen", allplayers)
 }
 
-function renderSuggestionsDrinks() {
-    autoComplete("customerNameDrinks", allplayers)
+function renderSuggestionsPlaceOrder() {
+    autoComplete("customerNamePlaceOrder", allplayers)
 }
 
 function renderSuggestionsCigarette() {

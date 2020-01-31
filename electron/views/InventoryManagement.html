@@ -39,8 +39,10 @@
                         color: black;">Kitchen Order</h1>
                 <div class="dataform">
                     <form action="/">
+                        <div style="margin-bottom: -5%;">
                         <input class="input" type="text" id="customerNameKitchen" value=""
                             onkeypress="renderSuggestionsKitchen()" placeholder="Enter Customer Name" />
+                        </div>
                         <br />
                         <br />
                         <input class="input" id="kitchenOrderItem" value="" type="text" placeholder="Order Item">
@@ -81,18 +83,20 @@
             style="display:none;background-color: white;opacity: 0.8;">
             <h1 style="text-align: center;">Inventory Orders & Management</h1>
             <div class="w3-bar w3-black">
-                <button class="w3-bar-item w3-button" onclick="tabItem('invetoryOrder')">Add Drinks Order</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('newInventoryItem')">Add New Drink</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('addItemStock')">Add Stock</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('inventorySummary')">Drinks Summary</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('invetoryOrder')">Place Order</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('newInventoryItem')">Add New Itemk</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('addItemStock')">Add Stock to Inventory</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('inventorySummary')">Inventory Summary</button>
             </div>
 
             <div id="invetoryOrder" class="w3-container category">
                 <h1 style="text-align: center;">Place Order</h1>
                 <div class="dataform">
                     <form>
-                        <input class="input" type="text" id="customerName" value=""
-                            onkeypress="renderSuggestionsDrinks()" placeholder="Enter Customer Name" />
+                        <div style="margin-bottom: -5%;">
+                        <input class="input customer" type="text" id="customerNamePlaceOrder" value=""
+                            onkeypress="renderSuggestionsPlaceOrder()" placeholder="Enter Customer Name" />
+                        </div>
                         <br />
                         <br />
                         <select class="select" id=itemCategorySelector>
@@ -118,7 +122,7 @@
                 </div>
 
             </div>
-            <!-- Drinks Summary Tab -->
+            <!-- Inventory Summary Tab -->
             <div id="inventorySummary" class="w3-container category" style="display:none; background-color: white;opacity: 0.8;">
                     <h2 style="text-align: center;">Inventory Summary</h2>
                 <table id="inventorySummaryTable">
@@ -137,6 +141,13 @@
             <h1 style="text-align: center;">Add New Item To Inventory</h1>
             <div class="dataform">
                 <form>
+                    <select class="select" id=itemCategorySelector>
+                        <option value="number" disabled selected>Select Category</option>
+                        <option id="drinks">Drinks</option>
+                        <option id="cigarettes">Cigarettes</option>
+                    </select>
+                    <br />
+                    <br />
                     <input class="input" id="newItemName" type="text" placeholder="Enter Item Name" />
                     <br />
                     <br />
