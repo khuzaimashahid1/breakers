@@ -10,7 +10,7 @@ window.$ = window.jQuery = require('jquery');
 var allplayers = remote.getGlobal('sharedObj').allplayers; //All players in DB
 var remainingPlayers = remote.getGlobal('sharedObj').players; //Players who are not in any game
 var currentPlayers = remote.getGlobal('sharedObj').currentPlayers; //Players who are currently in game
-ipc.on('Reload', (event, message) => {
+ipc.once('Reload', (event, message) => {
     console.log(message) // Prints 'whoooooooh!'
     allplayers = remote.getGlobal('sharedObj').allplayers; //All players in DB
     remainingPlayers = remote.getGlobal('sharedObj').players; //Players who are not in any game

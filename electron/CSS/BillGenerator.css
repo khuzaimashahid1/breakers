@@ -5,6 +5,7 @@ td{
 tr{
     width: 750px;
 }
+
 .autocomplete-items {
   position: absolute;
   margin-left: 28%;
@@ -30,13 +31,14 @@ right: 0;  */
 }
  /*when hovering an item:*/
  .autocomplete-items div:hover {
-  background-color: #4CAF50;
+  background-color: black;
+  color: white;
 }
 
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
-  background-color: #4CAF50 !important;
-  color: black;
+  background-color: black !important;
+  color: white;
 }
 .fixed_header{
     margin-top: -10px;
