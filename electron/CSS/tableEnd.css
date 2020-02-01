@@ -133,6 +133,12 @@ legend {
     border: 1px solid black;
   }
 
+  .tableData{
+    background-color: white;
+    opacity: 0.8;
+    margin-left: 10%;
+    margin-right: 10% ;
+  }
 
   .player {
     font-family: Georgia, "Times New Roman", Times, serif;
