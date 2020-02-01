@@ -40,6 +40,15 @@ function createWindow() {
     })
 }
 
+//SHOW DIALOGUE
+function showDialogueOnDBCall(result,message){
+    if(result===true) 
+         dialog.showErrorBox("Success",message)
+    else
+         dialog.showErrorBox("Failure",message)        
+        
+} 
+
 //Error Dialouge Box Pop-up
 ipc.on('error-dialog', function (event, message) {
     dialog.showErrorBox("ERROR", message)
