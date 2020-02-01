@@ -40,6 +40,7 @@ function createWindow() {
     })
 }
 
+
 //Error Dialouge Box Pop-up
 ipc.on('error-dialog', function (event, message) {
     dialog.showErrorBox("ERROR", message)
@@ -326,6 +327,20 @@ ipc.on('update-stock', function(event,itemName,quantity){
 ipc.on('get-table-data', function (event,gameId) {
     connections.getTableData(gameId).then(rows => {
         event.sender.send("table-data", rows);
+    });
+})
+
+//Get Inventory Data
+ipc.on('get-inventory-data', function (event,gameId) {
+    connections.getInventoryTable().then(rows => {
+        event.sender.send("inventory-data", rows);
+    });
+})
+
+//Get Kitchen Data
+ipc.on('get-kitchen-data', function (event,gameId) {
+    connections.getKitchenTable().then(rows => {
+        event.sender.send("kitchen-data", rows);
     });
 })
 

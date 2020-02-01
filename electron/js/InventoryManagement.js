@@ -1,5 +1,12 @@
+require('datatables.net-dt')();
 getInventoryCategory();
 initializeListeners();
+populatingInventoryTable();
+populatingKitchenTable();
+var inventoryData=[];
+var inventoryTable;
+var kitchenData=[];
+var kitchenTable;
 
 //Function For Getting Invenory Categories
 function getInventoryCategory() {
@@ -344,4 +351,98 @@ $('#addItemCategorySelector').change(function () {
 });
 });
 
+}
+
+//Getting Inventory Summary
+function populatingInventoryTable()
+{
+    $(document).ready(function () {
+      inventoryTable=$('#inventorySummaryTable').DataTable({
+        data: inventoryData,
+        "columns": [
+            {
+                data: "createDate"
+            },
+            {
+                data: "customerName"
+            },
+            {
+                data: "revenueDescription"
+            },
+            {
+                data: "quantity"
+            },
+            {
+                data: "revenueName"
+            },
+            {
+                data: "amount"
+            }
+    
+        ]
+    })
+    getInventorySummary()
+    });
+    
+}
+
+function getInventorySummary()
+{
+    ipc.send('get-inventory-data')
+    ipc.once('inventory-data',(event,data)=>
+  {
+    for (let i = 0; i < data.length; i++) {
+        // converting json to array for datatables
+        inventoryData.push(data[i])
+
+    }
+    inventoryTable.clear().rows.add(inventoryData).draw();
+    console.log(inventoryData);
+  })   
+}
+
+
+//Getting Inventory
+function populatingKitchenTable()
+{
+    $(document).ready(function () {
+      kitchenTable=$('#kitchenSummaryTable').DataTable({
+        data: kitchenData,
+        "columns": [
+            {
+                data: "createDate"
+            },
+            {
+                data: "customerName"
+            },
+            {
+                data: "revenueDescription"
+            },
+            {
+                data: "revenueName"
+            },
+            {
+                data: "amount"
+            }
+    
+        ]
+    })
+    getKitchenSummary()
+    });
+    
+}
+
+function getKitchenSummary()
+{
+    ipc.send('get-kitchen-data')
+    ipc.once('kitchen-data',(event,data)=>
+  {
+    for (let i = 0; i < data.length; i++) {
+        // converting json to array for datatables
+        kitchenData.push(data[i])
+
+    }
+    kitchenTable.clear().rows.add(kitchenData).draw();
+    console.log(kitchenData);
+  })   
 }

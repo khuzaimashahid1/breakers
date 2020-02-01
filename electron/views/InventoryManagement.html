@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link rel="stylesheet" href="../CSS/placeOrder.css"> -->
     <link rel="stylesheet" href="../CSS/orders.css">
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
     <!-- <link rel="stylesheet" href="../CSS/breakers.css"> -->
     <link rel="stylesheet" href="../CSS/tableEnd.css">
     <!-- <link rel="stylesheet" href="../CSS/modal.css"> -->
@@ -61,20 +62,29 @@
                 <div class="main-block">
                     <h2 style="text-align: center;
                             color: black;">Kitchen Summary Table</h2>
-                        <table>
-                            <tr>
-                                <th>Cutomer Name</th>
-                                <th>Table Number</th>
-                                <th>Ordered Item</th>
-                                <th>Price</th>
-                            </tr>
+                        <table id="kitchenSummaryTable" class="display" style="width:100%;  overflow: auto;">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Item</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Item</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </tfoot>
                         </table>
                         <hr />
                         <br />
                         <br />
-                    
-                        <h3 class="h3">Total Sale:</h3>
-        
                 </div>
             </div>
         </div>
@@ -124,15 +134,28 @@
             <!-- Inventory Summary Tab -->
             <div id="inventorySummary" class="w3-container category" style="display:none; background-color: white;opacity: 0.8;">
                     <h2 style="text-align: center;">Inventory Summary</h2>
-                <table id="inventorySummaryTable">
-                    <tr>
-                        <th>Cutomer Name</th>
-                        <th>Table Number</th>
-                        <th>Ordered Item</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                    </tr>
-                </table>
+                    <table id="inventorySummaryTable" class="display" style="width:100%;  overflow: auto;">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer Name</th>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer Name</th>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 <hr />
             </div>
         </div>

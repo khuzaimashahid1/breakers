@@ -1020,3 +1020,62 @@ module.exports.getRevenue =  async() =>
     resolve(rows);
    });
 }
+
+
+//Get Inventory Summary
+module.exports.getInventoryTable =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='SELECT customerName,amount,revenueName,revenueDescription, Bill.createDate, InventoryManagement.quantity FROM Bill JOIN Revenue USING(revenueId) JOIN Customer USING(customerId) JOIN RevenueCategory using (revenueCategoryId) JOIN InventoryManagement USING(inventoryManagementId) WHERE inventoryManagementId IS NOT NULL';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+//Get Kitchen Summary
+module.exports.getKitchenTable =  async() =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='SELECT customerName,amount,revenueName,revenueDescription, Bill.createDate FROM Bill JOIN Revenue USING(revenueId) JOIN Customer USING(customerId) WHERE Revenue.revenueName="Kitchen Sale"';
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
