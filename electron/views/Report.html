@@ -19,28 +19,61 @@
     text-align: center;
     margin-top: 10px;">Games Summary</h1>
 
-    <table id="example" class="display" style="width:100%;  overflow: auto;">
+    <!-- <div class="row" style="margin-bottom: 30px; margin-top: 20px;">
+      <input type="date" name="bday">
+    </div> -->
+
+    <div class="w3-bar" style="margin-top: 20px">
+      <input id="selectedDate" onkeypress="renderSuggestions()" class="w3-bar-item" type="date" name="name" placeholder="" style="margin-left: 30%;
+                 height: 40px;
+                 width: 20%;
+                 padding: 10px;
+                 border: 2px solid black;
+                 border-radius: 10px;
+                 background: white; ">
+
+      <button id="btnGenerateSummary" class="w3-button" onclick="generateSummary();" style="margin-left: 2%;
+              height: 40px;
+              width: 20%;
+              margin-right: 20%;
+              font-size: 14px;
+              font-weight: 600;
+              color: white;
+              border-radius: 10px;
+              border: 2px solid black;
+              background: green;
+               ">Generate Summary</button>
+  </div>
+    
+
+
+
+    <table id="report" class="display" style="width:100%;  overflow: auto;">
       <thead>
         <tr>
-          <th>Date</th>
+          <!-- <th>Date</th> -->
           <th>Kitchen</th>
           <th>Drinks</th>
           <th>Cigarette</th>
+          <th>Misc</th>
           <th>Tables</th>
           <th>Credit Clear</th>
           <th>Grand Total</th>
+          <th>Expense Total</th>
           <th>Net Total</th>
         </tr>
       </thead>
       <tfoot>
         <tr>
-          <th>Date</th>
+          <!-- <th>Date</th> -->
           <th>Kitchen</th>
           <th>Drinks</th>
           <th>Cigarette</th>
+          <th>Misc</th>
           <th>Tables</th>
           <th>Credit Clear</th>
           <th>Grand Total</th>
+          <th>Expense Total</th>
           <th>Net Total</th>
         </tr>
       </tfoot>
@@ -49,5 +82,6 @@
   </div>
 </body>
 <script src="../js/Report.js"></script>
+
 
 </html>

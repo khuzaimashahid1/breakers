@@ -8,7 +8,7 @@ ipc.on('Reload', (event, message) => {
 function openStartGame(){
     let winStartGame= new BrowserWindow({
             parent:parentWindow,
-            title:'Add New Game Now',
+            title:'New Game',
             fullscreen:false,
             webPreferences: {
                 nativeWindowOpen: true,
@@ -29,7 +29,7 @@ function openStartGame(){
 function openEndGame(){
     let winEndGame= new BrowserWindow({
             parent:parentWindow,
-            title:'Add New Game Now',
+            title:'On-going Game',
             fullscreen:false,
             webPreferences: {
                 nativeWindowOpen: true,
@@ -47,6 +47,27 @@ function openEndGame(){
     
 }   
 
+//OPEN TABLE SUMMARY WINDOW
+function openTableSummary(){
+    let winEndGame= new BrowserWindow({
+            parent:parentWindow,
+            title:'Table Summary',
+            fullscreen:false,
+            webPreferences: {
+                nativeWindowOpen: true,
+                nodeIntegration: true
+                
+            }
+        });
+    
+        winEndGame.loadURL(url.format({
+            pathname : path.join(__dirname,"./tableSummary.html"),
+            protocol: "file",
+            slashes: "true",
+            
+        }))
+    
+}
 
 //Set Status and Event Listeners Of All Tables 
 function setStatusAndEventListeners()
@@ -55,6 +76,7 @@ function setStatusAndEventListeners()
     for(let i=0;i<totalTables;i++)
     {
         let currentTable=i+1;
+        
         $('#s'+currentTable).html(remote.getGlobal('sharedObj').status[i]);
         if(remote.getGlobal('sharedObj').status[i]!='Vacant')
         {
@@ -64,6 +86,10 @@ function setStatusAndEventListeners()
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openEndGame();
               });
+              $( "#sum"+currentTable ).click(function() {
+                remote.getGlobal('sharedObj').tableNumber = currentTable;
+                openTableSummary();
+              });              
         }
         else
         {
@@ -73,6 +99,10 @@ function setStatusAndEventListeners()
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openStartGame();
               });
+              $( "#sum"+currentTable ).click(function() {
+                remote.getGlobal('sharedObj').tableNumber = currentTable;
+                openTableSummary();
+              }); 
         }
         
     }

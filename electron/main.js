@@ -40,6 +40,15 @@ function createWindow() {
     })
 }
 
+//SHOW DIALOGUE
+function showDialogueOnDBCall(result,message){
+    if(result===true) 
+         dialog.showErrorBox("Success",message)
+    else
+         dialog.showErrorBox("Failure",message)        
+        
+} 
+
 //Error Dialouge Box Pop-up
 ipc.on('error-dialog', function (event, message) {
     dialog.showErrorBox("ERROR", message)
@@ -302,6 +311,7 @@ ipc.on('get-inventory', function (event,inventoryCategoryId) {
 })
 
 
+
 //Add New Inventory Item
 ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItemQuantity,inventoryCategorId){
     const today = new Date();
@@ -349,6 +359,21 @@ ipc.on('get-table-data', function (event,gameId) {
         event.sender.send("table-data", rows);
     });
 })
+
+//Get report Data
+ipc.on('get-report-data', function (event,selectedDate) {
+    connections.getReportData(selectedDate).then(rows => {
+        event.sender.send("report-data", rows);
+    });
+})
+
+//Get daily expense Data for report
+ipc.on('get-daily-expense-report', function (event,selectedDate) {
+    connections.getDailyExpenseReportData(selectedDate).then(rows => {
+        event.sender.send("daily-expense-report", rows);
+    });
+})
+
 
 //Get Bill For Customer
 ipc.on('generate-bill', function (event, customerId) {
