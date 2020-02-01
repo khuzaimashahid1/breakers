@@ -1,5 +1,3 @@
-var drinkStock=[],cigaretteStock=[];
-// populateStock();
 getInventoryCategory();
 initializeListeners();
 
@@ -23,6 +21,12 @@ function getInventoryCategory() {
                 .val(categories[i].inventoryCategoryId)
                 .html(categories[i].inventoryCategoryName)
             );
+            
+
+            $("select#addItemCategorySelector").append($("<option>")
+            .val(categories[i].inventoryCategoryId)
+            .html(categories[i].inventoryCategoryName)
+        );
         }
        
     })
@@ -254,19 +258,6 @@ function getId(name)
     return null;
 }
 
-function drinkAddInventory()
-{
-    newDrinkName = $('#drinkNewName').val();
-    newDrinkPrice = $('#drinkNewPrice').val();
-    addInventoryItem(newDrinkName,newDrinkPrice);
-}
-
-function cigaretteAddInventory()
-{
-    newCigaretteName = $('#drinkNewName').val();
-    newCigarettePrice = $('#drinkNewPrice').val();
-    addInventoryItem(newCigaretteName,newCigarettePrice);
-}
 
 function addItemToInventory()
 {
@@ -274,10 +265,18 @@ function addItemToInventory()
     let newItemName=$("#newItemName").val()
     let newItemPrice=$("#newItemPrice").val()
     let newItemQuantity=$("#newItemQuantity").val()
+    let inventoryCategorId=$("select#newItemCategorySelector").children("option:selected").val();
     if(newItemName!=""&&newItemPrice!=""&&newItemQuantity!="")
     {
-        ipc.send('add-new-inventory-item', newItemName,newItemPrice,newItemQuantity)
+        ipc.send('add-new-inventory-item', newItemName,newItemPrice,newItemQuantity,inventoryCategorId)
     }
+}
+
+function addStock()
+{
+    let itemName=$("select#addItemSelector").children("option:selected").html();
+    let quantity=$('#itemStockQuantity').val();
+    ipc.send('update-stock',itemName,quantity)
 }
 
 function populateSummary()
@@ -292,6 +291,8 @@ $(document).ready(function () {
 
     $('#itemSelector').change(function () {
     $("#itemPrice").val($('#itemSelector').val())
+    console.log($("select#addItemSelector").children("option:selected").data("quantity"))
+    $('#remainingStock').val($('option:selected', this).data('quantity'))
     })
     
    $('#itemCategorySelector').change(function () {
@@ -311,7 +312,33 @@ $(document).ready(function () {
         $("#itemSelector").append($("<option>")
         .val(inventory[i].itemAmount)
         .html(inventory[i].itemName)
+        .data('quantity',inventory[i].quantity)
+        
     );
+    console.log(inventory[i].quantity)
+    }
+})
+});
+$('#addItemCategorySelector').change(function () {
+    let selectedValue = $("#addItemCategorySelector").val();
+    ipc.send('get-inventory',selectedValue);
+    ipc.once('Stock',(event,inventory)=>
+{
+    // Remove previous Select Option
+    $('select#addItemSelector')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="text" disabled selected>Select Item</option>');
+    
+    for(let i=0;i<inventory.length;i++)
+    {
+        $("#addItemSelector").append($("<option>")
+        .val(inventory[i].itemAmount)
+        .html(inventory[i].itemName)
+        .attr("quantity",inventory[i].quantity)
+    );
+    
     }
 })
 });

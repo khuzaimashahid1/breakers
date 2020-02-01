@@ -119,7 +119,7 @@
                         <button class="btn" type="button" onclick="inventoryOrder()">Add to bill</button>
                     </form>
                 </div>
-
+                <h3 class="h3" id="remainingStock">In Stock:</h3>
             </div>
             <!-- Inventory Summary Tab -->
             <div id="inventorySummary" class="w3-container category" style="display:none; background-color: white;opacity: 0.8;">
@@ -154,7 +154,7 @@
                     <input class="input" id="newItemQuantity" type="number" placeholder="Enter Quantity" />
                     <br />
                     <br />
-                    <button class="btn" onclick="addItemToInventory();">Add to Inventory</button>
+                    <button type="button" class="btn" onclick="addItemToInventory();">Add to Inventory</button>
                 </form>
             </div>
         </div>
@@ -164,26 +164,25 @@
             <div class="dataform">
 
                 <form>
-                    <select class="select" id=itemCategorySelector>
+                    <select class="select" id=addItemCategorySelector>
                         <option value="number" disabled selected>Select Category</option>
-                        <option id="drinks">Drinks</option>
-                        <option id="cigarettes">Cigarettes</option>
+                        
                     </select>
                     <br />
                     <br />
-                    <select class="select" id=itemSelector>
+                    <select class="select" id=addItemSelector>
                         <option value="number" disabled selected>Select Item</option>
                     </select>
                     <br />
                     <br />
-                    <input class="input" id="itemStockQuantity" type="number" placeholder="Quantity" />
+                    <input class="input" id="itemStockQuantity" type="number"  placeholder="Quantity" />
                     <br />
                     <br />
-                    <button class="btn" id="itemStockAdd">Add to Inventory</button>
+                    <button type="button" class="btn" id="itemStockAdd" onclick="addStock()">Add to Inventory</button>
                 </form>
                 <br />
                 <br />
-                <h3 class="h3" id="remainingStock">In Stock:</h3>
+                
             </div>
         </div>
     </div>
