@@ -123,13 +123,17 @@
                         <input class="input" id="itemPrice" type="text" placeholder="Price" readonly>
                         <br />
                         <br />
+                        <input class="input" id="itemQuantityStock" type="text" disabled placeholder="In Stock">
+                        <br />
+                        <br />
                         <input class="input" id="itemQuantity" type="number" placeholder="Quantity">
                         <br />
                         <br />
                         <button class="btn" type="button" onclick="inventoryOrder()">Add to bill</button>
                     </form>
+                    
                 </div>
-                <h3 class="h3" id="remainingStock">In Stock:</h3>
+                
             </div>
             <!-- Inventory Summary Tab -->
             <div id="inventorySummary" class="w3-container category" style="display:none; background-color: white;opacity: 0.8;">
@@ -196,6 +200,9 @@
                     <select class="select" id=addItemSelector>
                         <option value="number" disabled selected>Select Item</option>
                     </select>
+                    <br />
+                    <br />
+                    <input class="input" id="currentItemQuantityStock" type="text" disabled placeholder="In Stock" />
                     <br />
                     <br />
                     <input class="input" id="itemStockQuantity" type="number"  placeholder="Quantity" />

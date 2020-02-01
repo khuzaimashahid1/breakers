@@ -296,10 +296,12 @@ function initializeListeners()
 {
 $(document).ready(function () {
 
+    $('#addItemSelector').change(function () {
+        $('#currentItemQuantityStock').val("In Stock: "+$("option:selected", this).attr("data-quantity"))
+    })
     $('#itemSelector').change(function () {
     $("#itemPrice").val($('#itemSelector').val())
-    console.log($("select#addItemSelector").children("option:selected").data("quantity"))
-    $('#remainingStock').val($('option:selected', this).data('quantity'))
+    $('#itemQuantityStock').val("In Stock: "+$("option:selected", this).attr("data-quantity"))
     })
     
    $('#itemCategorySelector').change(function () {
@@ -319,7 +321,7 @@ $(document).ready(function () {
         $("#itemSelector").append($("<option>")
         .val(inventory[i].itemAmount)
         .html(inventory[i].itemName)
-        .data('quantity',inventory[i].quantity)
+        .attr('data-quantity',inventory[i].quantity)
         
     );
     console.log(inventory[i].quantity)
@@ -343,7 +345,7 @@ $('#addItemCategorySelector').change(function () {
         $("#addItemSelector").append($("<option>")
         .val(inventory[i].itemAmount)
         .html(inventory[i].itemName)
-        .attr("quantity",inventory[i].quantity)
+        .attr('data-quantity',inventory[i].quantity)
     );
     
     }

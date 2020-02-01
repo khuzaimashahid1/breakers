@@ -108,8 +108,10 @@
             <h1 style="text-align: center;">Credit Clear</h1>
             <div class="dataform">
                 <form >
+                    <div style="margin-bottom: -5%;">
                     <input class="input" id="clearCustomer" onkeypress="renderSuggestions();" type="text"
                         placeholder="Enter Customer Name" />
+                    </div>
                         <br />
                         <br />
                     <input class="input" id="clearAmount" placeholder="Enter Cleared Amount" />
@@ -131,29 +133,37 @@
                 width:100%; 
                 text-align: center;
                 margin-top: 10px;">Credit Clear History</h1>
-                <div class="w3-bar">
-                    <input id="customerCreditName" onkeypress="renderSuggestionsSummary();" class="w3-bar-item" type="text"
-                        name="name" placeholder="Player Name" style="margin-left: 30%;
-                           height: 40px;
-                           width: 20%;
-                           padding: 10px;
-                           color: black;
-                           border: 2px solid black;
-                           border-radius: 10px;
-                           background: white;  ">
+                <div class="dataform" 
+                style="
+                    width: 35%;
+                    margin-left: 30%;
+                    padding: 1%;
+                    margin-top: 2%;
+                    margin-bottom: 2%;
+                    border: 0px solid transparent;"
+                    >
+                    <div >
+                    <input 
+                        id="customerCreditName"
+                        onkeypress="renderSuggestionsSummary();" 
+                        class="input" 
+                        type="text"
+                        name="name" 
+                        placeholder="Player Name"
+                        style="width: 100%;
+                        ">
+                    </div>
 
-                    <button id="btnGenerateSummary" class="w3-button" onclick="getCreditHistory();" style="margin-left: 2%;
-                        height: 40px;
-                        width: 20%;
-                        margin-top: 0.8%;
-                        margin-right: 20%;
-                        font-size: 14px;
-                        font-weight: 600;
-                        color: white;
-                        border-radius: 10px;
-                        border: 2px solid black;
-                        background: green;
-                         ">Generate Summary</button>
+                    <button 
+                        id="btnGenerateSummary" 
+                        class="btn" 
+                        onclick="getCreditHistory();"
+                        style="
+                            width: 100%;
+                            margin-left: 0%;
+                            margin-top: 5%;"
+                         
+                            >Generate Summary</button>
                 </div>
 
                 <div id="clearSummary" class="w3-container category">

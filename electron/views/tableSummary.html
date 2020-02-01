@@ -2,49 +2,51 @@
 <html>
 <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../CSS/TableSummary.css">
         <link rel="stylesheet" href="../CSS/breakers.css">
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+        <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
 </head>
 <body>
-        <div class="topnav">
-                <a class="active" href="mainMenu.html">Tables</a>
-                <a href="kitchen.html">Kitchen</a>
-                <a href="DrinksTab.html">Drinks</a>
-                <a href="CigeratteTab.html" >Cigarettes</a>
-                <a >Expense</a>
-                <a href="SummeryTab.html">Summary</a>
-              </div>
-              
-<h2>Table Summary</h2>
+  
+        <div id="Fade" 
+        class="w3-container city" 
+        style="
+            margin-right: 5%;
+            margin-left: 5%; 
+            margin-top: 2%; 
+            margin-bottom: 2%; 
+            background: #ffff; 
+            opacity:0.8;">
+         <h1 
+         style="
+             width:100%; 
+             text-align: center;
+             margin-top: 10px;">Table Summary</h1>
+        <table id="tableSummary" class="display" style="width:100%;  overflow: auto;">
+            <thead>
+              <tr>
+                <th>Table Number</th>
+                <th>Game Type</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Customer Name</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Table Number</th>
+                <th>Game Type</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Customer Name</th>
+                <th>Amount</th>
+              </tr>
+            </tfoot>
+          </table>
+    </div>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Frame</th>
-    <th>Start Time</th>
-    <th>End Time</th>
-    <th>Refreshment</th>
-    <th>Game Type</th>
-    <th>Price</th>
-  </tr>
- 
-</table>
 
 </body>
 </html>

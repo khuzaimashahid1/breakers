@@ -1,0 +1,79 @@
+body{
+    background-image: url("../resources/BREAKERS-SNOOKER.jpg");
+    height: 100%;
+    width: 100%; 
+  }
+
+td{
+    width: 250px;
+   }
+   
+   tr{
+       width: 750px;
+   }
+   
+   .autocomplete-items {
+     position: absolute;
+     margin-left: 28%;
+     /* border: 1px solid #d4d4d4; */
+     /* border-bottom: none;
+   border-top: none; */
+     /* z-index: 99;
+   /*position the autocomplete items to be the same width as the container:*/
+     /* top: 100%;
+   left: 0;
+   right: 0;  */
+   }
+   .autocomplete-items div{
+   
+     margin-top: 1%;
+    
+     /* margin-left: 76%;
+     margin-top: -10px; */
+     width: 190px;
+     padding: 10px;
+     cursor: pointer;
+     background-color: #fff;
+   }
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+     background-color: black;
+     color: white;
+   }
+   
+   /*when navigating through the items using the arrow keys:*/
+   .autocomplete-active {
+     background-color: black !important;
+     color: white;
+   }
+   .fixed_header{
+       margin-top: -10px;
+       margin-left: 18%;
+       table-layout: fixed;
+       border-collapse: collapse;
+   }
+   
+   
+   .fixed_header tbody{
+     display:block;
+     width: 100%;
+     overflow: auto;
+     height: 230px;
+   }
+   
+   .fixed_header thead tr {
+      display: block;
+   }
+   
+   .fixed_header thead {
+     background: black;
+     color:#fff;
+   }
+   
+   .fixed_header th, .fixed_header td {
+     padding: 5px;
+     text-align: center;
+     /* width: 40%; */
+   }
+   
+   

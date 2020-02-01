@@ -69,14 +69,14 @@ function tabItem(category) {
 //Populate Game Info
 function populatePlayers() {
     var numberofCurrnetPlayers = currentPlayers.length;
-    $(".header").append(
-        '<div class="headerItem">' +
+    $("#header").append(
+        '<div class="w3-bar-item">' +
         '<label>Table No. : ' + tableNumber + '</label>' +
         '</div>' +
-        '<div class="headerItem">' +
+        '<div class="w3-bar-item">' +
         '<label>Game Type: ' + currentGame.gameType + ' </label>' +
         '</div>' +
-        '<div class="headerItem">' +
+        '<div class="w3-bar-item">' +
         '<label>Start Time: ' + currentGame.startTime + '</label>' +
         '</div>'
     );
