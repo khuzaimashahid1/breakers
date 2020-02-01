@@ -13,6 +13,7 @@ var table = document.getElementById("gameExpense");
 getCurrentPlayers();
 populatePlayers();
 populateStock();
+getTableData();
 console.log(players)
 console.log(currentPlayers)
 //Function For Getting Current Players
@@ -150,21 +151,24 @@ function populateStock() {
 
 }
 
-function getDrinks(){
-    ipc.send('get-table-drinks',tableNumber)
-    ipc.once('table-drinks',(event,tableDrinks)=>
+//Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
+function getTableData(){
+    ipc.send('get-table-data',currentGame.gameId)
+    ipc.once('table-data',(event,tableData)=>
   {
-    for(let i=0;i<tableDrinks.length;i++)
+    for(let i=0;i<tableData.length;i++)
     {
-        var row = table.insertRow(0);
+        var row = table.insertRow(1);
         var orderItem = row.insertCell(0);
         var orderType = row.insertCell(1);
-        var orderAmunt = row.insertCell(1);
-        orderItem.innerHTML = tableDrinks[i].item;
-        orderType.innerHTML = tableDrinks[i].type;
-        orderAmunt.innerHTML = tableDrinks[i].amount;
+        var orderAmunt = row.insertCell(2);
+        var customerName = row.insertCell(3);
+        orderItem.innerHTML = tableData[i].orderItem;
+        orderType.innerHTML = tableData[i].orderDescription;
+        orderAmunt.innerHTML = tableData[i].orderAmount;
+        customerName.innerHTML = tableData[i].customerName;
     }
-    console.log(tableDrinks);
+    console.log(tableData);
   })
 }
 
@@ -178,7 +182,7 @@ function drinksOrder()
     let gameId=currentGame.gameId;
     let quantity=$("#DrinkQuantity").val()
     ipc.send('add-order',inventoryId,gameId,currentPlayerId,quantity,price)
-       
+    getTableData();   
 }
 
 //Cigarettes Order
@@ -191,7 +195,7 @@ function cigarettesOrder()
     let gameId=currentGame.gameId;
     let quantity=$("#CigaretteQuantity").val()
     ipc.send('add-order',inventoryId,gameId,currentPlayerId,quantity,price)
-       
+    getTableData();      
 }
 
 
@@ -203,7 +207,7 @@ function kitchenOrder()
     let kitchenPrice=$("#kitchenPrice").val();
     let gameId=currentGame.gameId;
     ipc.send('add-order-others',gameId,currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
-       
+    getTableData();      
 }
 
 //Kitchen Order
@@ -213,7 +217,7 @@ function miscOrder()
     let miscPrice=$("#miscPrice").val();
     let gameId=currentGame.gameId;
     ipc.send('add-order-others',gameId,currentPlayerId,"Misc",miscItem,miscPrice)
-       
+    getTableData();      
 }
 
 //End Game (Iron Man Dies)

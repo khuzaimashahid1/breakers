@@ -175,6 +175,35 @@ module.exports.getCreditors =  async() =>
 }
 
 
+//Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
+module.exports.getTableData =  async(gameId) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+  
+  sql='SELECT Revenue.revenueName as orderItem, Revenue.revenueDescription as orderDescription, Revenue.revenueAmount as orderAmount, Customer.customerName From Revenue JOIN Bill USING(revenueId) JOIN Customer USING(customerId) WHERE gameId ='+gameId;
+  
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
 //Get Creditors
 module.exports.getSalary =  async(employeeId) =>
 {

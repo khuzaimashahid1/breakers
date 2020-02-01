@@ -287,6 +287,13 @@ ipc.on('get-inventory', function (event,inventoryCategoryId) {
 //     });
 // })
 
+//Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
+ipc.on('get-table-data', function (event,gameId) {
+    connections.getTableData(gameId).then(rows => {
+        event.sender.send("table-data", rows);
+    });
+})
+
 //Get Bill For Customer
 ipc.on('generate-bill', function (event, customerId) {
     connections.generateBill(customerId).then(result => {
