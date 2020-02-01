@@ -329,6 +329,13 @@ ipc.on('get-table-data', function (event,gameId) {
     });
 })
 
+//Get report Data
+ipc.on('get-report-data', function (event,selectedDate) {
+    connections.getReportData(selectedDate).then(rows => {
+        event.sender.send("report-data", rows);
+    });
+})
+
 //Get Bill For Customer
 ipc.on('generate-bill', function (event, customerId) {
     connections.generateBill(customerId).then(result => {
