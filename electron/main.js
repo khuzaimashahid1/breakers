@@ -130,7 +130,7 @@ ipc.on('add-customer', function (event, customerName, customerAddress, customerP
 
 //Add Expense
 ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseAmount, createDate,expenseCategoryId) {
-    connections.addExpense(expenseName, expenseDescription, expenseAmount, createDate,expenseCategoryId).then(result => {
+    connections.addExpense(expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId).then(result => {
         if (result === true) {
             const options = {
                 title: "Success",
@@ -187,13 +187,13 @@ ipc.on('delete-customer', function (event, customerId) {
 })
 
 //Add Order
-ipc.on('add-order', function (event, inventoryId, gameId, customerId, quantity, amount) {
+ipc.on('add-order', function (event, selectedItem, gameId, customerId, quantity, amount) {
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.addOrder(currentDate, currentDate, inventoryId, gameId, customerId, quantity, amount);
+    connections.addOrder(currentDate, currentDate, selectedItem, gameId, customerId, quantity, amount);
 })
 
 //Add Order Others
@@ -280,12 +280,47 @@ ipc.on('get-inventory', function (event,inventoryCategoryId) {
     });
 })
 
-// //Get Drinks Stock
-// ipc.on('get-drinks', function (event) {
-//     connections.getDrinks().then(rows => {
-//         event.sender.send("Drinks Stock", rows);
-//     });
-// })
+
+//Add New Inventory Item
+ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItemQuantity,inventoryCategorId){
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const currentDate = yyyy + '-' + mm + '-' + dd;
+    connections.addInventoryItem(currentDate,newItemName,newItemPrice,newItemQuantity,inventoryCategorId).then(result => {
+        if (result === true) {
+            // event.sender.send('Reload Inventory','New Item Added');
+            dialog.showErrorBox("Success","New Item Added")
+            
+        }
+        else
+        {
+            dialog.showErrorBox("Error",result)
+        }
+
+    });
+
+})
+
+//Update Stovk
+ipc.on('update-stock', function(event,itemName,quantity){
+    const today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const currentDate = yyyy + '-' + mm + '-' + dd;
+    connections.updateStock(currentDate,itemName,quantity).then(result => {
+        if (result === true) {
+            // event.sender.send('Reload Inventory','New Item Added');
+            dialog.showErrorBox("Success","Inventory Updated")
+            
+        }
+        
+
+    });
+
+})
 
 //Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
 ipc.on('get-table-data', function (event,gameId) {

@@ -1,24 +1,14 @@
-var drinkStock=[],cigaretteStock=[];
-// populateStock();
 getInventoryCategory();
 initializeListeners();
 
 //Function For Getting Invenory Categories
 function getInventoryCategory() {
     let inventoryCategory = []
-    //Remove previous Select Option
-    // $('select#itemCategorySelector')
-    //     .find('option')
-    //     .remove()
-    //     .end()
-    //     .append('<option value="text" disabled selected>Select Employee</option>');
-    
     
     //Get Inventory Category from Main Process IPC
     ipc.send('get-inventory-category');
     ipc.once('inventoryCategory', (event, categories) => {
         for (let i = 0; i < categories.length; i++) {
-            console.log(categories)
             // converting json to array for datatables
             inventoryCategory.push(categories[i])
             // for employee salary drop down
@@ -27,7 +17,16 @@ function getInventoryCategory() {
                 .html(categories[i].inventoryCategoryName)
             );
 
+            $("select#newItemCategorySelector").append($("<option>")
+                .val(categories[i].inventoryCategoryId)
+                .html(categories[i].inventoryCategoryName)
+            );
             
+
+            $("select#addItemCategorySelector").append($("<option>")
+            .val(categories[i].inventoryCategoryId)
+            .html(categories[i].inventoryCategoryName)
+        );
         }
        
     })
@@ -95,54 +94,6 @@ function buttonTab(evt,closingTab,openingTab,numberOfButtons) {
 }
 
 
-//Populate All Stocks
-function populateStock() {
-    
-    //Get Cigarettes from Main Process IPC
-    ipc.send('get-cigs');
-    ipc.once('Cigarette Stock', (event, cigStock) => 
-    {
-        cigaretteStock=cigStock
-        for (let i = 0; i < cigaretteStock.length; i++) {
-            $("select#cigaretteSelectOrder").append($("<option>")
-                .val(cigaretteStock[i].inventoryId)
-                .html(cigaretteStock[i].itemName)
-            );
-            $("select#cigaretteSelectStock").append($("<option>")
-                .val(cigaretteStock[i].inventoryId)
-                .html(cigaretteStock[i].itemName)
-            );
-        }
-        $("select#cigaretteSelectOrder").change(function () {
-            var selectedCigarette = $(this).children("option:selected").val();
-            cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-            $("#cigarettePriceOrder").val(cigaretteFilter[0].itemAmount)
-        });
-    })
-   
-    //Get Drinks from Main Process IPC
-    ipc.send('get-drinks');
-    ipc.once('Drinks Stock', (event, drinks) => 
-    {
-        drinkStock=drinks;
-        for (let i = 0; i < drinkStock.length; i++) {
-            $("select#drinkSelectOrder").append($("<option>")
-                .val(drinkStock[i].inventoryId)
-                .html(drinkStock[i].itemName)
-            );
-            $("select#drinkSelectStock").append($("<option>")
-                .val(drinkStock[i].inventoryId)
-                .html(drinkStock[i].itemName)
-            );
-        }
-        $("select#drinkSelectOrder").change(function () {
-            var selectedDrink = $(this).children("option:selected").val();
-            drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-            $("#drinkPriceOrder").val(drinkFilter[0].itemAmount)
-        });
-    })
-
-}
 
 //Autocomplete Customer Name Field
 function autoComplete(input, allplayers) {
@@ -270,50 +221,18 @@ function kitchenOrder()
        
 }
 
-function drinkOrder()
+function inventoryOrder()
 {
-    let customerName= $('#customerNameDrinks').val()
-    let selectedDrink = $("select#drinkSelectOrder").children("option:selected").val();
-    const drinkFilter=drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-    let inventoryId=drinkFilter[0].inventoryId;
-    let price=drinkFilter[0].itemAmount;
-    let quantity=1;
+    let customerName =  $("#customerNamePlaceOrder").val()
+    let selectedItem = $("select#itemSelector").children("option:selected").html();
+    let itemPrice=$("select#itemSelector").children("option:selected").val();
     currentPlayerId = getId(customerName)
-    if(selectedDrink!="")
+    let quantity=$("#itemQuantity").val()
+    if(selectedItem!=""&& customerName!="")
     {
         if(currentPlayerId!=null)
         {
-            ipc.send('add-order',inventoryId,null,currentPlayerId,quantity,price)
-            currentPlayerId=null
-        }
-        else
-        {
-            ipc.send('error-dialog',"Customer not in database");
-        }
-    }
-    else
-    {
-        ipc.send('error-dialog',"Empty field(s)");
-    }  
-}
-
-
-function cigarettesOrder()
-{
-    let customerName =  $("#customerNameCigarettes").val()
-    var selectedCigarette = $("select#cigaretteSelectOrder").children("option:selected").val();
-    const cigaretteFilter=cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-    let inventoryId=cigaretteFilter[0].inventoryId;
-    let price=cigaretteFilter[0].itemAmount;
-    console.log(customerName)
-    console.log(cigaretteFilter[0])
-    currentPlayerId = getId(customerName)
-    let quantity=1;
-    if(selectedCigarette!=""&& customerName!="")
-    {
-        if(currentPlayerId!=null)
-        {
-            ipc.send('add-order',inventoryId,null,currentPlayerId,quantity,price)
+            ipc.send('add-order',selectedItem,null,currentPlayerId,quantity,itemPrice)
             currentPlayerId=null
         }
         else
@@ -339,23 +258,25 @@ function getId(name)
     return null;
 }
 
-function drinkAddInventory()
-{
-    newDrinkName = $('#drinkNewName').val();
-    newDrinkPrice = $('#drinkNewPrice').val();
-    addInventoryItem(newDrinkName,newDrinkPrice);
-}
 
-function cigaretteAddInventory()
-{
-    newCigaretteName = $('#drinkNewName').val();
-    newCigarettePrice = $('#drinkNewPrice').val();
-    addInventoryItem(newCigaretteName,newCigarettePrice);
-}
-
-function addInventoryItem(name, price)
+function addItemToInventory()
 {
     //Add to Inventory Code here with IPC
+    let newItemName=$("#newItemName").val()
+    let newItemPrice=$("#newItemPrice").val()
+    let newItemQuantity=$("#newItemQuantity").val()
+    let inventoryCategorId=$("select#newItemCategorySelector").children("option:selected").val();
+    if(newItemName!=""&&newItemPrice!=""&&newItemQuantity!="")
+    {
+        ipc.send('add-new-inventory-item', newItemName,newItemPrice,newItemQuantity,inventoryCategorId)
+    }
+}
+
+function addStock()
+{
+    let itemName=$("select#addItemSelector").children("option:selected").html();
+    let quantity=$('#itemStockQuantity').val();
+    ipc.send('update-stock',itemName,quantity)
 }
 
 function populateSummary()
@@ -368,8 +289,12 @@ function initializeListeners()
 {
 $(document).ready(function () {
 
+    $('#addItemSelector').change(function () {
+        $('#currentItemQuantityStock').val("In Stock: "+$("option:selected", this).attr("data-quantity"))
+    })
     $('#itemSelector').change(function () {
     $("#itemPrice").val($('#itemSelector').val())
+    $('#itemQuantityStock').val("In Stock: "+$("option:selected", this).attr("data-quantity"))
     })
     
    $('#itemCategorySelector').change(function () {
@@ -389,7 +314,33 @@ $(document).ready(function () {
         $("#itemSelector").append($("<option>")
         .val(inventory[i].itemAmount)
         .html(inventory[i].itemName)
+        .attr('data-quantity',inventory[i].quantity)
+        
     );
+    console.log(inventory[i].quantity)
+    }
+})
+});
+$('#addItemCategorySelector').change(function () {
+    let selectedValue = $("#addItemCategorySelector").val();
+    ipc.send('get-inventory',selectedValue);
+    ipc.once('Stock',(event,inventory)=>
+{
+    // Remove previous Select Option
+    $('select#addItemSelector')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="text" disabled selected>Select Item</option>');
+    
+    for(let i=0;i<inventory.length;i++)
+    {
+        $("#addItemSelector").append($("<option>")
+        .val(inventory[i].itemAmount)
+        .html(inventory[i].itemName)
+        .attr('data-quantity',inventory[i].quantity)
+    );
+    
     }
 })
 });

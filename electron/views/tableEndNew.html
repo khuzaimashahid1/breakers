@@ -60,7 +60,7 @@
                 <span class="close">&times;</span>
                 <div class="w3-bar w3-black" >
                     <button class="w3-bar-item w3-button"  style="margin-left: 20%;" onclick="tabItem('Kitchen')">Kitchen</button>
-                    <button class="w3-bar-item w3-button" onclick="tabItem('invetoryOrder')">Inventory Order</button>
+                    <button class="w3-bar-item w3-button" onclick="tabItem('inventoryOrder')">Inventory Order</button>
                     <button class="w3-bar-item w3-button" onclick="tabItem('Miscallenous')">Miscallenous</button>
                 </div>
 
@@ -79,34 +79,31 @@
                     </div>
                 </div>
 
-                <div id="invetoryOrder" class="w3-container city" style="display:none">
-                    <h1 style="text-align: center;">Place Order</h1>
+                <div id="inventoryOrder" class="w3-container city" style="display:none">
                     <div class="main-block">
-                        <form>
-                            <div>
-                            <input class="customer" style=" margin-left: 20%; margin-right: 20%;" type="text" id="customerNamePlaceOrder" value=""
-                                onkeypress="renderSuggestionsPlaceOrder()" placeholder="Enter Customer Name" />
-                            </div>
-                            <br />
-                            <br />
-                            <select  style=" margin-left: 20%; margin-right: 20%;" id=itemCategorySelector>
+                        <h1 style="text-align: center;">Place Order</h1>
+                        <form class="info"> 
+                            <select  style=" width: 100%; margin-left: 20%; margin-right: 20%;" id=itemCategorySelector>
                                 <option value="number" disabled selected>Select Category</option>
                                 
                             </select>
                             <br />
-                            <br />
-                            <select  style=" margin-left: 20%; margin-right: 20%;" id=itemSelector>
+                         
+                            <select  style="width: 100%; margin-left: 20%; margin-right: 20%;" id=itemSelector>
                                 <option value="number" disabled selected>Select Item</option>
                             </select>
                             <br />
+                         
+                            <input  style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemPrice" type="text" placeholder="Price" readonly>
                             <br />
-                            <input  style=" margin-left: 20%; margin-right: 20%;" id="itemPrice" type="text" placeholder="Price" readonly>
+                           
+                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantityStock" type="text" disabled placeholder="In Stock">
                             <br />
+                            
+                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantity" type="number" placeholder="Quantity">
                             <br />
-                            <input style="margin-left: 20%; margin-right: 20%;" id="itemQuantity" type="number" placeholder="Quantity">
-                            <br />
-                            <br />
-                            <button class="btnModal" style="margin-left: 20%; margin-right: 20%;" type="button" onclick="placeOrder()">Add to bill</button>
+                           
+                            <button class="btnModal" type="button" onclick="placeOrder()">Add to bill</button>
                         </form>
                     </div>
     
