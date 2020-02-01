@@ -116,7 +116,7 @@
                         <input class="input" id="itemQuantity" type="number" placeholder="Quantity">
                         <br />
                         <br />
-                        <button class="btn" type="button" onclick="placeOrder()">Add to bill</button>
+                        <button class="btn" type="button" onclick="inventoryOrder()">Add to bill</button>
                     </form>
                 </div>
 
@@ -140,10 +140,8 @@
             <h1 style="text-align: center;">Add New Item To Inventory</h1>
             <div class="dataform">
                 <form>
-                    <select class="select" id=itemCategorySelector>
+                    <select class="select" id=newItemCategorySelector>
                         <option value="number" disabled selected>Select Category</option>
-                        <option id="drinks">Drinks</option>
-                        <option id="cigarettes">Cigarettes</option>
                     </select>
                     <br />
                     <br />
@@ -153,7 +151,10 @@
                     <input class="input" id="newItemPrice" type="number" placeholder="Enter Item Price" />
                     <br />
                     <br />
-                    <button class="btn" onclick="addItemTtoInventory();">Add to Inventory</button>
+                    <input class="input" id="newItemQuantity" type="number" placeholder="Enter Quantity" />
+                    <br />
+                    <br />
+                    <button class="btn" onclick="addItemToInventory();">Add to Inventory</button>
                 </form>
             </div>
         </div>

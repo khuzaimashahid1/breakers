@@ -187,13 +187,13 @@ ipc.on('delete-customer', function (event, customerId) {
 })
 
 //Add Order
-ipc.on('add-order', function (event, inventoryId, gameId, customerId, quantity, amount) {
+ipc.on('add-order', function (event, selectedItem, gameId, customerId, quantity, amount) {
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.addOrder(currentDate, currentDate, inventoryId, gameId, customerId, quantity, amount);
+    connections.addOrder(currentDate, currentDate, selectedItem, gameId, customerId, quantity, amount);
 })
 
 //Add Order Others

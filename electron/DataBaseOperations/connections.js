@@ -601,7 +601,7 @@ module.exports.endGame = (createDate,updateDate,gameId,amount,loserId1,loserId2,
 }
 
 //Add Order For inventory Items
-module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,quantity,amount) =>
+module.exports.addOrder = (createDate,updateDate,selectedItem,gameId,customerId,quantity,amount) =>
 {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
@@ -612,9 +612,9 @@ module.exports.addOrder = (createDate,updateDate,inventoryId,gameId,customerId,q
   
   db.serialize(() => {
     // Queries scheduled here will be serialized.
-    db.run('Insert into InventoryManagement(createDate,quantity,inventoryId,gameId) values(?,?,?,?)',[createDate,-quantity,inventoryId,gameId])
-    .run('UPDATE Inventory SET updateDate=?,quantity=(Select quantity from Inventory where inventoryId=?)-? where inventoryId=?',[updateDate,inventoryId,quantity,inventoryId])
-    .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,inventoryManagementId,gameId) values (?,((Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))||" Sale"),?,(Select itemName from Inventory where inventoryId=?),(Select revenueCategoryId from RevenueCategory where revenueCategoryName=(Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where inventoryId=?))), (SELECT MAX(inventoryManagementId) FROM InventoryManagement),?)',[createDate,inventoryId,amount*quantity,inventoryId,inventoryId,gameId])
+    db.run('Insert into InventoryManagement(createDate,quantity,inventoryId,gameId) values(?,?,(Select inventoryId from Inventory where itemName=?),?)',[createDate,-quantity,selectedItem,gameId])
+    .run('UPDATE Inventory SET updateDate=?,quantity=(Select quantity from Inventory where inventoryId=(Select inventoryId from Inventory where itemName=?))-? where inventoryId=(Select inventoryId from Inventory where itemName=?)',[updateDate,selectedItem,quantity,selectedItem])
+    .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,inventoryManagementId,gameId) values (?,((Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where itemName=?))||" Sale"),?,?,(Select revenueCategoryId from RevenueCategory where revenueCategoryName=(Select inventoryCategoryName from InventoryCategory where inventoryCategoryId=(Select inventoryCategoryId from Inventory where itemName=?))), (SELECT MAX(inventoryManagementId) FROM InventoryManagement),?)',[createDate,selectedItem,amount*quantity,selectedItem,selectedItem,gameId])
     .run('Insert into Bill(createDate,status,customerId,amount,revenueId) values(?,"unpaid",?,?,(SELECT MAX(revenueId) FROM Revenue))',[createDate,customerId,amount*quantity])
     });
 
