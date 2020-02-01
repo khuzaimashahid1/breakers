@@ -1053,3 +1053,34 @@ module.exports.getReportData =  async(selectedDate) =>
     resolve(rows);
    });
 }
+
+
+//Get Daily Expense Report Data
+module.exports.getDailyExpenseReportData =  async(selectedDate) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  console.log("selectedDate"+selectedDate)
+  
+  sql='SELECT sum(expenseAmount) as expense, createDate FROM Expense WHERE createDate="'+selectedDate+'"';
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
