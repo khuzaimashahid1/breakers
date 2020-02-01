@@ -9,8 +9,6 @@ body{
 
   .autocomplete-items {
     position: absolute;
-    margin-left: 24.5%;
-    margin-top: 0.5%;
     overflow: hidden;
     /* border: 1px solid #d4d4d4; */
     /* border-bottom: none;
@@ -27,7 +25,7 @@ body{
    
     /* margin-left: 76%;
     margin-top: -10px; */
-    width: 190px;
+    width: 300px;
     padding: 10px;
     cursor: pointer;
     background-color: #fff;

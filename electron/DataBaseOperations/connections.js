@@ -810,6 +810,39 @@ module.exports.addCustomer=(customerName,customerAddress,customerPhone,createDat
   });
 }
 
+//Add InventoryItem
+module.exports.addInventoryItem=(currentDate,newItemName,newItemPrice,newItemQuantity,inventoryCategorId)=>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  return new Promise(function(resolve, reject) {
+    db.run('insert into Inventory (itemName,itemAmount,quantity,createDate,inventoryCategoryId) VALUES (?, ?, ?,?,?)', [newItemName,newItemPrice,newItemQuantity,currentDate,inventoryCategorId], (err) => {
+        if (err !== null) 
+        {
+          resolve("Item Already Exists")
+        }
+        // resolve(err);
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
+  });
+}
+
+
+
 
 //Add Expense
 module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId)=>
@@ -839,7 +872,34 @@ module.exports.addExpense=(expenseName,expenseDescription,expenseAmount,createDa
   });
 }
 
+//Update Stock
+module.exports.updateStock=(currentDate,itemName,quantity)=>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
 
+  return new Promise(function(resolve, reject) {
+    db.run('Insert into InventoryManagement(createDate,quantity,inventoryId) values(?,?,(Select inventoryId from Inventory where itemName=?))',[currentDate,quantity,itemName])
+    db.run('UPDATE Inventory SET updateDate=?,quantity=((SELECT quantity from Inventory WHERE itemName=?)+?) WHERE inventoryId=(SELECT inventoryId from Inventory WHERE itemName=?)',[currentDate,itemName,quantity,itemName], (err) => {
+        if (err !== null) 
+        reject(err);
+        else 
+        {
+          db.close((err) => {
+            if (err) {
+              return console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+          resolve(true);
+        }
+    });
+  });
+}
 
 //Get Expense
 module.exports.getExpense =  async() =>
