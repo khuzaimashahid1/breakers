@@ -8,7 +8,7 @@ ipc.once('Reload', (event, message) => {
 function openStartGame(){
     let winStartGame= new BrowserWindow({
             parent:parentWindow,
-            title:'Add New Game Now',
+            title:'New Game',
             fullscreen:false,
             webPreferences: {
                 nativeWindowOpen: true,
@@ -29,7 +29,7 @@ function openStartGame(){
 function openEndGame(){
     let winEndGame= new BrowserWindow({
             parent:parentWindow,
-            title:'Add New Game Now',
+            title:'On-going Game',
             fullscreen:false,
             webPreferences: {
                 nativeWindowOpen: true,
