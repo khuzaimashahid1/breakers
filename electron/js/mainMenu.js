@@ -1,6 +1,6 @@
 setStatusAndEventListeners();
 startTimer();
-ipc.once('Reload', (event, message) => {
+ipc.on('Reload', (event, message) => {
     setStatusAndEventListeners();
     startTimer();
   })
@@ -78,7 +78,7 @@ function setStatusAndEventListeners()
         let currentTable=i+1;
         
         $('#s'+currentTable).html(remote.getGlobal('sharedObj').status[i]);
-        if(remote.getGlobal('sharedObj').status[i]!=='Vacant')
+        if(remote.getGlobal('sharedObj').status[i]!='Vacant')
         {
             $( "#tab"+currentTable ).html('End Game');
             $( "#tab"+currentTable ).off();
@@ -112,7 +112,6 @@ function setStatusAndEventListeners()
 function startTimer()
 {
     let games=remote.getGlobal('sharedObj').games;
-    
     for(let i=0;i<games.length;i++)
     {
         

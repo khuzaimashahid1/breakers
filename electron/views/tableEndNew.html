@@ -24,12 +24,41 @@
             <legend>Current Players in the game</legend>
             <div class="grid-container">
             </div>
+        </div>
 
-
+        <div>
+            <button type="button" class="collapsible">Game Menu</button>
+            <div class="content">
+                <div id="inventoryOrder" class="w3-container city" >
+                    <div class="main-block">
+                        <form class="info"> 
+                            <select  style=" width: 100%; margin-left: 20%; margin-right: 20%;" id="loserSelect" class="playersList">
+                                <option>Choose Loser</option>
+                                
+                            </select>
+                            <br />
+                         
+                            <label style="width: 100%;margin-left: 20%; margin-right: 20%; color: white;"><input  id="finalCheckBox" type="checkbox" placeholder="Final" readonly>Final</label>
+                            <br />
+                           
+                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="numberOfGames" type="number" step="2" min="1" placeholder="1">
+                            <br />
+                            
+                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="amount" type="number" placeholder="Amount">
+                            <br />
+                           
+                            <button class="btnModal" type="button" onclick="endGame()">End Game</button>
+                            <br>
+                            <button id="nextGame" class="btnModal" onclick="nextGame()">Next Game</button>
+                        </form>
+                    </div>
+    
+                </div>
+            </div>
         </div>
         <!-- MAKING A DIV FOR FOOTHER OF THE PAGE -->
-        <div  class="w3-bar w3-black" >
-            <div class="w3-bar-item" style="margin-left: 20%;">
+        <!-- <div  class="w3-bar w3-black" >
+            <div class="w3-bar-item" style="margin-left: 5%;">
                 <select id="loserSelect" class="playersList">
                     <option>Choose Loser</option>
                 </select>
@@ -40,8 +69,8 @@
             <div class="w3-bar-item">
                 <button id="endGame" class="w3-button" onclick="endGame()">End Game</button>
             </div>
-
-        </div>
+                     
+        </div> -->
 
         <div class="tableData">
             <table id="gameExpense" style="width:100%">
@@ -103,7 +132,7 @@
                             <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantity" type="number" placeholder="Quantity">
                             <br />
                            
-                            <button class="btnModal" type="button" onclick="placeOrder()">Add to bill</button>
+                            <button class="btnModal" type="button" onclick="inventoryOrder()">Add to bill</button>
                         </form>
                     </div>
     
@@ -142,6 +171,22 @@
     </div>
 
 </body>
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+    </script>
 <script src="../js/tableEnd.js"></script>
 
 </html>
