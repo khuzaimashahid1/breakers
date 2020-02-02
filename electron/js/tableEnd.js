@@ -10,9 +10,10 @@ let currentPlayers = []
 let drinkStock,cigaretteStock;
 var table = document.getElementById("gameExpense");
 
+initializeListeners();
+getInventoryCategory();
 getCurrentPlayers();
 populatePlayers();
-populateStock();
 getTableData();
 console.log(players)
 console.log(currentPlayers)
@@ -110,45 +111,98 @@ function populatePlayers() {
 
 }
 
-//Populate All Stocks
-function populateStock() {
+//Function For Getting Invenory Categories
+function getInventoryCategory() {
+    let inventoryCategory = []
     
-    //Get Cigarettes from Main Process IPC
-    ipc.send('get-cigs');
-    ipc.on('Cigarette Stock', (event, cigStock) => 
-    {
-        cigaretteStock = cigStock
-        for (let i = 0; i < cigaretteStock.length; i++) {
-            $("select#CigaretteSelect").append($("<option>")
-                .val(cigaretteStock[i].inventoryId)
-                .html(cigaretteStock[i].itemName)
+    //Get Inventory Category from Main Process IPC
+    ipc.send('get-inventory-category');
+    ipc.once('inventoryCategory', (event, categories) => {
+        for (let i = 0; i < categories.length; i++) {
+            // converting json to array for datatables
+            inventoryCategory.push(categories[i])
+            // for employee salary drop down
+            $("select#itemCategorySelector").append($("<option>")
+                .val(categories[i].inventoryCategoryId)
+                .html(categories[i].inventoryCategoryName)
             );
-        }
-        $("select#CigaretteSelect").change(function () {
-            var selectedCigarette = $(this).children("option:selected").val();
-            const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-            $("#CigarettePrice").val(cigaretteFilter[0].itemAmount)
-        });
-    })
-   
-    //Get Drinks from Main Process IPC
-    ipc.send('get-drinks');
-    ipc.on('Drinks Stock', (event, drinks) => 
-    {
-        drinkStock = drinks;
-        for (let i = 0; i < drinkStock.length; i++) {
-            $("select#DrinkSelect").append($("<option>")
-                .val(drinkStock[i].inventoryId)
-                .html(drinkStock[i].itemName)
-            );
-        }
-        $("select#DrinkSelect").change(function () {
-            var selectedDrink = $(this).children("option:selected").val();
-            const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-            $("#DrinkPrice").val(drinkFilter[0].itemAmount)
-        });
-    })
 
+            $("select#newItemCategorySelector").append($("<option>")
+                .val(categories[i].inventoryCategoryId)
+                .html(categories[i].inventoryCategoryName)
+            );
+            
+
+            $("select#addItemCategorySelector").append($("<option>")
+            .val(categories[i].inventoryCategoryId)
+            .html(categories[i].inventoryCategoryName)
+        );
+        }
+       
+    })
+}
+
+//Function For Getting Invenory Categories
+function initializeListeners() 
+{   
+    $(document).ready(function () {
+    
+        $('#addItemSelector').change(function () {
+            $('#currentItemQuantityStock').val("In Stock: "+$("option:selected", this).attr("data-quantity"))
+        })
+        $('#itemSelector').change(function () {
+        $("#itemPrice").val($('#itemSelector').val())
+        $('#itemQuantityStock').val("In Stock: "+$("option:selected", this).attr("data-quantity"))
+        })
+        
+       $('#itemCategorySelector').change(function () {
+        let selectedValue = $("#itemCategorySelector").val();
+        ipc.send('get-inventory',selectedValue);
+        ipc.once('Stock',(event,inventory)=>
+    {
+        // Remove previous Select Option
+        $('select#itemSelector')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="text" disabled selected>Select Item</option>');
+        
+        for(let i=0;i<inventory.length;i++)
+        {
+            $("#itemSelector").append($("<option>")
+            .val(inventory[i].itemAmount)
+            .html(inventory[i].itemName)
+            .attr('data-quantity',inventory[i].quantity)
+            
+        );
+        console.log(inventory[i].quantity)
+        }
+    })
+    });
+    $('#addItemCategorySelector').change(function () {
+        let selectedValue = $("#addItemCategorySelector").val();
+        ipc.send('get-inventory',selectedValue);
+        ipc.once('Stock',(event,inventory)=>
+    {
+        // Remove previous Select Option
+        $('select#addItemSelector')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="text" disabled selected>Select Item</option>');
+        
+        for(let i=0;i<inventory.length;i++)
+        {
+            $("#addItemSelector").append($("<option>")
+            .val(inventory[i].itemAmount)
+            .html(inventory[i].itemName)
+            .attr('data-quantity',inventory[i].quantity)
+        );
+        
+        }
+    })
+    });
+    });    
 }
 
 //Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
@@ -218,6 +272,30 @@ function miscOrder()
     let gameId=currentGame.gameId;
     ipc.send('add-order-others',gameId,currentPlayerId,"Misc",miscItem,miscPrice)
     getTableData();      
+}
+
+//Inventory Order
+function inventoryOrder()
+{
+    let selectedItem = $("select#itemSelector").children("option:selected").html();
+    let itemPrice=$("select#itemSelector").children("option:selected").val();
+    let quantity=$("#itemQuantity").val()
+    if(selectedItem!=""&& customerName!="")
+    {
+        if(currentPlayerId!=null)
+        {
+            ipc.send('add-order',selectedItem,gameId,currentPlayerId,quantity,itemPrice)
+            currentPlayerId=null
+        }
+        else
+        {
+            ipc.send('error-dialog',"Customer not in database");
+        }
+    }
+    else
+    {
+        ipc.send('error-dialog',"Empty field(s)");
+    }
 }
 
 //End Game (Iron Man Dies)

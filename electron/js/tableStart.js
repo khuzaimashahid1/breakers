@@ -250,7 +250,9 @@ function autoComplete(input, players) {
 //Compare All Names in fields and Start Game if No error arises
 function compareAndStartGame(gameType,playersCount)
 {
+    players = remote.getGlobal('sharedObj').players;
     playersArray=[]
+    let currentPlayers=[]
     for (let i=1;i<=playersCount;i++)
     {
         let field='#'+gameType+'Player'+i;
@@ -281,16 +283,19 @@ function compareAndStartGame(gameType,playersCount)
                 else
                 {
                     playersArray.push(player[0].customerId);
-                    remote.getGlobal('sharedObj').currentPlayers.push(player[0]);
-                    players=players.filter(currentPlayer => (currentPlayer !== player[0]));
-                    
+                    currentPlayers.push(player[0])
                 }
                 
             }
         }
     }
-    remote.getGlobal('sharedObj').players=players;
     
+    for(let i=0;i<currentPlayers.length;i++)
+    {
+        remote.getGlobal('sharedObj').currentPlayers.push(currentPlayers[i]);
+        players=players.filter(currentPlayer => (currentPlayer !== currentPlayers[i]));
+    }
+    remote.getGlobal('sharedObj').players=players;
     for(let i=playersArray.length;i<=9;i++)
     {
         playersArray.push(null);
