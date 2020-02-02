@@ -144,15 +144,14 @@ module.exports.getCreditors = async () => {
     }
     console.log('Connected to the breakers database.');
   });
-  
-  sql='Select customerName,creditAmount,customerId from Customer WHERE creditAmount!=0';
-  
-  
-  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
-      {
-        return rows;
-      })
-  
+
+  sql = 'Select customerName,creditAmount,customerId from Customer WHERE creditAmount!=0';
+
+
+  var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
+    return rows;
+  })
+
   db.close((err) => {
     if (err) {
       return console.error(err.message);
@@ -259,11 +258,11 @@ module.exports.clearCredit = (currentDate, customerId, clearedAmount) => {
   });
   const today = new Date();
   const clearingTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  
+
   db.serialize(() => {
-  db.run('UPDATE Customer SET updateDate=?,creditAmount=((SELECT creditAmount FROM Customer WHERE customerId=?)-?) WHERE customerId=?',[currentDate,customerId,clearedAmount,customerId])
-  .run('Insert into CreditManagement(createDate,amount,clearingTime,customerId) values(?,?,?,?)',[currentDate,-clearedAmount,clearingTime,customerId])
-  .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,creditManagementId) values (?,"Credit Clear",?,((Select customerName FROM Customer where customerId=?) || " Credit Cleared"),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Credit"),(SELECT MAX(creditManagementId) FROM CreditManagement))',[currentDate,clearedAmount,customerId])
+    db.run('UPDATE Customer SET updateDate=?,creditAmount=((SELECT creditAmount FROM Customer WHERE customerId=?)-?) WHERE customerId=?', [currentDate, customerId, clearedAmount, customerId])
+      .run('Insert into CreditManagement(createDate,amount,clearingTime,customerId) values(?,?,?,?)', [currentDate, -clearedAmount, clearingTime, customerId])
+      .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,creditManagementId) values (?,"Credit Clear",?,((Select customerName FROM Customer where customerId=?) || " Credit Cleared"),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Credit"),(SELECT MAX(creditManagementId) FROM CreditManagement))', [currentDate, clearedAmount, customerId])
   })
   db.close((err) => {
     if (err) {
@@ -440,7 +439,7 @@ module.exports.getOngoingGames = async () => {
     }
     console.log('Close the database connection.');
   });
-  return Promise.all([tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8,tab9, tab10]);
+  return Promise.all([tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10]);
 }
 
 
@@ -764,7 +763,7 @@ module.exports.addCustomer = (customerName, customerAddress, customerPhone, crea
 }
 
 //Add InventoryItem
-module.exports.addInventoryItem = (currentDate, newItemName, newItemPrice, newItemQuantity, inventoryCategorId) => {
+module.exports.addInventoryItem = (currentDate, newItemName, newItemPrice, newItemQuantity, inventoryCategorId,newItemPurchasePrice) => {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -773,24 +772,25 @@ module.exports.addInventoryItem = (currentDate, newItemName, newItemPrice, newIt
   });
 
   return new Promise(function (resolve, reject) {
-    db.run('insert into Inventory (itemName,itemAmount,quantity,createDate,inventoryCategoryId) VALUES (?, ?, ?,?,?)', [newItemName, newItemPrice, newItemQuantity, currentDate, inventoryCategorId], (err) => {
-      if (err !== null) {
-        resolve("Item Already Exists")
-      }
-      // resolve(err);
-      else {
-        db.close((err) => {
-          if (err) {
-            return console.error(err.message);
+    db.serialize(()=>{
+      db.run('insert into Inventory (itemName,itemAmount,quantity,createDate,inventoryCategoryId) VALUES (?, ?, ?,?,?)', [newItemName, newItemPrice, newItemQuantity, currentDate, inventoryCategorId])
+        .run('INSERT into Expense (expenseName,expenseAmount,expenseDescription,expenseCategoryId,createDate) VALUES (?, ?, ?,?,?)', [newItemName+ " Purchase", newItemPurchasePrice * newItemQuantity, newItemQuantity+" Items",1, currentDate ]), (err) => {
+          if (err !== null) {
+            resolve("Item Already Exists")
           }
-          console.log('Close the database connection.');
-        });
-        resolve(true);
-      }
-    });
+          // resolve(err);
+          else {
+            db.close((err) => {
+              if (err) {
+                return console.error(err.message);
+              }
+              console.log('Close the database connection.');
+            });
+            resolve(true);
+          }
+        }});
   });
 }
-
 
 
 
@@ -1053,13 +1053,13 @@ module.exports.getTablesSummary = async (tableNo) => {
     console.log('Connected to the breakers database.');
   });
 
-  sql = 'SELECT Bill.createDate,Game.startTime,Game.endTime,Customer.customerName,Bill.amount from Bill JOIN Customer USING (customerId) JOIN Revenue USING(revenueId) JOIN Game USING (gameId) where Game.tableNo=?',[tableNo];
+  sql = 'SELECT Bill.createDate,Game.startTime,Game.endTime,Customer.customerName,Bill.amount from Bill JOIN Customer USING (customerId) JOIN Revenue USING(revenueId) JOIN Game USING (gameId) where Game.tableNo=?', [tableNo];
 
 
   var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
     return rows;
   })
-  
+
   db.close((err) => {
     if (err) {
       return console.error(err.message);
@@ -1073,8 +1073,7 @@ module.exports.getTablesSummary = async (tableNo) => {
 
 
 //Get Daily Expense Report Data
-module.exports.getDailyExpenseReportData =  async(selectedDate) =>
-{
+module.exports.getDailyExpenseReportData = async (selectedDate) => {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -1082,15 +1081,14 @@ module.exports.getDailyExpenseReportData =  async(selectedDate) =>
     console.log('Connected to the breakers database.');
   });
 
-  console.log("selectedDate"+selectedDate)
-  
-  sql='SELECT sum(expenseAmount) as expense, createDate FROM Expense WHERE createDate="'+selectedDate+'"';
-  
-  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
-      {
-        return rows;
-      })
-  
+  console.log("selectedDate" + selectedDate)
+
+  sql = 'SELECT sum(expenseAmount) as expense, createDate FROM Expense WHERE createDate="' + selectedDate + '"';
+
+  var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
+    return rows;
+  })
+
   db.close((err) => {
     if (err) {
       return console.error(err.message);

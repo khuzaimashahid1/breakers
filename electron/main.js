@@ -313,13 +313,13 @@ ipc.on('get-inventory', function (event,inventoryCategoryId) {
 
 
 //Add New Inventory Item
-ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItemQuantity,inventoryCategorId){
+ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItemQuantity,inventoryCategorId,newItemPurchasePrice){
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.addInventoryItem(currentDate,newItemName,newItemPrice,newItemQuantity,inventoryCategorId).then(result => {
+    connections.addInventoryItem(currentDate,newItemName,newItemPrice,newItemQuantity,inventoryCategorId,newItemPurchasePrice).then(result => {
         if (result === true) {
             // event.sender.send('Reload Inventory','New Item Added');
             dialog.showErrorBox("Success","New Item Added")

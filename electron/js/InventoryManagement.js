@@ -271,11 +271,12 @@ function addItemToInventory()
     //Add to Inventory Code here with IPC
     let newItemName=$("#newItemName").val()
     let newItemPrice=$("#newItemPrice").val()
+    let newItemPurchasePrice=$("#newItemPurchasePrice").val()
     let newItemQuantity=$("#newItemQuantity").val()
     let inventoryCategorId=$("select#newItemCategorySelector").children("option:selected").val();
-    if(newItemName!=""&&newItemPrice!=""&&newItemQuantity!="")
+    if(newItemName!=""&&newItemPrice!=""&&newItemQuantity!=""&&newItemPurchasePrice!="")
     {
-        ipc.send('add-new-inventory-item', newItemName,newItemPrice,newItemQuantity,inventoryCategorId)
+        ipc.send('add-new-inventory-item', newItemName,newItemPrice,newItemQuantity,inventoryCategorId,newItemPurchasePrice)
     }
 }
 
