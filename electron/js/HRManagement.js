@@ -35,7 +35,7 @@ function addEmployee() {
     const createDate = yyyy + '-' + mm + '-' + dd;
 
     ipc.send('add-employee', employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate);
-
+    clearFields('addEmployee');
 
 }
 
@@ -52,7 +52,7 @@ function paySalary() {
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
     ipc.send('pay-employee-salary', employeeId, salaryMonth, salaryAmount, salaryNote, advanceDeductionAmount, createDate);
-
+    clearFields('paySalary');
 
 }
 
@@ -62,6 +62,7 @@ function addAdvance() {
     let advanceAmount = $('#advanceAmount').val();
 
     ipc.send('add-employee-advance', employeeId, advanceAmount);
+    clearFields('advanceSalary');
     
     
 }
@@ -114,6 +115,35 @@ function getEmployees() {
         employeeTable.clear().rows.add(employeeData).draw();
 
     })
+}
+//CLEAR FIELDS
+function clearFields(orderType)
+{
+    if (orderType =='addEmployee')
+        {
+           document.getElementById('employeeName').value ='';
+           document.getElementById('employeeDesignation').value ='';
+           document.getElementById('employeeCNIC').value ='';
+           document.getElementById('employeeAddress').value ='';
+           document.getElementById('employeePhone').value ='';
+           document.getElementById('employeeBasicPay').value ='';
+        }
+        else if (orderType =='paySalary')
+        {
+           document.getElementById('basicSalary').value ='';
+           document.getElementById('advanceTaken').value ='';
+           document.getElementById('employeeSelect').selectedIndex = "0";
+           document.getElementById('monthSelect').selectedIndex = "0";
+           document.getElementById('salaryAmount').value ='';
+           document.getElementById('salaryNote').value ='';
+           document.getElementById('advanceDeductionAmount').value ='';
+        }
+        else if (orderType =='advanceSalary')
+        {
+           document.getElementById('advanceTakenAdvance').value ='';
+           document.getElementById('advanceAmount').value ='';
+           document.getElementById('employeeSelectAdvance').selectedIndex = "0";
+        }
 }
 
 //Get Salary History
