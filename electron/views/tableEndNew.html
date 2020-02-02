@@ -29,7 +29,7 @@
         <div>
             <button type="button" class="collapsible">Game Menu</button>
             <div class="content">
-                <div id="inventoryOrder" class="w3-container city" >
+                <div id="gameMenu" class="w3-container " >
                     <div class="main-block">
                         <form class="info"> 
                             <select  style=" width: 100%; margin-left: 20%; margin-right: 20%;" id="loserSelect" class="playersList">
@@ -38,7 +38,7 @@
                             </select>
                             <br />
                          
-                            <label style="width: 100%;margin-left: 20%; margin-right: 20%; color: white;"><input  id="finalCheckBox" type="checkbox" placeholder="Final" readonly>Final</label>
+                            <label style="width: 100%;margin-left: 20%; margin-right: 20%; color: white;"><input  id="finalCheckBox" type="checkbox" placeholder="Final" >Final</label>
                             <br />
                            
                             <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="numberOfGames" type="number" step="2" min="1" placeholder="1">
@@ -132,7 +132,7 @@
                             <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantity" type="number" placeholder="Quantity">
                             <br />
                            
-                            <button class="btnModal" type="button" onclick="placeOrder()">Add to bill</button>
+                            <button class="btnModal" type="button" onclick="inventoryOrder()">Add to bill</button>
                         </form>
                     </div>
     
@@ -156,16 +156,7 @@
                 </div>
 
 
-                <div class="columnBody">
-                    <!-- <table id="gameExpense" style="width:80%">
-                        <tr>
-                            <th>Order Item</th>
-                            <th>Order Type</th>
-                            <th>Amount</th>
-                            <th>Customer</th>
-                        </tr>
-                    </table> -->
-                </div>
+               
             </div>
         </div>
     </div>

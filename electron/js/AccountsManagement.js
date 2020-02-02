@@ -23,6 +23,20 @@ function getExpense() {
         expenseTable.clear().rows.add(expenseArray).draw();
     })
 }
+//CLEAR FIELDS
+function clearFields(orderType)
+{
+    if (orderType =='addExpense')
+        {
+           document.getElementById('expenseName').value ='';
+           document.getElementById('expenseCategory').selectedIndex ='0';
+           document.getElementById('expenseDescription').value ='';
+           document.getElementById('expenseAmount').value ='';
+           
+        }
+        
+}
+
 
 //Fetching Expense From DB
 function getExpenseCategory() {
@@ -92,7 +106,7 @@ function addExpense() {
     if (expenseName != '' && expenseAmount!='') 
     {
         ipc.send('add-expense', expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId)
-
+        clearFields('addExpense')
     }
     else {
         ipc.send('error-dialog', "Empty Field(s)")

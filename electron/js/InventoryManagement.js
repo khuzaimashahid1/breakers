@@ -1,5 +1,12 @@
+require('datatables.net-dt')();
 getInventoryCategory();
 initializeListeners();
+populatingInventoryTable();
+populatingKitchenTable();
+var inventoryData=[];
+var inventoryTable;
+var kitchenData=[];
+var kitchenTable;
 
 //Function For Getting Invenory Categories
 function getInventoryCategory() {
@@ -197,6 +204,7 @@ function autoComplete(input, allplayers) {
 
 function kitchenOrder()
 {
+    
 
     var kitchenItem= $("#kitchenOrderItem").val()
     var kitchenPrice= $('#kitchenOrderPrice').val()
@@ -206,8 +214,11 @@ function kitchenOrder()
     {
         if(currentPlayerId!=null)
         {
+            
             ipc.send('add-order-others',null,currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
             currentPlayerId=null
+            clearFields('kitchenOrder');
+           
         }
         else
         {
@@ -232,8 +243,10 @@ function inventoryOrder()
     {
         if(currentPlayerId!=null)
         {
+            
             ipc.send('add-order',selectedItem,null,currentPlayerId,quantity,itemPrice)
             currentPlayerId=null
+            clearFields('inventoryOrder');
         }
         else
         {
@@ -346,4 +359,123 @@ $('#addItemCategorySelector').change(function () {
 });
 });
 
+}
+
+//Getting Inventory Summary
+function populatingInventoryTable()
+{
+    $(document).ready(function () {
+      inventoryTable=$('#inventorySummaryTable').DataTable({
+        scrollY:'50vh',
+        scrollCollapse: true,
+        paging:true,
+        data: inventoryData,
+        "columns": [
+            {
+                data: "createDate"
+            },
+            {
+                data: "customerName"
+            },
+            {
+                data: "revenueDescription"
+            },
+            {
+                data: "quantity"
+            },
+            {
+                data: "revenueName"
+            },
+            {
+                data: "amount"
+            }
+    
+        ]
+    })
+    getInventorySummary()
+    });
+    
+}
+
+function getInventorySummary()
+{
+    ipc.send('get-inventory-data')
+    ipc.once('inventory-data',(event,data)=>
+  {
+    for (let i = 0; i < data.length; i++) {
+        // converting json to array for datatables
+        inventoryData.push(data[i])
+
+    }
+    inventoryTable.clear().rows.add(inventoryData).draw();
+    console.log(inventoryData);
+  })   
+}
+
+
+//Getting Inventory
+function populatingKitchenTable()
+{
+    $(document).ready(function () {
+      kitchenTable=$('#kitchenSummaryTable').DataTable({
+        scrollY:'30vh',
+        scrollCollapse: true,
+        paging:true,
+        data: kitchenData,
+        "columns": [
+            {
+                data: "createDate"
+            },
+            {
+                data: "customerName"
+            },
+            {
+                data: "revenueDescription"
+            },
+            {
+                data: "revenueName"
+            },
+            {
+                data: "amount"
+            }
+    
+        ]
+    })
+    getKitchenSummary()
+    });
+    
+}
+// Clear fields
+function clearFields(orderType)
+{
+    if (orderType =='kitchenOrder')
+        {
+           document.getElementById('customerNameKitchen').value ='';
+           document.getElementById('kitchenOrderItem').value ='';
+           document.getElementById('kitchenOrderPrice').value ='';
+        }
+        else if (orderType =='invetoryOrder')
+        {
+           document.getElementById('customerNamePlaceOrder').value ='';
+           document.getElementById('itemQuantityStock').value ='';
+           document.getElementById('itemCategorySelector').selectedIndex = "0";
+           document.getElementById('itemSelector').selectedIndex = "0";
+           document.getElementById('itemPrice').value ='';
+           document.getElementById('itemQuantity').value ='';
+        }
+}
+
+function getKitchenSummary()
+{
+    ipc.send('get-kitchen-data')
+    ipc.once('kitchen-data',(event,data)=>
+  {
+    for (let i = 0; i < data.length; i++) {
+        // converting json to array for datatables
+        kitchenData.push(data[i])
+
+    }
+    kitchenTable.clear().rows.add(kitchenData).draw();
+    console.log(kitchenData);
+  })   
 }
