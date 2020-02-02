@@ -253,26 +253,26 @@ ipc.on('end-game', function (event, gameId, amount, loserId1, loserId2) {
 
 })
 
-// //End Game
-// ipc.on('end-game-final-single', function (event,totalGames, gameId, amount, loserId1, loserId2) {
+//End Game
+ipc.on('end-game-final', function (event,totalGames, gameId, amount,winnerId1,winnerId2, loserId1, loserId2) {
     
-    
-    
-//     const today = new Date();
-//     const endTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-//     var dd = String(today.getDate()).padStart(2, '0');
-//     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-//     var yyyy = today.getFullYear();
-//     const updateDate = yyyy + '-' + mm + '-' + dd;
-//     connections.endGame(updateDate, updateDate, gameId, amount, loserId1, loserId2, endTime).then(result => {
-//         if (result === true) {
-//             getAllCustomers();
-//             getAllOngoingGames();
-//         }
+    let winnerAmount=((totalGames-1)/2)*amount;
+    connections.addFinal(winnerAmount,winnerId1,winnerId2,loserId1,loserId2);
+    const today = new Date();
+    const endTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    const updateDate = yyyy + '-' + mm + '-' + dd;
+    connections.endGame(updateDate, updateDate, gameId, amount, loserId1, loserId2, endTime).then(result => {
+        if (result === true) {
+            getAllCustomers();
+            getAllOngoingGames();
+        }
 
-//     });
+    });
 
-// })
+})
 
 //Get Creditors
 ipc.on('get-creditors', function (event) {

@@ -593,6 +593,44 @@ module.exports.endGame = (createDate, updateDate, gameId, amount, loserId1, lose
 }
 
 //Add Order For inventory Items
+module.exports.addFinal = (createDate, winnerAmount,winnerId1,winnerId2,loserId1,loserId2) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  if(winnerId2===null&&loserId2===null)
+  {
+  db.serialize(() => {
+    // Queries scheduled here will be serialized.
+    db.run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, winnerId1, -winnerAmount])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, loserId1, winnerAmount])
+  });
+}
+else
+{
+  db.serialize(() => {
+    // Queries scheduled here will be serialized.
+    db.run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, winnerId1, -winnerAmount/2])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, loserId1, winnerAmount/2])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, winnerId2, -winnerAmount/2])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, loserId2, winnerAmount/2])
+  });
+}
+  
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+}
+
+
+//Add Order For inventory Items
 module.exports.addOrder = (createDate, updateDate, selectedItem, gameId, customerId, quantity, amount) => {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {

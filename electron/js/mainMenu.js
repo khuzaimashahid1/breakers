@@ -1,9 +1,17 @@
-setStatusAndEventListeners();
-startTimer();
-ipc.on('Reload', (event, message) => {
+if(!listener)
+{
+var listener = ipc.on('Reload', (event, message) => {
     setStatusAndEventListeners();
     startTimer();
   })
+}
+setStatusAndEventListeners();
+startTimer();
+
+
+
+
+
 //Open 'add game'window
 function openStartGame(){
     let winStartGame= new BrowserWindow({
