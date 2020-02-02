@@ -367,10 +367,26 @@ ipc.on('get-report-data', function (event,selectedDate) {
     });
 })
 
-//Get daily expense Data for report
+//Get daily expense Data for Expense report
 ipc.on('get-daily-expense-report', function (event,selectedDate) {
     connections.getDailyExpenseReportData(selectedDate).then(rows => {
         event.sender.send("daily-expense-report", rows);
+    });
+})
+
+//Get daily Credit Data for Expense report
+ipc.on('get-daily-credit-report', function (event,selectedDate) {
+    connections.getDailyCreditExpenseReportData(selectedDate).then(rows => {
+        console.log(rows)
+        event.sender.send("daily-credit-report", rows);
+    });
+})
+
+
+//Get daily Remaining Data for Expense report
+ipc.on('get-daily-remaining-report', function (event,selectedDate) {
+    connections.getDailyRemainingExpenseReportData(selectedDate).then(rows => {
+        event.sender.send("daily-remaining-report", rows);
     });
 })
 
