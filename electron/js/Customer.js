@@ -81,6 +81,7 @@ function addCustomer() {
   var yyyy = today.getFullYear();
   const createDate = yyyy + '-' + mm + '-' + dd;
   ipc.send('add-customer', customerName, customerAddress, customerPhone, createDate)
+  clearFields('addCustomer')
 }
 
 
@@ -170,13 +171,30 @@ function clearCredit()
     console.log(getId(customerName))
     console.log(clearAmount)
     ipc.send('clear-credit',getId(customerName),clearAmount)
+    clearFields('creditClear')
   }
   else
   {
     ipc.send('error-dialog',"Empty field(s)");
   }
 }
-
+//CLEAR FIELDS
+function clearFields(orderType)
+{
+    if (orderType =='addCustomer')
+        {
+           document.getElementById('uname').value ='';
+           document.getElementById('address').value ='';
+           document.getElementById('phone').value ='';
+           
+        }
+        else if (orderType =='creditClear')
+        {
+           document.getElementById('clearCustomer').value ='';
+           document.getElementById('clearAmount').value ='';
+           
+        }
+}
 //Get Customer Id from name
 function getId(name)
 {

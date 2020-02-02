@@ -1125,7 +1125,70 @@ module.exports.getDailyExpenseReportData =  async(selectedDate) =>
 
   console.log("selectedDate"+selectedDate)
   
-  sql='SELECT sum(expenseAmount) as expense, createDate FROM Expense WHERE createDate="'+selectedDate+'"';
+  sql='SELECT sum(Expense.expenseAmount) as amount, ExpenseCategory.expenseCategoryName as expenseName From Expense Join ExpenseCategory USING(expenseCategoryId) Where Expense.createDate="'+selectedDate+'" GROUP By ExpenseCategory.expenseCategoryName';
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Get Daily Credit Data for Expense Report 
+module.exports.getDailyCreditExpenseReportData =  async(selectedDate) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  console.log("selectedDate"+selectedDate)
+  
+  sql='SELECT sum(Bill.amount) as creditAmount FROM Bill JOIN CreditManagement USING(customerId) WHERE Bill.status="Partial Paid"  AND CreditManagement.createDate="'+selectedDate+'"';
+  // sql='SELECT sum(Bill.amount) as creditAmount FROM Bill JOIN CreditManagement USING(customerId) WHERE Bill.status="Partial Paid"  AND CreditManagement.createDate='+selectedDate
+  console.log(sql)
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Get Daily Remaining Data for Expense Report 
+module.exports.getDailyRemainingExpenseReportData =  async(selectedDate) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  console.log("selectedDate"+selectedDate)
+  
+  sql='SELECT sum(Bill.amount) as remainingAmount FROM Bill WHERE Bill.status="unpaid"  AND Bill.createDate="'+selectedDate+'"';
   
   var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
       {
