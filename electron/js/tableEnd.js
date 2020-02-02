@@ -226,30 +226,80 @@ function endGame()
     if(currentGame.gameType==="Single" || currentGame.gameType==="Century")
     {
         var loser = $("select#loserSelect").children("option:selected").val();
-        console.log(loser)
         const player=currentPlayers.filter(player => (player!=null && player.customerName == loser));
+        let amount=$("#amount").val()
             if(player.length<1)
             {
                 ipc.send('error-dialog',"Please Select a Loser");
+                return;
+            }
+            else if(amount<=0)
+            {
+                ipc.send('error-dialog',"Please Enter Amount");
                 return;
             }
             else
             {
                 let gameId=currentGame.gameId;
                 let loserId1=player[0].customerId;
-                ipc.send('end-game',gameId,100,loserId1,null)
-                remote.getCurrentWindow().close()
+                if(!$( "#finalCheckBox" ).prop('checked'))
+                {
+                    ipc.send('end-game',gameId,amount,loserId1,null)
+                    remote.getCurrentWindow().close()
+                }
+                else
+                {
+                    const winners=currentPlayers.filter(player=>(player!=null&&player.customerId!=loserId1 ))
+                    let winnerId1=winners[0].customerId
+                    let totalGames=$('#numberOfGames').val()
+                    ipc.send('end-game-final',totalGames,gameId,amount,winnerId1,null,loserId1,null)
+                    remote.getCurrentWindow().close()
+                }
+                
             }
     }
     else
     {
-        var loser = $("select#loserSelect").children("option:selected").attr('id');
-        loser = loser.split(",");
-        let gameId=currentGame.gameId;
-        ipc.send('end-game',gameId,100,parseInt(loser[0]),parseInt(loser[1]))
-        remote.getCurrentWindow().close()
+        
+            var loser = $("select#loserSelect").children("option:selected").attr('id');
+            let amount=$("#amount").val()
+            loser = loser.split(",");
+            let loserId1=parseInt(loser[0]);
+            let loserId2=parseInt(loser[1])
+            let gameId = currentGame.gameId;
+            if(loser=="")
+            {
+                ipc.send('error-dialog',"Please Select a Loser");
+                return;
+            }
+            else if(amount<=0)
+            {
+                ipc.send('error-dialog',"Please Enter Amount");
+                return;
+            }
+            
+            else
+            {
+                if (!$("#finalCheckBox").prop('checked')) 
+                {
+                ipc.send('end-game', gameId, amount, loserId1, loserId2)
+                remote.getCurrentWindow().close()
+                }
+                else
+                {
+                    const winners=currentPlayers.filter(player=>(player!=null&&player.customerId!=loserId1&&player.customerId!=loserId2 ))
+                    let winnerId1=winners[0].customerId
+                    let winnerId2=winners[1].customerId
+                    let totalGames=$('#numberOfGames').val()
+                    ipc.send('end-game-final',totalGames,gameId,amount,winnerId1,winnerId2,loserId1,loserId2)
+                    remote.getCurrentWindow().close()
+                }
+            }
+        }
+        
 
-    }
+
+    
 }
 
 function nextGame()

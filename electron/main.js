@@ -256,14 +256,15 @@ ipc.on('end-game', function (event, gameId, amount, loserId1, loserId2) {
 //End Game
 ipc.on('end-game-final', function (event,totalGames, gameId, amount,winnerId1,winnerId2, loserId1, loserId2) {
     
-    let winnerAmount=((totalGames-1)/2)*amount;
-    connections.addFinal(winnerAmount,winnerId1,winnerId2,loserId1,loserId2);
+    
     const today = new Date();
     const endTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const updateDate = yyyy + '-' + mm + '-' + dd;
+    let winnerAmount=((totalGames-1)/2)*amount;
+    connections.addFinal(updateDate,winnerAmount,winnerId1,winnerId2,loserId1,loserId2);
     connections.endGame(updateDate, updateDate, gameId, amount, loserId1, loserId2, endTime).then(result => {
         if (result === true) {
             getAllCustomers();
@@ -428,6 +429,14 @@ ipc.on('generate-bill', function (event, customerId) {
                         })
                     }
                 }
+                else if (result[i][j].billAmount) {
+                    finalResult.push({
+                        item: "Final Game",
+                        price: result[i][j].billAmount,
+                        time_quantity: 1,
+                        billId: result[i][j].billId
+                    })
+                }
                 else {
                     if (result[i][j].tableNo) {
                         finalResult.push({
@@ -450,7 +459,6 @@ ipc.on('generate-bill', function (event, customerId) {
             }
 
         }
-        console.log(finalResult)
         event.sender.send("generated-bill", finalResult)
 
     })

@@ -456,7 +456,7 @@ module.exports.generateBill = async (customerId) => {
   sql1 = 'SELECT Bill.billId,Bill.amount,Game.gameType,Revenue.revenueDescription,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Revenue.revenueName ="Games Sale" AND Bill.status="unpaid" and Bill.customerId=' + customerId;
   sql2 = 'SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Bill JOIN Revenue USING (revenueId)  JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId) LEFT JOIN Game on Game.gameId=Revenue.gameId WHERE Bill.customerId=' + customerId + ' and Bill.status="unpaid" UNION ALL SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Game  LEFT JOIN (Revenue JOIN Bill USING (revenueId) JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId)) using (gameId) WHERE Game.gameId IS NULL and Bill.status="unpaid" and Bill.customerId=' + customerId;
   sql3 = 'Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Bill JOIN Revenue using(revenueId) LEFT JOIN Game using(gameId) WHERE Bill.customerId=' + customerId + ' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and Bill.status="unpaid" UNION ALL Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Game LEFT JOIN Revenue using(gameId) JOIN Bill using(revenueId) WHERE Bill.customerId=' + customerId + ' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and(Revenue.gameId IS NULL) and Bill.status="unpaid"'
-
+  sql4='SELECT billId,amount as billAmount FROM Bill where customerId='+customerId+' AND revenueId IS NULL'
   var tab1 = await selectStatementMultipleRowsTogether(db, sql1).then(rows => {
     return rows;
   })
@@ -464,6 +464,9 @@ module.exports.generateBill = async (customerId) => {
     return rows;
   })
   var tab3 = await selectStatementMultipleRowsTogether(db, sql3).then(rows => {
+    return rows;
+  })
+  var tab4 = await selectStatementMultipleRowsTogether(db, sql4).then(rows => {
     return rows;
   })
 
@@ -474,7 +477,7 @@ module.exports.generateBill = async (customerId) => {
     }
     console.log('Close the database connection.');
   });
-  return Promise.all([tab1, tab2, tab3]);
+  return Promise.all([tab1, tab2, tab3,tab4]);
 }
 
 
