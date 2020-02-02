@@ -344,6 +344,13 @@ ipc.on('get-kitchen-data', function (event,gameId) {
     });
 })
 
+//Get Tables Summary
+ipc.on('get-tables-summary', function (event,tableNo) {
+    connections.getTablesSummary(tableNo).then(rows => {
+        event.sender.send("tables-summary", rows);
+    });
+})
+
 //Get report Data
 ipc.on('get-report-data', function (event,selectedDate) {
     connections.getReportData(selectedDate).then(rows => {
@@ -354,7 +361,6 @@ ipc.on('get-report-data', function (event,selectedDate) {
 //Get Bill For Customer
 ipc.on('generate-bill', function (event, customerId) {
     connections.generateBill(customerId).then(result => {
-        console.log(result)
         let finalResult = [];
         for (let i = 0; i < result.length; i++) {
             for (let j = 0; j < result[i].length; j++) {

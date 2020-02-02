@@ -397,6 +397,8 @@ module.exports.getOngoingGames = async () => {
   sql6 = 'SELECT * FROM Game WHERE tableNo=6 AND status=\'ongoing\'';
   sql7 = 'SELECT * FROM Game WHERE tableNo=7 AND status=\'ongoing\'';
   sql8 = 'SELECT * FROM Game WHERE tableNo=8 AND status=\'ongoing\'';
+  sql9 = 'SELECT * FROM Game WHERE tableNo=9 AND status=\'ongoing\'';
+  sql10 = 'SELECT * FROM Game WHERE tableNo=10 AND status=\'ongoing\'';
   var tab1 = await selectStatementMultipleRowsTogether(db, sql1).then(rows => {
     return rows;
   })
@@ -421,6 +423,12 @@ module.exports.getOngoingGames = async () => {
   var tab8 = await selectStatementMultipleRowsTogether(db, sql8).then(rows => {
     return rows;
   })
+  var tab9 = await selectStatementMultipleRowsTogether(db, sql9).then(rows => {
+    return rows;
+  })
+  var tab10 = await selectStatementMultipleRowsTogether(db, sql10).then(rows => {
+    return rows;
+  })
 
   db.close((err) => {
     if (err) {
@@ -428,7 +436,7 @@ module.exports.getOngoingGames = async () => {
     }
     console.log('Close the database connection.');
   });
-  return Promise.all([tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8]);
+  return Promise.all([tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8,tab9, tab10]);
 }
 
 
@@ -1003,6 +1011,7 @@ module.exports.getKitchenTable = async () => {
 }
 
 
+
 //Get Report Data
 module.exports.getReportData = async (selectedDate) => {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
@@ -1015,6 +1024,34 @@ module.exports.getReportData = async (selectedDate) => {
   console.log("selectedDate" + selectedDate)
 
   sql = 'SELECT createDate,revenueName,SUM(revenueAmount) as totalRevenue FROM Revenue WHERE createDate="' + selectedDate + '" GROUP BY createDate,revenueName';
+
+  var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
+    return rows;
+  })
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function (resolve, reject) {
+    resolve(rows);
+  });
+}
+
+
+//Get Tables Summary
+module.exports.getTablesSummary = async (tableNo) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  sql = 'SELECT Bill.createDate,Game.startTime,Game.endTime,Customer.customerName,Bill.amount from Bill JOIN Customer USING (customerId) JOIN Revenue USING(revenueId) JOIN Game USING (gameId) where Game.tableNo=?',[tableNo];
+
 
   var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
     return rows;
