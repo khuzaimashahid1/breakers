@@ -86,7 +86,7 @@ module.exports.createTables = () =>
       .run('CREATE TABLE IF NOT EXISTS ExpenseCategory(expenseCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,expenseCategoryName text UNIQUE,createDate text,updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS RevenueCategory(revenueCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,revenueCategoryName text UNIQUE,createDate text,updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS Expense(expenseId INTEGER PRIMARY KEY AUTOINCREMENT,expenseName text, expenseAmount int, expenseDescription text , createDate text,updateDate text, expenseCategoryId int,inventoryManagementId int, gameId int,employeeId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(expenseCategoryId) REFERENCES ExpenseCategory(expenseCategoryId),FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
-      .run('CREATE TABLE IF NOT EXISTS Revenue(revenueId INTEGER PRIMARY KEY AUTOINCREMENT,revenueName text, revenueAmount int, revenueDescription text , createDate text,updateDate text, revenueCategoryId int,inventoryManagementId int, gameId int, FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(revenueCategoryId) REFERENCES RevenueCategory(revenueCategoryId))')
+      .run('CREATE TABLE IF NOT EXISTS Revenue(revenueId INTEGER PRIMARY KEY AUTOINCREMENT,revenueName text, revenueAmount int, revenueDescription text , createDate text,updateDate text, revenueCategoryId int,inventoryManagementId int, gameId int,creditManagementId int, FOREIGN KEY(creditManagementId) REFERENCES CreditManagement(creditManagementId),FOREIGN KEY(gameId) REFERENCES Game(gameId) , FOREIGN KEY(inventoryManagementId) REFERENCES InventoryManagement(inventoryManagementId) , FOREIGN KEY(revenueCategoryId) REFERENCES RevenueCategory(revenueCategoryId))')
       .run('CREATE TABLE IF NOT EXISTS Account(accountId INTEGER PRIMARY KEY AUTOINCREMENT,accountName text,accountDescription text, amount int,createDate text,updateDate text)')
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
       .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int DEFAULT 0, createDate text,updateDate text)')
@@ -155,7 +155,7 @@ module.exports.getCreditors =  async() =>
     console.log('Connected to the breakers database.');
   });
   
-  sql='Select customerName,creditAmount,customerId from Customer WHERE creditAmount>0';
+  sql='Select customerName,creditAmount,customerId from Customer WHERE creditAmount!=0';
   
   
   var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
@@ -276,9 +276,12 @@ module.exports.clearCredit =  (currentDate,customerId,clearedAmount) =>
   });
   const today = new Date();
   const clearingTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  db.run('UPDATE Customer SET updateDate=?,creditAmount=((SELECT creditAmount FROM Customer WHERE customerId=?)-?) WHERE customerId=?',[currentDate,customerId,clearedAmount,customerId])
-  db.run('Insert into CreditManagement(createDate,amount,clearingTime,customerId) values(?,?,?,?)',[currentDate,-clearedAmount,clearingTime,customerId])
   
+  db.serialize(() => {
+  db.run('UPDATE Customer SET updateDate=?,creditAmount=((SELECT creditAmount FROM Customer WHERE customerId=?)-?) WHERE customerId=?',[currentDate,customerId,clearedAmount,customerId])
+  .run('Insert into CreditManagement(createDate,amount,clearingTime,customerId) values(?,?,?,?)',[currentDate,-clearedAmount,clearingTime,customerId])
+  .run('Insert into Revenue(createDate,revenueName,revenueAmount,revenueDescription,revenueCategoryId,creditManagementId) values (?,"Credit Clear",?,((Select customerName FROM Customer where customerId=?) || " Credit Cleared"),(Select revenueCategoryId from RevenueCategory where revenueCategoryName="Credit"),(SELECT MAX(creditManagementId) FROM CreditManagement))',[currentDate,clearedAmount,customerId])
+  })
   db.close((err) => {
     if (err) {
       return console.error(err.message);
