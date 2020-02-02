@@ -6,6 +6,7 @@ var jsonData = []
 initializeTables();
 
 
+
 //Get report data
 function getReportData(selectedDate) {
     jsonData = []

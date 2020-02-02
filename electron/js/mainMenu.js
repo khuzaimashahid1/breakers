@@ -72,7 +72,7 @@ function openTableSummary(){
 //Set Status and Event Listeners Of All Tables 
 function setStatusAndEventListeners()
 {
-    let totalTables=8;
+    let totalTables=10;
     for(let i=0;i<totalTables;i++)
     {
         let currentTable=i+1;
@@ -99,7 +99,7 @@ function setStatusAndEventListeners()
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openStartGame();
               });
-              $( "#sum"+currentTable ).click(function() {
+              $("#sum"+currentTable ).click(function() {
                 remote.getGlobal('sharedObj').tableNumber = currentTable;
                 openTableSummary();
               }); 
