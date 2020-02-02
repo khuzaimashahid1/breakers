@@ -226,19 +226,20 @@ legend {
 
 
 .collapsible {
-  background-color: #777;
+  background-color: black;
   color: white;
   cursor: pointer;
   padding: 18px;
   width: 100%;
+  text-align: center;
   border: none;
-  text-align: left;
   outline: none;
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .active, .collapsible:hover {
-  background-color: #555;
+  background-color:black;
+  color: white;
 }
 
 .content {
