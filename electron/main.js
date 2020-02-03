@@ -197,7 +197,7 @@ ipc.on('add-order', function (event, selectedItem, gameId, customerId, quantity,
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.addOrder(currentDate, selectedItem, gameId, customerId, quantity, amount);
+    connections.addOrder(currentDate, currentDate, selectedItem, gameId, customerId, quantity, amount);
 })
 
 //Add Order Others
