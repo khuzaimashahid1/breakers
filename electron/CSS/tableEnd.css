@@ -20,13 +20,13 @@
   margin-right: 5px ;
   text-align: center;
 }
-legend {
-  margin-left: 30%;
+h1 {
+  text-align: center;
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 24px;
   font-style: bold;
   color: #000;
-  color: #000;
+
   padding: 3px 6px;
 }
 
@@ -186,6 +186,7 @@ legend {
   /* Modal Content/Box */
   .modal-content {
     background-color: #fefefe;
+    opacity: 0.8;
     margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
@@ -224,10 +225,30 @@ legend {
   margin-left: 35%;
 }
 
+.btn {
+  display: block;
+  width: 200px;
+  padding: 10px;
+  margin: 20px auto 0;
+  border: none;
+  border-radius: 5px; 
+  background:black; 
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  }
+  .btn:hover {
+  background: white;
+  border:5px solid black;
+
+  border-radius: 5px; 
+  color: black;
+  }
 
 .collapsible {
   background-color: black;
   color: white;
+
   cursor: pointer;
   padding: 18px;
   width: 100%;
@@ -246,5 +267,4 @@ legend {
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: #f1f1f1;
 }

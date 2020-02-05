@@ -39,6 +39,8 @@ function openEndGame(){
             parent:parentWindow,
             title:'On-going Game',
             fullscreen:false,
+            height:700,
+            width:800,
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true
