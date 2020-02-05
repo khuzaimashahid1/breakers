@@ -1,10 +1,12 @@
-if(!listener)
+if(!mainListener)
 {
-var listener = ipc.on('Reload', (event, message) => {
-    setStatusAndEventListeners();
-    startTimer();
-  })
+    var mainListener=ipc.on('Reload',(event, message) => {
+        setStatusAndEventListeners();
+        startTimer();
+      })  
+    
 }
+
 setStatusAndEventListeners();
 startTimer();
 

@@ -7,7 +7,7 @@
     <!-- <link rel="stylesheet" href="../CSS/breakers.css"> -->
     <link rel="stylesheet" href="../CSS/tableEnd.css">
     <link rel="stylesheet" href="../CSS/BillGenerator.css">
-    <!-- <link rel="stylesheet" href="../CSS/mainMenu.css"> -->
+    <!-- <link rel="stylesheet" href="../CSS/modal.css"> -->
     <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
     <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
 </head>
@@ -33,6 +33,7 @@
                            height: 40px;
                            width: 20%;
                            padding: 10px;
+                           color:black;
                            border: 2px solid black;
                            border-radius: 10px;
                            background: white;  ">
@@ -79,7 +80,7 @@
 
             <div class="main-block">
                 <label  style="
-                           margin-left: 33%;
+                           margin-left: 38%;
                            height: 40px;
                            width: 20%;
                            padding: 10px;
@@ -97,33 +98,14 @@
                           color: black;
                            ">0.0$ </label>
                 <br />
-                <label for="" style="
-                           margin-left: 33%;
-                           height: 40px;
-                           width: 20%;
-                           padding: 10px;
-                           font-size: 25px;
-                           font-style: oblique;
-                           color: black;
-                            ">Paid: </label>
-
-
-                <input id="amountReceived" type="text" style="
-                          margin-left: 2%;
-                          height: 30px;
-                          width: 100px;
-                          padding: 10px;
-                          font-size: 25px;
-                          font-style: oblique;
-                          color: black;" name="lname" placeholder="0.0 PKR"><br>
                 <br />
-                <br />
-                <div style="margin-bottom: 5%;">
+               
+                <div style="margin-bottom: 5%; margin-left: 20%;">
 
                         <button 
                             id="btnAmountReceived" 
                             class="w3-button" 
-                            onclick="amountReceived()" 
+                            onclick="modalScript()" 
                             style="margin-left: 2%;
                                 height: 40px;
                                 width: 20%;
@@ -134,27 +116,48 @@
                                 border-radius: 10px;
                                 border: 2px solid black;
                                 background: green;
-                         ">Amount Received</button>
+                         ">Payment</button>
 
-                        <button id="btnCancel" class="w3-button" onclick="" style="margin-left: 2%;
-                        height: 40px;
-                        width: 20%;
-                        margin-right: 20%;
-                        font-size: 14px;
-                        font-weight: 600;
-                        color: white;
-                        border-radius: 10px;
-                        border: 2px solid black;
-                        background: green;
-                         ">Cancel</button>
 
                 </div>
             </div>
         </div>
     </div>
-    <script>
-    </script>
+    <!-- MODAL SECTION FOR PAYMENT -->
 
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class="w3-bar w3-black" >
+              <button class="w3-bar-item w3-button w3-white"  style="margin-left: 45%;" >Payment</button>
+          </div>
+
+          <div id="gamePayment" class="w3-container city" style="display:block">
+              <div class="main-block-modal">
+                  <form class="info">   
+                    <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="totalBill1" type="number" placeholder="Total Bill" readonly>
+                      <br />
+                    
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="paymentByCash" type="number" placeholder="Payment By Cash" value="0">
+                      <br />
+                     
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="paymentByCard" type="number"  placeholder="Payment By Card" value="0">
+                      <br />
+                      
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="paymentByEasyPaisa" type="number" placeholder="Payment By Easypaisa" value="0">
+                      <br />
+                     
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="discount" type="number" placeholder="Discount" value="0">
+                      <br />
+
+                      <button class="btnModal" type="button" onclick="amountReceived();">Pay</button>
+                  </form>
+              </div>
+
+          </div>
+        
+      </div>
+  </div>
 </body>
 <script src="../js/BillGenerator.js"></script>
 

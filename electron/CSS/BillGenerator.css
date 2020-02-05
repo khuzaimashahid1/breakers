@@ -70,3 +70,73 @@ right: 0;  */
   /* width: 40%; */
 }
 
+/* MODAL SECTION */
+input, select { 
+  padding: 0;
+  margin: 0;
+  outline: none;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 16px;
+  color: #eee;
+  }
+.main-block-modal, .info {
+  display: flex;
+  flex-direction: column;
+  }
+  .main-block-modal {
+  justify-content: center;
+  align-items: center;
+  width: 100%; 
+  min-height: 100%;
+
+  background-size: cover;
+  }
+  form {
+  width: 80%; 
+  padding: 25px;
+  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  }
+  input, select {
+  padding: 5px;
+  margin-bottom: 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #eee;
+  /* Due to datatables getting fucked  */
+  }
+  input::placeholder {
+  color: #eee;
+  }
+
+  .btnModal {
+    display: block;
+    width: 200px;
+    padding: 10px;
+    margin: 20px auto 0;
+    border: none;
+    border-radius: 5px; 
+    background: #ffff; 
+    font-size: 14px;
+    font-weight: 600;
+    color: green;
+    }
+    .btnModal:hover {
+    background: green;
+    color: #fff;
+    }
+    @media (min-width: 768px) {
+      .info {
+      flex-flow: row wrap;
+      justify-content: space-between;
+      }
+      input {
+      width: 46%;
+      }
+      input.fname {
+      width: 100%;
+      }
+      select {
+      width: 48%;
+      }
+      }

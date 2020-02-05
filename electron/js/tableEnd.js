@@ -7,12 +7,13 @@ let tableNumber = remote.getGlobal('sharedObj').tableNumber
 let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
 let currentPlayerId;
 let currentPlayers = []
-let drinkStock,cigaretteStock;
+let drinkStock, cigaretteStock;
 var table = document.getElementById("gameExpense");
 
+initializeListeners();
+getInventoryCategory();
 getCurrentPlayers();
 populatePlayers();
-populateStock();
 getTableData();
 console.log(players)
 console.log(currentPlayers)
@@ -60,7 +61,7 @@ function clearFields(orderType)
 
 //Render Modal
 function modalScript(playerId) {
-    currentPlayerId=playerId;
+    currentPlayerId = playerId;
     // Get the modal
     var modal = document.getElementById("myModal");
     modal.style.display = "block";
@@ -105,7 +106,7 @@ function populatePlayers() {
         '<label>Start Time: ' + currentGame.startTime + '</label>' +
         '</div>'
     );
-    let team=1;
+    let team = 1;
     for (i = 0; i < numberofCurrnetPlayers; i++) {
         if (currentPlayers[i] !== null) {
             $(".grid-container").append(' <div class="grid-item">' +
@@ -113,114 +114,155 @@ function populatePlayers() {
                 '<label class="player">' + currentPlayers[i].customerName + '</label>' +
                 '</div>' +
                 '<div class="hoverBody">' +
-                '<button id="btnAddExtra" class="btnAddExtra"  onClick="modalScript('+currentPlayers[i].customerId+')">Add Extra</button>' +
+                '<button id="btnAddExtra" class="btnAddExtra"  onClick="modalScript(' + currentPlayers[i].customerId + ')">Add Extra</button>' +
                 '</div>' +
                 '</div>');
-            if(currentGame.gameType==="Double")
-            {
-                if(i==0 || i ==2)
-                {
-                    $(".playersList").append("<option id=" + currentPlayers[i].customerId +","+currentPlayers[i+1].customerId + ">" + "Team "+team+ " ( "+currentPlayers[i].customerName +" and "+currentPlayers[i+1].customerName+")"+ "</option");
+            if (currentGame.gameType === "Double") {
+                if (i == 0 || i == 2) {
+                    $(".playersList").append("<option id=" + currentPlayers[i].customerId + "," + currentPlayers[i + 1].customerId + ">" + "Team " + team + " ( " + currentPlayers[i].customerName + " and " + currentPlayers[i + 1].customerName + ")" + "</option");
                     team++;
                 }
-                
+
             }
-            else
-            {
+            else {
                 $(".playersList").append("<option id=" + currentPlayers[i].customerId + ">" + currentPlayers[i].customerName + "</option");
             }
-                
+
         }
     }
 
 }
 
-//Populate All Stocks
-function populateStock() {
-    
-    //Get Cigarettes from Main Process IPC
-    ipc.send('get-cigs');
-    ipc.on('Cigarette Stock', (event, cigStock) => 
-    {
-        cigaretteStock = cigStock
-        for (let i = 0; i < cigaretteStock.length; i++) {
-            $("select#CigaretteSelect").append($("<option>")
-                .val(cigaretteStock[i].inventoryId)
-                .html(cigaretteStock[i].itemName)
-            );
-        }
-        $("select#CigaretteSelect").change(function () {
-            var selectedCigarette = $(this).children("option:selected").val();
-            const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-            $("#CigarettePrice").val(cigaretteFilter[0].itemAmount)
-        });
-    })
-   
-    //Get Drinks from Main Process IPC
-    ipc.send('get-drinks');
-    ipc.on('Drinks Stock', (event, drinks) => 
-    {
-        drinkStock = drinks;
-        for (let i = 0; i < drinkStock.length; i++) {
-            $("select#DrinkSelect").append($("<option>")
-                .val(drinkStock[i].inventoryId)
-                .html(drinkStock[i].itemName)
-            );
-        }
-        $("select#DrinkSelect").change(function () {
-            var selectedDrink = $(this).children("option:selected").val();
-            const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-            $("#DrinkPrice").val(drinkFilter[0].itemAmount)
-        });
-    })
+//Function For Getting Invenory Categories
+function getInventoryCategory() {
+    let inventoryCategory = []
 
+    //Get Inventory Category from Main Process IPC
+    ipc.send('get-inventory-category');
+    ipc.once('inventoryCategory', (event, categories) => {
+        for (let i = 0; i < categories.length; i++) {
+            // converting json to array for datatables
+            inventoryCategory.push(categories[i])
+            // for employee salary drop down
+            $("select#itemCategorySelector").append($("<option>")
+                .val(categories[i].inventoryCategoryId)
+                .html(categories[i].inventoryCategoryName)
+            );
+
+            $("select#newItemCategorySelector").append($("<option>")
+                .val(categories[i].inventoryCategoryId)
+                .html(categories[i].inventoryCategoryName)
+            );
+
+
+            $("select#addItemCategorySelector").append($("<option>")
+                .val(categories[i].inventoryCategoryId)
+                .html(categories[i].inventoryCategoryName)
+            );
+        }
+
+    })
+}
+
+//Function For Getting Invenory Categories
+function initializeListeners() {
+    $(document).ready(function () {
+
+        $('#addItemSelector').change(function () {
+            $('#currentItemQuantityStock').val("In Stock: " + $("option:selected", this).attr("data-quantity"))
+        })
+        $('#itemSelector').change(function () {
+            $("#itemPrice").val($('#itemSelector').val())
+            $('#itemQuantityStock').val("In Stock: " + $("option:selected", this).attr("data-quantity"))
+        })
+
+        $('#itemCategorySelector').change(function () {
+            let selectedValue = $("#itemCategorySelector").val();
+            ipc.send('get-inventory', selectedValue);
+            ipc.once('Stock', (event, inventory) => {
+                // Remove previous Select Option
+                $('select#itemSelector')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append('<option value="text" disabled selected>Select Item</option>');
+
+                for (let i = 0; i < inventory.length; i++) {
+                    $("#itemSelector").append($("<option>")
+                        .val(inventory[i].itemAmount)
+                        .html(inventory[i].itemName)
+                        .attr('data-quantity', inventory[i].quantity)
+
+                    );
+                    console.log(inventory[i].quantity)
+                }
+            })
+        });
+        $('#addItemCategorySelector').change(function () {
+            let selectedValue = $("#addItemCategorySelector").val();
+            ipc.send('get-inventory', selectedValue);
+            ipc.once('Stock', (event, inventory) => {
+                // Remove previous Select Option
+                $('select#addItemSelector')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append('<option value="text" disabled selected>Select Item</option>');
+
+                for (let i = 0; i < inventory.length; i++) {
+                    $("#addItemSelector").append($("<option>")
+                        .val(inventory[i].itemAmount)
+                        .html(inventory[i].itemName)
+                        .attr('data-quantity', inventory[i].quantity)
+                    );
+
+                }
+            })
+        });
+    });
 }
 
 //Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
-function getTableData(){
-    ipc.send('get-table-data',currentGame.gameId)
-    ipc.once('table-data',(event,tableData)=>
-  {
-    for(let i=0;i<tableData.length;i++)
-    {
-        var row = table.insertRow(1);
-        var orderItem = row.insertCell(0);
-        var orderType = row.insertCell(1);
-        var orderAmunt = row.insertCell(2);
-        var customerName = row.insertCell(3);
-        orderItem.innerHTML = tableData[i].orderItem;
-        orderType.innerHTML = tableData[i].orderDescription;
-        orderAmunt.innerHTML = tableData[i].orderAmount;
-        customerName.innerHTML = tableData[i].customerName;
-    }
-    console.log(tableData);
-  })
+function getTableData() {
+    ipc.send('get-table-data', currentGame.gameId)
+    ipc.once('table-data', (event, tableData) => {
+        for (let i = 0; i < tableData.length; i++) {
+            var row = table.insertRow(1);
+            var orderItem = row.insertCell(0);
+            var orderType = row.insertCell(1);
+            var orderAmunt = row.insertCell(2);
+            var customerName = row.insertCell(3);
+            orderItem.innerHTML = tableData[i].orderItem;
+            orderType.innerHTML = tableData[i].orderDescription;
+            orderAmunt.innerHTML = tableData[i].orderAmount;
+            customerName.innerHTML = tableData[i].customerName;
+        }
+        console.log(tableData);
+    })
 }
 
 //Drinks Order
-function drinksOrder()
-{
+function drinksOrder() {
     let selectedDrink = $("select#DrinkSelect").children("option:selected").val();
-    const drinkFilter=drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
-    let inventoryId=drinkFilter[0].inventoryId;
-    let price=drinkFilter[0].itemAmount;
-    let gameId=currentGame.gameId;
-    let quantity=$("#DrinkQuantity").val()
-    ipc.send('add-order',inventoryId,gameId,currentPlayerId,quantity,price)
-    getTableData();   
+    const drinkFilter = drinkStock.filter((drink => (drink.inventoryId === parseInt(selectedDrink))));
+    let inventoryId = drinkFilter[0].inventoryId;
+    let price = drinkFilter[0].itemAmount;
+    let gameId = currentGame.gameId;
+    let quantity = $("#DrinkQuantity").val()
+    ipc.send('add-order', inventoryId, gameId, currentPlayerId, quantity, price)
+    getTableData();
 }
 
 //Cigarettes Order
-function cigarettesOrder()
-{
+function cigarettesOrder() {
     var selectedCigarette = $("select#CigaretteSelect").children("option:selected").val();
-    const cigaretteFilter=cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
-    let inventoryId=cigaretteFilter[0].inventoryId;
-    let price=cigaretteFilter[0].itemAmount;
-    let gameId=currentGame.gameId;
-    let quantity=$("#CigaretteQuantity").val()
-    ipc.send('add-order',inventoryId,gameId,currentPlayerId,quantity,price)
-    getTableData();      
+    const cigaretteFilter = cigaretteStock.filter((cigarette => (cigarette.inventoryId === parseInt(selectedCigarette))));
+    let inventoryId = cigaretteFilter[0].inventoryId;
+    let price = cigaretteFilter[0].itemAmount;
+    let gameId = currentGame.gameId;
+    let quantity = $("#CigaretteQuantity").val()
+    ipc.send('add-order', inventoryId, gameId, currentPlayerId, quantity, price)
+    getTableData();
 }
 
 //Inventory Order
@@ -276,11 +318,27 @@ function miscOrder()
     getTableData();      
 }
 
-//End Game (Iron Man Dies)
-function endGame()
-{
-    if(currentGame.gameType==="Single" || currentGame.gameType==="Century")
+//Inventory Order
+function inventoryOrder() {
+    let selectedItem = $("select#itemSelector").children("option:selected").html();
+    let itemPrice = $("select#itemSelector").children("option:selected").val();
+    let quantity = $("#itemQuantity").val()
+    let gameId = currentGame.gameId;
+    if (selectedItem != "") 
     {
+        ipc.send('add-order', selectedItem, gameId, currentPlayerId, quantity, itemPrice)
+        clearFields('inventory')
+    }
+    else 
+    {
+        ipc.send('error-dialog', "Empty field(s)");
+    }
+}
+
+//End Game 
+function endGame() {
+    console.log("End Game Called")
+    if (currentGame.gameType === "Single" || currentGame.gameType === "Century") {
         var loser = $("select#loserSelect").children("option:selected").val();
         const player=currentPlayers.filter(player => (player!=null && player.customerName == loser));
         let amount=$("#amount").val()
@@ -358,29 +416,26 @@ function endGame()
     
 }
 
-function nextGame()
-{
-    const status="ongoing";
+function nextGame() {
+    const status = "ongoing";
     const today = new Date();
     const startTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const createDate = yyyy + '-' + mm + '-' + dd;
-    let playersArray=[]
-    for(let i =0;i<currentPlayers.length;i++)
-    {
-        if(currentPlayers[i]!==null)
-        {
+    let playersArray = []
+    for (let i = 0; i < currentPlayers.length; i++) {
+        if (currentPlayers[i] !== null) {
             playersArray.push(currentPlayers[i].customerId)
         }
-        else
-        {
+        else {
             playersArray.push(null)
         }
-        
+
     }
-    ipc.send('start-game',tableNumber,status,currentGame.gameType,...playersArray,startTime,createDate)
+    
+    ipc.send('start-game', tableNumber, status, currentGame.gameType, ...playersArray, startTime, createDate)
     endGame();
 }
 

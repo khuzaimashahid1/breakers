@@ -1,4 +1,3 @@
-// window.$ = window.jQuery = require('jquery');
 require('datatables.net-dt')();
 var billData=[],billIdArray=[],datatable,totalBill=0;
 function renderSuggestions()
@@ -107,6 +106,32 @@ function autoComplete(input, allplayers) {
     });
 }
 
+//Render Modal
+function modalScript() {
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    var mainBody= document.getElementById("Fade");
+    mainBody.style.display = "none";
+    modal.style.display = "block";
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+        mainBody.style.display = "block";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            mainBody.style.display = "block";
+        }
+    }
+
+
+
+}
+
 function generateBill()
 {
     totalBill=0
@@ -125,6 +150,7 @@ function generateBill()
         datatable.clear().rows.add(billData).draw();
         // $("#totalBill").innerText(totalBill+ " PKR")
         $("#totalBill").html(totalBill+ " PKR")
+        $("#totalBill1").val(totalBill)
     })
 
 }
@@ -163,18 +189,27 @@ function getId(name)
 
 function amountReceived()
 {
-    let received=$("#amountReceived").val()
-    let remaining;
+    let cash=parseInt($('#paymentByCash').val());
+    let card=parseInt($('#paymentByCard').val())
+    let ep=parseInt($('#paymentByEasyPaisa').val())
+    let discount=parseInt($('#discount').val())
+    let bill=totalBill-discount;
+    console.log(totalBill)
+    console.log(bill)
+    let received=cash+card+ep;
+    let remaining=bill-received;
     console.log(received)
-    if(received==totalBill)
+    console.log(remaining)
+    
+    if(remaining==0)
     {
-        ipc.send('pay-bill',"paid",0,currentPlayerId,...billIdArray)
+        ipc.send('pay-bill',cash,card,ep,discount,"paid",0,currentPlayerId,...billIdArray)
         
     }
     else
     {
-        remaining=totalBill-received;
-        ipc.send('pay-bill',"Partial Paid",remaining,currentPlayerId,...billIdArray)
+        remaining=bill-received;
+        ipc.send('pay-bill',cash,card,ep,discount,"Partial Paid",remaining,currentPlayerId,...billIdArray)
         
     }
 }

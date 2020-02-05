@@ -41,13 +41,14 @@ function createWindow() {
     })
 }
 
-//SHOW DIALOGUE
-function showDialogueOnDBCall(result,message){
-    if(result===true) 
-         dialog.showErrorBox("Success",message)
-    else
-         dialog.showErrorBox("Failure",message)        
-        
+//SHOW  SUCCESS DIALOG
+function showSuccessDialog(message){
+    const options = {
+        title: "Success",
+        message: message,
+        button: ['OK']
+    }
+    dialog.showMessageBox(null, options)      
 } 
 
 //Error Dialouge Box Pop-up
@@ -83,7 +84,7 @@ ipc.on('add-employee',function(event, employeeName, employeeDesignation, employe
         {
             if(result===true)
             {
-                dialog.showErrorBox("Success","New Employee Added")
+                showSuccessDialog("New Employee Added!")
                 event.sender.send('Reload Employees','New Employee Added');
             }
             
@@ -102,7 +103,7 @@ ipc.on('add-employee-advance',function(event, employeeId, advanceAmount){
         {
             if(result===true)
             {  
-                dialog.showErrorBox("Success","Advance Amount Added")
+                showSuccessDialog("Advance Amount Added!")
                 event.sender.send('Reload Employees','Advance Changed');
             }
             
@@ -115,7 +116,7 @@ ipc.on('add-employee-advance',function(event, employeeId, advanceAmount){
 ipc.on('pay-employee-salary', function (event, employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount, createDate) {
     connections.paySalaryEmployee(employeeId,salaryMonth, salaryAmount,salaryNote, advanceDeductionAmount, createDate).then(result => {
         if (result === true) {
-            dialog.showErrorBox("Success", "Salary Added")
+            showSuccessDialog("Salary Added!")
             event.sender.send('Reload Employees','Salary Paid');
         }
 
@@ -130,7 +131,7 @@ ipc.on('add-customer', function (event, customerName, customerAddress, customerP
         if (result === true) {
             getAllCustomers();
             getAllOngoingGames();
-
+            showSuccessDialog("Customer Added!")
         }
 
     });
@@ -142,14 +143,8 @@ ipc.on('add-customer', function (event, customerName, customerAddress, customerP
 ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseAmount, createDate,expenseCategoryId) {
     connections.addExpense(expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId).then(result => {
         if (result === true) {
-            const options = {
-                title: "Success",
-                message: "message",
-                button: ['okay']
-            }
-            dialog.showMessageBox(null, options)
+            showSuccessDialog("Expense Added")
         }
-
     });
 
 })
@@ -217,13 +212,13 @@ ipc.on('add-order-others', function (event, gameId, customerId, categoryName, it
 })
 
 //Pay Bill
-ipc.on('pay-bill', function (event, status, creditAmount, customerId, ...billIdArray) {
+ipc.on('pay-bill', function (event,cash,card,ep,discount, status, creditAmount, customerId, ...billIdArray) {
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.payBill(currentDate, status, creditAmount, customerId, ...billIdArray);
+    connections.payBill(currentDate,cash,card,ep,discount, status, creditAmount, customerId, ...billIdArray);
 })
 
 //Clear Credit
@@ -238,6 +233,7 @@ ipc.on('clear-credit', function (event, customerId, clearedAmount) {
 
 //End Game
 ipc.on('end-game', function (event, gameId, amount, loserId1, loserId2) {
+    console.log("END GAME CALLED")
     const today = new Date();
     const endTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -315,16 +311,16 @@ ipc.on('get-inventory', function (event,inventoryCategoryId) {
 
 
 //Add New Inventory Item
-ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItemQuantity,inventoryCategorId){
+ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItemQuantity,inventoryCategorId,newItemPurchasePrice){
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.addInventoryItem(currentDate,newItemName,newItemPrice,newItemQuantity,inventoryCategorId).then(result => {
+    connections.addInventoryItem(currentDate,newItemName,newItemPrice,newItemQuantity,inventoryCategorId,newItemPurchasePrice).then(result => {
         if (result === true) {
             // event.sender.send('Reload Inventory','New Item Added');
-            dialog.showErrorBox("Success","New Item Added")
+            showSuccessDialog("New Item Added")
             
         }
         else
@@ -346,7 +342,7 @@ ipc.on('update-stock', function(event,itemName,quantity){
     connections.updateStock(currentDate,itemName,quantity).then(result => {
         if (result === true) {
             // event.sender.send('Reload Inventory','New Item Added');
-            dialog.showErrorBox("Success","Inventory Updated")
+            showSuccessDialog("Inventory Updated")
             
         }
         

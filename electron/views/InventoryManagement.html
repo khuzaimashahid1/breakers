@@ -94,7 +94,7 @@
             <h1 style="text-align: center;">Inventory Orders & Management</h1>
             <div class="w3-bar w3-black">
                 <button class="w3-bar-item w3-button" onclick="tabItem('invetoryOrder')">Place Order</button>
-                <button class="w3-bar-item w3-button" onclick="tabItem('newInventoryItem')">Add New Itemk</button>
+                <button class="w3-bar-item w3-button" onclick="tabItem('newInventoryItem')">Add New Item</button>
                 <button class="w3-bar-item w3-button" onclick="tabItem('addItemStock')">Add Stock to Inventory</button>
                 <button class="w3-bar-item w3-button" onclick="tabItem('inventorySummary')">Inventory Summary</button>
             </div>
@@ -136,7 +136,7 @@
                 
             </div>
             <!-- Inventory Summary Tab -->
-            <div id="inventorySummary" class="w3-container category" style="display:none; background-color: white;opacity: 0.8;">
+            <div id="inventorySummary" class="w3-container category" style="display:none; background-color:">
                     <h2 style="text-align: center;">Inventory Summary</h2>
                     <table id="inventorySummaryTable" class="display" style="width:100%;  overflow: auto;">
                         <thead>
@@ -175,7 +175,10 @@
                     <input class="input" id="newItemName" type="text" placeholder="Enter Item Name" />
                     <br />
                     <br />
-                    <input class="input" id="newItemPrice" type="number" placeholder="Enter Item Price" />
+                    <input class="input" id="newItemPrice" type="number" placeholder="Enter Item Retail Price" />
+                    <br />
+                    <br />
+                    <input class="input" id="newItemPurchasePrice" type="number" placeholder="Enter Purchase Item Price" />
                     <br />
                     <br />
                     <input class="input" id="newItemQuantity" type="number" placeholder="Enter Quantity" />
