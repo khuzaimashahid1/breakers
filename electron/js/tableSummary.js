@@ -1,4 +1,11 @@
+const { BrowserWindow } = require('electron').remote
+const { remote } =require('electron');
+const electron= require('electron');
+const ipc = electron.ipcRenderer;
 require('datatables.net-dt')();
+window.$ = window.jQuery = require('jquery');
+
+
 populatingTableSummary();
 var summaryData=[];
 var summaryTable;

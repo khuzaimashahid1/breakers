@@ -67,7 +67,7 @@ function openTableSummary(){
                 
             }
         });
-    
+        winEndGame.tableId = 
         winEndGame.loadURL(url.format({
             pathname : path.join(__dirname,"./tableSummary.html"),
             protocol: "file",
