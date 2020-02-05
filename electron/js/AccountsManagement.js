@@ -127,6 +127,20 @@ function openLink(evt, animName) {
     }
     document.getElementById(animName).style.display = "block";
     evt.currentTarget.className += " w3-white";
+
+    if(animName == "Fade"){
+        var tableExpense = $('#Expense').DataTable();
+        $('#Fade').css( 'display', 'block' );
+          tableExpense.columns.adjust().draw(); 
+    }
+    else if(animName == "Left"){
+        var tableRevenue = $('#Revenue').DataTable();
+        $('#Left').css( 'display', 'block' );
+          tableRevenue.columns.adjust().draw();  
+    }
+
+
+
 }
 
 function tabItem(category) {
@@ -148,8 +162,7 @@ $(document).ready(function () {
     // Revenue DataTable
     revenueTable=$('#Revenue').DataTable({
         scrollY:'50vh',
-        scrollX:'50vh',
-        scrollCollapse: false,
+        scrollCollapse: true,
         paging:true,
         data: revenueArray,
         "columns": [

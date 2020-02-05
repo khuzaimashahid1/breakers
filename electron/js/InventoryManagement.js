@@ -83,7 +83,20 @@ function setAllSubTabsToNone(){
 //Selecting Order Action Tab
 function tabItem(category) {
     setAllSubTabsToNone();
-    document.getElementById(category).style.display = "block";
+    if(category == "kitchenSummary"){
+        document.getElementById(category).style.display = "block";
+        var tableKitchenSummary = $('#kitchenSummaryTable').DataTable();
+        $('#kitchenSummary').css( 'display', 'block' );
+        tableKitchenSummary.columns.adjust().draw();  
+    }
+    else if(category == "inventorySummary"){
+        document.getElementById(category).style.display = "block";
+        var tableInventorySummary= $('#inventorySummaryTable').DataTable();
+        $('#inventorySummary').css( 'display', 'block' );
+        tableInventorySummary.columns.adjust().draw();
+    }
+    else
+        document.getElementById(category).style.display = "block";
 }
 //BUTTONS TAB NAVIGATOR IN MAIN CONTAINER
 function buttonTab(evt,closingTab,openingTab,numberOfButtons) {
@@ -369,7 +382,7 @@ function populatingInventoryTable()
 {
     $(document).ready(function () {
       inventoryTable=$('#inventorySummaryTable').DataTable({
-        scrollY:'50vh',
+        scrollY:'35vh',
         scrollCollapse: true,
         paging:true,
         data: inventoryData,
