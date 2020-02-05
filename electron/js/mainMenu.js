@@ -39,6 +39,8 @@ function openEndGame(){
             parent:parentWindow,
             title:'On-going Game',
             fullscreen:false,
+            height:700,
+            width:800,
             webPreferences: {
                 nativeWindowOpen: true,
                 nodeIntegration: true
@@ -67,7 +69,6 @@ function openTableSummary(){
                 
             }
         });
-        winEndGame.tableId = 
         winEndGame.loadURL(url.format({
             pathname : path.join(__dirname,"./tableSummary.html"),
             protocol: "file",

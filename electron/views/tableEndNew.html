@@ -21,30 +21,40 @@
 
         <!-- MAKING A DIV FOR GAME BODY DEPENDING ON GAME TYPE -->
         <div id="playersContainer" class="playersContainer">
-            <legend>Current Players in the game</legend>
+            <h1>Current Players in the game</h1>
             <div class="grid-container">
             </div>
+
+            <div class="tableData">
+                <table id="gameExpense" style="width:100%">
+                    <tr>
+                        <th>Order Item</th>
+                        <th>Order Type</th>
+                        <th>Amount</th>
+                        <th>Customer</th>
+                    </tr>
+                </table>
         </div>
 
         <div>
-            <button type="button" class="collapsible">Game Menu</button>
+            <button type="button" class="collapsible" style=" width: 30%; margin-left:35%;" >Game Menu</button>
             <div class="content">
                 <div id="gameMenu" class="w3-container" >
-                    <div class="main-block">
-                        <form class="info"> 
+                    <div class="main-block" >
+                        <form class="info" > 
                             <select  style=" width: 100%; margin-left: 20%; margin-right: 20%;" id="loserSelect" class="playersList">
                                 <option id="">Choose Loser</option>
                                 
                             </select>
                             <br />
                          
-                            <label style="width: 100%;margin-left: 20%; margin-right: 20%; color: white;"><input  id="finalCheckBox" type="checkbox" placeholder="Final" >Final</label>
+                            <label style="width: 100%;margin-left: 40%; margin-right: 20%; color: white; font-size: 20px;">Final<input  id="finalCheckBox" style="margin-left: -15%;"  type="checkbox"></label>
                             <br />
                            
-                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="numberOfGames" type="number" step="2" min="1" placeholder="1">
+                            <input style="width: 100%; margin-left: 20%; margin-right: 20%; color: white;" id="numberOfGames" type="number" step="2" min="1" placeholder="1">
                             <br />
                             
-                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="amount" type="number" placeholder="Amount">
+                            <input style="width: 100%; margin-left: 20%; margin-right: 20%; color: white" id="amount" type="number" placeholder="Amount">
                             <br />
                            
                             <button type="button" class="btnModal"onclick="endGame()">End Game</button>
@@ -72,16 +82,8 @@
                      
         </div> -->
 
-        <div class="tableData">
-            <table id="gameExpense" style="width:100%">
-                <tr>
-                    <th>Order Item</th>
-                    <th>Order Type</th>
-                    <th>Amount</th>
-                    <th>Customer</th>
-                </tr>
-            </table>
-
+           
+   
         </div>
 
         <div id="myModal" class="modal">
@@ -98,9 +100,9 @@
                         <h1>Kitchen Order</h1>
                         <form >
                             <div class="info">
-                                <input type="text" id="kitchenItem" placeholder="Order Item" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <input required type="text" id="kitchenItem" placeholder="Order Item" style="width: 100%; margin-left: 20%; margin-right: 20%;">
                                 <br/>
-                                <input type="text" id="kitchenPrice" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <input required type="text" id="kitchenPrice" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
                                 
                             </div>
                             <button  type="button" class="btnModal" onclick="kitchenOrder()">Add to Bill</button>
@@ -123,13 +125,13 @@
                             </select>
                             <br />
                          
-                            <input  style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemPrice" type="text" placeholder="Price" readonly>
+                            <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemPrice" type="text" placeholder="Price" readonly>
                             <br />
                            
-                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantityStock" type="text" disabled placeholder="In Stock">
+                            <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantityStock" type="text" disabled placeholder="In Stock">
                             <br />
                             
-                            <input style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantity" type="number" placeholder="Quantity">
+                            <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="itemQuantity" type="number" placeholder="Quantity">
                             <br />
                            
                             <button class="btnModal" type="button" onclick="inventoryOrder()">Add to bill</button>
@@ -144,9 +146,9 @@
                         <form >
                             <div class="info">
 
-                                <input type="text" id="miscItem" placeholder="Order Item" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <input required type="text" id="miscItem" placeholder="Order Item" style="width: 100%; margin-left: 20%; margin-right: 20%;">
                                 <br/>
-                                <input type="text" id="miscPrice" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
+                                <input required type="text" id="miscPrice" placeholder="Price" style="width: 100%; margin-left: 20%; margin-right: 20%;">
 
                             </div>
 

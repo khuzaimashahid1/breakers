@@ -33,6 +33,31 @@ function getCurrentPlayers() {
     console.log(currentGame)
 }
 
+function clearFields(orderType)
+{
+    if (orderType =='kitchen')
+        {
+           document.getElementById('kitchenItem').value ='';
+           document.getElementById('kitchenPrice').value ='';
+           
+        }
+    else  if (orderType =='inventory')
+    {
+       document.getElementById('itemCategorySelector').selectedIndex ='0';
+       document.getElementById('itemSelector').selectedIndex ='0';
+       document.getElementById('itemPrice').value ='';
+       document.getElementById('itemQuantityStock').value ='';
+       document.getElementById('itemQuantity').value ='';
+       
+    }
+    else if (orderType =='misc')
+    {
+        document.getElementById('miscItem').value ='';
+           document.getElementById('miscPrice').value ='';
+    }
+        
+}
+
 //Render Modal
 function modalScript(playerId) {
     currentPlayerId=playerId;
@@ -198,6 +223,35 @@ function cigarettesOrder()
     getTableData();      
 }
 
+//Inventory Order
+
+function inventoryOrder()
+{
+    let customerName =  $("#customerNamePlaceOrder").val()
+    let selectedItem = $("select#itemSelector").children("option:selected").html();
+    let itemPrice=$("select#itemSelector").children("option:selected").val();
+    currentPlayerId = getId(customerName)
+    let quantity=$("#itemQuantity").val()
+    if(selectedItem!=""&& customerName!="")
+    {
+        if(currentPlayerId!=null)
+        {
+            
+            ipc.send('add-order',selectedItem,null,currentPlayerId,quantity,itemPrice)
+            currentPlayerId=null
+            clearFields('inventory');
+        }
+        else
+        {
+            ipc.send('error-dialog',"Customer not in database");
+        }
+    }
+    else
+    {
+        ipc.send('error-dialog',"Empty field(s)");
+    }  
+}
+
 
 
 //Kitchen Order
@@ -207,6 +261,7 @@ function kitchenOrder()
     let kitchenPrice=$("#kitchenPrice").val();
     let gameId=currentGame.gameId;
     ipc.send('add-order-others',gameId,currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
+    clearFields('kitchen');
     getTableData();      
 }
 
@@ -217,6 +272,7 @@ function miscOrder()
     let miscPrice=$("#miscPrice").val();
     let gameId=currentGame.gameId;
     ipc.send('add-order-others',gameId,currentPlayerId,"Misc",miscItem,miscPrice)
+    clearFields('misc')
     getTableData();      
 }
 

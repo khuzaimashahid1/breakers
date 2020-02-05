@@ -4,16 +4,15 @@ const electron= require('electron');
 const ipc = electron.ipcRenderer;
 require('datatables.net-dt')();
 window.$ = window.jQuery = require('jquery');
-
-
-populatingTableSummary();
+let tableNumber = remote.getGlobal('sharedObj').tableNumber
+populatingTableSummary(tableNumber);
 var summaryData=[];
 var summaryTable;
 
 
 
 //Getting Inventory
-function populatingTableSummary()
+function populatingTableSummary(tableNumber)
 {
     $(document).ready(function () {
       summaryTable=$('#tableSummary').DataTable({
@@ -37,14 +36,14 @@ function populatingTableSummary()
     
         ]
     })
-    getTablesSummary()
+    getTablesSummary(tableNumber)
     });
     
 }
 
-function getTablesSummary()
+function getTablesSummary(tableNumber)
 {
-    ipc.send('get-tables-summary',1)
+    ipc.send('get-tables-summary',tableNumber)
     ipc.once('tables-summary',(event,data)=>
   {
     for (let i = 0; i < data.length; i++) {
