@@ -1094,8 +1094,7 @@ module.exports.getTablesSummary = async (tableNo) => {
     console.log('Connected to the breakers database.');
   });
 
-  sql = 'SELECT Bill.createDate,Game.startTime,Game.endTime,Customer.customerName,Bill.amount from Bill JOIN Customer USING (customerId) JOIN Revenue USING(revenueId) JOIN Game USING (gameId) where Game.tableNo=?', [tableNo];
-
+  sql = 'SELECT Bill.createDate,Game.startTime,Game.endTime,Customer.customerName,Bill.amount from Bill JOIN Customer USING (customerId) JOIN Revenue USING(revenueId) JOIN Game USING (gameId) where Game.tableNo='+tableNo;
 
   var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
     return rows;
