@@ -7,8 +7,9 @@ const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 const connections = require("./DataBaseOperations/connections.js");
 
+//Create Database
+// connections.createTables();
 
-connections.createTables();
 global.win = null;
 global.sharedObj = {
     tableNumber: null,
