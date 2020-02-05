@@ -125,6 +125,7 @@ function modalScript() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            mainBody.style.display = "block";
         }
     }
 
