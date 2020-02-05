@@ -83,7 +83,20 @@ function setAllSubTabsToNone(){
 //Selecting Order Action Tab
 function tabItem(category) {
     setAllSubTabsToNone();
-    document.getElementById(category).style.display = "block";
+    if(category == "kitchenSummary"){
+        document.getElementById(category).style.display = "block";
+        var tableKitchenSummary = $('#kitchenSummaryTable').DataTable();
+        $('#kitchenSummary').css( 'display', 'block' );
+        tableKitchenSummary.columns.adjust().draw();  
+    }
+    else if(category == "inventorySummary"){
+        document.getElementById(category).style.display = "block";
+        var tableInventorySummary= $('#inventorySummaryTable').DataTable();
+        $('#inventorySummary').css( 'display', 'block' );
+        tableInventorySummary.columns.adjust().draw();
+    }
+    else
+        document.getElementById(category).style.display = "block";
 }
 //BUTTONS TAB NAVIGATOR IN MAIN CONTAINER
 function buttonTab(evt,closingTab,openingTab,numberOfButtons) {
@@ -283,6 +296,7 @@ function addItemToInventory()
     if(newItemName!=""&&newItemPrice!=""&&newItemQuantity!=""&&newItemPurchasePrice!="")
     {
         ipc.send('add-new-inventory-item', newItemName,newItemPrice,newItemQuantity,inventoryCategorId,newItemPurchasePrice)
+        clearFields('addItemToInventory')
     }
 }
 
@@ -294,6 +308,7 @@ function addStock()
     if(itemName!=""&&quantity!=""&&purchasePrice!="")
     {
         ipc.send('update-stock',itemName,quantity,purchasePrice);
+        clearFields('addItemStock');
     }
     else
     {   
@@ -374,7 +389,7 @@ function populatingInventoryTable()
 {
     $(document).ready(function () {
       inventoryTable=$('#inventorySummaryTable').DataTable({
-        scrollY:'50vh',
+        scrollY:'35vh',
         scrollCollapse: true,
         paging:true,
         data: inventoryData,
@@ -462,7 +477,7 @@ function clearFields(orderType)
            document.getElementById('kitchenOrderItem').value ='';
            document.getElementById('kitchenOrderPrice').value ='';
         }
-        else if (orderType =='invetoryOrder')
+        else if (orderType =='inventoryOrder')
         {
            document.getElementById('customerNamePlaceOrder').value ='';
            document.getElementById('itemQuantityStock').value ='';
@@ -471,6 +486,22 @@ function clearFields(orderType)
            document.getElementById('itemPrice').value ='';
            document.getElementById('itemQuantity').value ='';
         }
+        else if (orderType =='addItemToInventory')
+        {
+           document.getElementById('newItemName').value ='';
+           document.getElementById('newItemPrice').value ='';
+           document.getElementById('newItemCategorySelector').selectedIndex = "0";
+           document.getElementById('newItemPurchasePrice').value ='';
+           document.getElementById('newItemQuantity').value ='';
+        }
+        else if (orderType =='addItemStock')
+        {
+           document.getElementById('addItemCategorySelector').selectedIndex = "0";
+           document.getElementById('addItemSelector').selectedIndex = "0";
+           document.getElementById('currentItemQuantityStock').value ='';
+           document.getElementById('itemStockQuantity').value ='';
+        }
+
 }
 
 function getKitchenSummary()

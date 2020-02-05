@@ -1187,7 +1187,7 @@ module.exports.getDailyRemainingExpenseReportData =  async(selectedDate) =>
 
   console.log("selectedDate"+selectedDate)
   
-  sql='SELECT sum(Bill.amount) as remainingAmount FROM Bill WHERE Bill.status="unpaid"  AND Bill.createDate="'+selectedDate+'"';
+  sql='SELECT sum(Bill.amount) as remainingAmount FROM Bill WHERE Bill.status="unpaid" AND Bill.createDate="'+selectedDate+'"';
   
   var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
       {
