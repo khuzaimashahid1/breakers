@@ -455,7 +455,7 @@ module.exports.generateBill = async (customerId) => {
   sql1 = 'SELECT Bill.billId,Bill.amount,Game.gameType,Revenue.revenueDescription,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Revenue.revenueName ="Games Sale" AND Bill.status="unpaid" and Bill.customerId=' + customerId;
   sql2 = 'SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Bill JOIN Revenue USING (revenueId)  JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId) LEFT JOIN Game on Game.gameId=Revenue.gameId WHERE Bill.customerId=' + customerId + ' and Bill.status="unpaid" UNION ALL SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Game  LEFT JOIN (Revenue JOIN Bill USING (revenueId) JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId)) using (gameId) WHERE Game.gameId IS NULL and Bill.status="unpaid" and Bill.customerId=' + customerId;
   sql3 = 'Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Bill JOIN Revenue using(revenueId) LEFT JOIN Game using(gameId) WHERE Bill.customerId=' + customerId + ' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and Bill.status="unpaid" UNION ALL Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Game LEFT JOIN Revenue using(gameId) JOIN Bill using(revenueId) WHERE Bill.customerId=' + customerId + ' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and(Revenue.gameId IS NULL) and Bill.status="unpaid"'
-
+  sql4='SELECT billId,amount as billAmount FROM Bill where customerId='+customerId+' AND revenueId IS NULL'
   var tab1 = await selectStatementMultipleRowsTogether(db, sql1).then(rows => {
     return rows;
   })
@@ -463,6 +463,9 @@ module.exports.generateBill = async (customerId) => {
     return rows;
   })
   var tab3 = await selectStatementMultipleRowsTogether(db, sql3).then(rows => {
+    return rows;
+  })
+  var tab4 = await selectStatementMultipleRowsTogether(db, sql4).then(rows => {
     return rows;
   })
 
@@ -473,7 +476,7 @@ module.exports.generateBill = async (customerId) => {
     }
     console.log('Close the database connection.');
   });
-  return Promise.all([tab1, tab2, tab3]);
+  return Promise.all([tab1, tab2, tab3,tab4]);
 }
 
 
@@ -590,6 +593,44 @@ module.exports.endGame = (createDate, updateDate, gameId, amount, loserId1, lose
     });
   }
 }
+
+//Add Order For inventory Items
+module.exports.addFinal = (createDate, winnerAmount,winnerId1,winnerId2,loserId1,loserId2) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  if(winnerId2===null&&loserId2===null)
+  {
+  db.serialize(() => {
+    // Queries scheduled here will be serialized.
+    db.run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, winnerId1, -winnerAmount])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, loserId1, winnerAmount])
+  });
+}
+else
+{
+  db.serialize(() => {
+    // Queries scheduled here will be serialized.
+    db.run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, winnerId1, -winnerAmount/2])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, loserId1, winnerAmount/2])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, winnerId2, -winnerAmount/2])
+    .run('Insert into Bill(createDate,status,customerId,amount) values(?,"unpaid",?,?)', [createDate, loserId2, winnerAmount/2])
+  });
+}
+  
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+}
+
 
 //Add Order For inventory Items
 module.exports.addOrder = (createDate, updateDate, selectedItem, gameId, customerId, quantity, amount) => {
@@ -1081,14 +1122,78 @@ module.exports.getDailyExpenseReportData = async (selectedDate) => {
     console.log('Connected to the breakers database.');
   });
 
-  console.log("selectedDate" + selectedDate)
+  console.log("selectedDate"+selectedDate)
+  
+  sql='SELECT sum(Expense.expenseAmount) as amount, ExpenseCategory.expenseCategoryName as expenseName From Expense Join ExpenseCategory USING(expenseCategoryId) Where Expense.createDate="'+selectedDate+'" GROUP By ExpenseCategory.expenseCategoryName';
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
 
-  sql = 'SELECT sum(expenseAmount) as expense, createDate FROM Expense WHERE createDate="' + selectedDate + '"';
 
-  var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
-    return rows;
-  })
+//Get Daily Credit Data for Expense Report 
+module.exports.getDailyCreditExpenseReportData =  async(selectedDate) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
 
+  console.log("selectedDate"+selectedDate)
+  
+  sql='SELECT sum(amount) as creditAmount FROM CreditManagement where createDate="'+selectedDate+'"';
+  // sql='SELECT sum(Bill.amount) as creditAmount FROM Bill JOIN CreditManagement USING(customerId) WHERE Bill.status="Partial Paid"  AND CreditManagement.createDate='+selectedDate
+  console.log(sql)
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+
+//Get Daily Remaining Data for Expense Report 
+module.exports.getDailyRemainingExpenseReportData =  async(selectedDate) =>
+{
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  console.log("selectedDate"+selectedDate)
+  
+  sql='SELECT sum(Bill.amount) as remainingAmount FROM Bill WHERE Bill.status="unpaid"  AND Bill.createDate="'+selectedDate+'"';
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
   db.close((err) => {
     if (err) {
       return console.error(err.message);

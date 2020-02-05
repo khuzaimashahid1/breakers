@@ -204,6 +204,7 @@ function autoComplete(input, allplayers) {
 
 function kitchenOrder()
 {
+    
 
     var kitchenItem= $("#kitchenOrderItem").val()
     var kitchenPrice= $('#kitchenOrderPrice').val()
@@ -213,8 +214,11 @@ function kitchenOrder()
     {
         if(currentPlayerId!=null)
         {
+            
             ipc.send('add-order-others',null,currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
             currentPlayerId=null
+            clearFields('kitchenOrder');
+           
         }
         else
         {
@@ -239,8 +243,10 @@ function inventoryOrder()
     {
         if(currentPlayerId!=null)
         {
+            
             ipc.send('add-order',selectedItem,null,currentPlayerId,quantity,itemPrice)
             currentPlayerId=null
+            clearFields('inventoryOrder');
         }
         else
         {
@@ -361,6 +367,9 @@ function populatingInventoryTable()
 {
     $(document).ready(function () {
       inventoryTable=$('#inventorySummaryTable').DataTable({
+        scrollY:'50vh',
+        scrollCollapse: true,
+        paging:true,
         data: inventoryData,
         "columns": [
             {
@@ -410,6 +419,9 @@ function populatingKitchenTable()
 {
     $(document).ready(function () {
       kitchenTable=$('#kitchenSummaryTable').DataTable({
+        scrollY:'30vh',
+        scrollCollapse: true,
+        paging:true,
         data: kitchenData,
         "columns": [
             {
@@ -433,6 +445,25 @@ function populatingKitchenTable()
     getKitchenSummary()
     });
     
+}
+// Clear fields
+function clearFields(orderType)
+{
+    if (orderType =='kitchenOrder')
+        {
+           document.getElementById('customerNameKitchen').value ='';
+           document.getElementById('kitchenOrderItem').value ='';
+           document.getElementById('kitchenOrderPrice').value ='';
+        }
+        else if (orderType =='invetoryOrder')
+        {
+           document.getElementById('customerNamePlaceOrder').value ='';
+           document.getElementById('itemQuantityStock').value ='';
+           document.getElementById('itemCategorySelector').selectedIndex = "0";
+           document.getElementById('itemSelector').selectedIndex = "0";
+           document.getElementById('itemPrice').value ='';
+           document.getElementById('itemQuantity').value ='';
+        }
 }
 
 function getKitchenSummary()
