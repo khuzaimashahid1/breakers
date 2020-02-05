@@ -290,7 +290,14 @@ function addStock()
 {
     let itemName=$("select#addItemSelector").children("option:selected").html();
     let quantity=$('#itemStockQuantity').val();
-    ipc.send('update-stock',itemName,quantity)
+    let purchasePrice=$("#purchasePrice").val();
+    if(itemName!=""&&quantity!=""&&purchasePrice!="")
+    {
+        ipc.send('update-stock',itemName,quantity,purchasePrice);
+    }
+    else
+    {   
+    }
 }
 
 function populateSummary()

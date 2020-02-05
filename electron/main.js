@@ -332,13 +332,13 @@ ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItem
 })
 
 //Update Stovk
-ipc.on('update-stock', function(event,itemName,quantity){
+ipc.on('update-stock', function(event,itemName,quantity,purchasePrice){
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.updateStock(currentDate,itemName,quantity).then(result => {
+    connections.updateStock(currentDate,itemName,quantity,purchasePrice).then(result => {
         if (result === true) {
             // event.sender.send('Reload Inventory','New Item Added');
             showSuccessDialog("Inventory Updated")

@@ -719,7 +719,7 @@ module.exports.addAdvanceEmployee = (currentDate, employeeId, advanceAmount) => 
 
   return new Promise(function (resolve, reject) {
     db.serialize(() => {
-      db.run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount,employeeId) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Advance Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),"Advance Taken",?,?)', [currentDate, employeeId, advanceAmount, employeeId])
+      db.run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount,employeeId) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Advance Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Out Expense"),"Advance Taken",?,?)', [currentDate, employeeId, advanceAmount, employeeId])
         .run('UPDATE Employee SET employeeAdvance =((Select employeeAdvance FROM Employee where employeeId=?)+?) WHERE employeeId =?', [employeeId, advanceAmount, employeeId], (err) => {
           if (err !== null) {
             console.error(err.message);
@@ -752,7 +752,7 @@ module.exports.paySalaryEmployee = (employeeId, salaryMonth, salaryAmount, salar
     db.serialize(() => {
       // Queries scheduled here will be serialized.
       db.run('Insert into Salary (salaryAmount,salaryMonth, createDate, employeeId) values(?,?,?,?)', [salaryAmount, salaryMonth, createDate, employeeId])
-        .run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount,employeeId) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Salary Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Salary"),?,?,?)', [createDate, employeeId, salaryNote, salaryAmount, employeeId])
+        .run('Insert into Expense (createDate,expenseName,expenseCategoryId,expenseDescription,expenseAmount,employeeId) values (?,((SELECT employeeName FROM Employee WHERE employeeId=?)||" Salary Paid"),(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Monthly Expense"),?,?,?)', [createDate, employeeId, salaryNote, salaryAmount, employeeId])
         .run('UPDATE Employee SET employeeAdvance = ((Select employeeAdvance from Employee where employeeId=?)-?) WHERE employeeId =?', [employeeId, advanceDeductionAmount, employeeId], (err) => {
           if (err !== null)
             console.log(err)
@@ -815,7 +815,7 @@ module.exports.addInventoryItem = (currentDate, newItemName, newItemPrice, newIt
   return new Promise(function (resolve, reject) {
     db.serialize(()=>{
       db.run('insert into Inventory (itemName,itemAmount,quantity,createDate,inventoryCategoryId) VALUES (?, ?, ?,?,?)', [newItemName, newItemPrice, newItemQuantity, currentDate, inventoryCategorId])
-        .run('INSERT into Expense (expenseName,expenseAmount,expenseDescription,expenseCategoryId,createDate) VALUES (?, ?, ?,?,?)', [newItemName+ " Purchase", newItemPurchasePrice * newItemQuantity, newItemQuantity+" Items",1, currentDate ]), (err) => {
+        .run('INSERT into Expense (expenseName,expenseAmount,expenseDescription,expenseCategoryId,createDate) VALUES (?, ?, ?,(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Monthly Expense"),?)', [newItemName+ " Purchase", newItemPurchasePrice * newItemQuantity, newItemQuantity+" Items",currentDate ]), (err) => {
           if (err !== null) {
             resolve("Item Already Exists")
           }
@@ -862,7 +862,7 @@ module.exports.addExpense = (expenseName, expenseDescription, expenseAmount, cre
 }
 
 //Update Stock
-module.exports.updateStock = (currentDate, itemName, quantity) => {
+module.exports.updateStock = (currentDate, itemName, quantity, purchasePrice) => {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -872,6 +872,7 @@ module.exports.updateStock = (currentDate, itemName, quantity) => {
 
   return new Promise(function (resolve, reject) {
     db.run('Insert into InventoryManagement(createDate,quantity,inventoryId) values(?,?,(Select inventoryId from Inventory where itemName=?))', [currentDate, quantity, itemName])
+    db.run('INSERT into Expense (expenseName,expenseAmount,expenseDescription,expenseCategoryId,createDate) VALUES (?, ?, ?,(Select expenseCategoryId from ExpenseCategory WHERE expenseCategoryName="Monthly Expense"),?)', [itemName+ " Purchase", purchasePrice * quantity, quantity+" Items", currentDate ])
     db.run('UPDATE Inventory SET updateDate=?,quantity=((SELECT quantity from Inventory WHERE itemName=?)+?) WHERE inventoryId=(SELECT inventoryId from Inventory WHERE itemName=?)', [currentDate, itemName, quantity, itemName], (err) => {
       if (err !== null)
         reject(err);

@@ -98,6 +98,10 @@ function getReportData(selectedDate) {
                     expenseReportObject.OutExpense = expenseReportData[i].amount;
                     auditReportObject.ExpenseTotal += expenseReportData[i].amount;
                 }
+                if (expenseReportData[i].expenseName == "Kitchen Expense") {
+                    expenseReportObject.KitchenExpense = expenseReportData[i].amount;
+                    auditReportObject.ExpenseTotal += expenseReportData[i].amount;
+                }
 
 
             }
@@ -105,8 +109,8 @@ function getReportData(selectedDate) {
             // As the kitchen sale dose not have profit so we are using same revenue data
             console.log("revenueReportObject.KitchenSale" + revenueReportObject.KitchenSale)
             if (revenueReportObject.KitchenSale != 0) {
-                expenseReportObject.KitchenExpense = revenueReportObject.KitchenSale;
-                auditReportObject.ExpenseTotal += revenueReportObject.KitchenSale;
+                // expenseReportObject.KitchenExpense = revenueReportObject.KitchenSale;
+                // auditReportObject.ExpenseTotal += revenueReportObject.KitchenSale;
             }
             // Get Expense Credit Amount 
             ipc.send('get-daily-credit-report', selectedDate);

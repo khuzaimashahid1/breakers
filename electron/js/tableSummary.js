@@ -22,13 +22,13 @@ function populatingTableSummary(tableNumber)
                 data: "createDate"
             },
             {
-                data: "customerName"
-            },
-            {
                 data: "startTime"
             },
             {
                 data: "endTime"
+            },
+            {
+                data: "customerName"
             },
             {
                 data: "amount"
