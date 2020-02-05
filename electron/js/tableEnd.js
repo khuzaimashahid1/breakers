@@ -327,6 +327,7 @@ function inventoryOrder() {
     if (selectedItem != "") 
     {
         ipc.send('add-order', selectedItem, gameId, currentPlayerId, quantity, itemPrice)
+        clearFields('inventory')
     }
     else 
     {

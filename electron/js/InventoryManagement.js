@@ -283,6 +283,7 @@ function addItemToInventory()
     if(newItemName!=""&&newItemPrice!=""&&newItemQuantity!=""&&newItemPurchasePrice!="")
     {
         ipc.send('add-new-inventory-item', newItemName,newItemPrice,newItemQuantity,inventoryCategorId,newItemPurchasePrice)
+        clearFields('addItemToInventory')
     }
 }
 
@@ -291,6 +292,7 @@ function addStock()
     let itemName=$("select#addItemSelector").children("option:selected").html();
     let quantity=$('#itemStockQuantity').val();
     ipc.send('update-stock',itemName,quantity)
+    clearFields('addItemStock')
 }
 
 function populateSummary()
@@ -455,7 +457,7 @@ function clearFields(orderType)
            document.getElementById('kitchenOrderItem').value ='';
            document.getElementById('kitchenOrderPrice').value ='';
         }
-        else if (orderType =='invetoryOrder')
+        else if (orderType =='inventoryOrder')
         {
            document.getElementById('customerNamePlaceOrder').value ='';
            document.getElementById('itemQuantityStock').value ='';
@@ -464,6 +466,22 @@ function clearFields(orderType)
            document.getElementById('itemPrice').value ='';
            document.getElementById('itemQuantity').value ='';
         }
+        else if (orderType =='addItemToInventory')
+        {
+           document.getElementById('newItemName').value ='';
+           document.getElementById('newItemPrice').value ='';
+           document.getElementById('newItemCategorySelector').selectedIndex = "0";
+           document.getElementById('newItemPurchasePrice').value ='';
+           document.getElementById('newItemQuantity').value ='';
+        }
+        else if (orderType =='addItemStock')
+        {
+           document.getElementById('addItemCategorySelector').selectedIndex = "0";
+           document.getElementById('addItemSelector').selectedIndex = "0";
+           document.getElementById('currentItemQuantityStock').value ='';
+           document.getElementById('itemStockQuantity').value ='';
+        }
+
 }
 
 function getKitchenSummary()
