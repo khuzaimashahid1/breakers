@@ -1,7 +1,7 @@
 
 require('datatables.net-dt')();
-var  data = [];
-var revenueTable,expenseTable, selectedDate;
+var data = [];
+var revenueTable, expenseTable, selectedDate;
 var revenueData = []
 var expenseData = []
 initializeTables();
@@ -21,29 +21,29 @@ function getReportData(selectedDate) {
         TableSale: 0,
         CreditClear: 0,
     }
-    
+
     var expenseReportObject = {
         KitchenExpense: 0,
         CreditAmount: 0,
         RemainingAmount: 0,
         ClubExpense: 0,
-        OutExpense: 0
-    
+        OutExpense: 0,
+        Discount: 0
+
     }
-    
-    
+
+
     var auditReportObject = {
         GrandTotal: 0,
         ExpenseTotal: 0,
         NetSale: 0
     }
-    
+
 
     // Get Revenue for all categories
     ipc.send('get-report-data', selectedDate);
     ipc.once('report-data', (event, revenueReportData) => {
 
-        // console.log(revenueReportData)
         for (let i = 0; i < revenueReportData.length; i++) {
 
             if (revenueReportData[i].revenueName == "Kitchen Sale") {
@@ -78,7 +78,6 @@ function getReportData(selectedDate) {
         }
 
         revenueData.push(revenueReportObject)
-        console.log(revenueData);
         revenueTable.clear().rows.add(revenueData).draw();
         $("#GrandTotal").html(auditReportObject.GrandTotal + " PKR")
 
@@ -86,7 +85,6 @@ function getReportData(selectedDate) {
         // Get Club and Out Expense 
         ipc.send('get-daily-expense-report', selectedDate);
         ipc.once('daily-expense-report', (event, expenseReportData) => {
-            console.log(expenseReportData)
             for (let i = 0; i < expenseReportData.length; i++) {
 
 
@@ -106,16 +104,11 @@ function getReportData(selectedDate) {
 
             }
 
-            // As the kitchen sale dose not have profit so we are using same revenue data
-            console.log("revenueReportObject.KitchenSale" + revenueReportObject.KitchenSale)
-            if (revenueReportObject.KitchenSale != 0) {
-                // expenseReportObject.KitchenExpense = revenueReportObject.KitchenSale;
-                // auditReportObject.ExpenseTotal += revenueReportObject.KitchenSale;
-            }
+
+
             // Get Expense Credit Amount 
             ipc.send('get-daily-credit-report', selectedDate);
             ipc.once('daily-credit-report', (event, creditExpenseReportData) => {
-                console.log(creditExpenseReportData)
                 if (creditExpenseReportData[0].creditAmount != null) {
                     expenseReportObject.CreditAmount = creditExpenseReportData[0].creditAmount;
                     auditReportObject.ExpenseTotal += creditExpenseReportData[0].creditAmount;
@@ -124,99 +117,140 @@ function getReportData(selectedDate) {
                 // Get Expense Remaining Amount
                 ipc.send('get-daily-remaining-report', selectedDate);
                 ipc.once('daily-remaining-report', (event, remainingExpenseReportData) => {
-                    console.log(remainingExpenseReportData)
                     if (remainingExpenseReportData[0].remainingAmount != null) {
                         expenseReportObject.RemainingAmount = remainingExpenseReportData[0].remainingAmount;
                         auditReportObject.ExpenseTotal += remainingExpenseReportData[0].remainingAmount;
                     }
-                    expenseData.push(expenseReportObject)
-                    console.log(expenseData);
+                    // expenseData.push(expenseReportObject)
 
-                    expenseTable.clear().rows.add(expenseData).draw();
-                    auditReportObject.NetSale = auditReportObject.GrandTotal - auditReportObject.ExpenseTotal;
-                    console.log("auditReportObject.GrandTotal" + auditReportObject.GrandTotal)
-                    console.log("auditReportObject.NetSale" + auditReportObject.NetSale)
-                    $("#ExpenseTotal").html(auditReportObject.ExpenseTotal + " PKR")
-                    $("#NetTotal").html(auditReportObject.NetSale + " PKR")
+                    // expenseTable.clear().rows.add(expenseData).draw();
+                    // auditReportObject.NetSale = auditReportObject.GrandTotal - auditReportObject.ExpenseTotal;
+                    // $("#ExpenseTotal").html(auditReportObject.ExpenseTotal + " PKR")
+                    // $("#NetTotal").html(auditReportObject.NetSale + " PKR")
+
+
+
+
+                    // selectedDate = $('#selectedDate').val()
+                    // var str = selectedDate;
+                    // var res = str.split("-");
+                    // var tillDate = res[0] + "-" + res[1];
+                    // ipc.send('get-net-kitchen', tillDate)
+                    // ipc.once('net-kitchen', (event, netKitchenData) => {
+
+                    //     $("#NetKitchen").html(netKitchenData.amount + " PKR")
+                    // })
+
+            // Get Payment 
+            ipc.send('get-payment-method', selectedDate);
+            ipc.once('payment-method', (event, paymentData) => {
+                console.log(paymentData)
+                if (paymentData[0].discount != null) {
+                    expenseReportObject.Discount = paymentData[0].discount;
+                    auditReportObject.ExpenseTotal += paymentData[0].discount;
+                }
+
+
+                expenseData.push(expenseReportObject)
+
+                expenseTable.clear().rows.add(expenseData).draw();
+                auditReportObject.NetSale = auditReportObject.GrandTotal - auditReportObject.ExpenseTotal;
+                $("#ExpenseTotal").html(auditReportObject.ExpenseTotal + " PKR")
+                $("#NetTotal").html(auditReportObject.NetSale + " PKR")
+
+
+                $("#CashPaid").html(paymentData[0].cash + " PKR")
+                $("#CardPaid").html(paymentData[0].card + " PKR")
+                $("#EasypaisaPaid").html(paymentData[0].easypaisa + " PKR")
+            })
+
+
+
                 })
 
             })
 
         })
     })
-        
-
-        
-
-        
-
-
-
 }
 
-function generateSummary()
-{
-    selectedDate= $('#selectedDate').val()
-    console.log(selectedDate)
+function generateSummary() {
+    selectedDate = $('#selectedDate').val()
     getReportData(selectedDate);
+    var str = selectedDate;
+    var res = str.split("-");
+    var tillDate = res[0] + "-" + res[1];
+    ipc.send('get-net-kitchen', tillDate)
+    ipc.once('net-kitchen', (event, netKitchenData) => {
+        $("#NetKitchenExpense").html(netKitchenData[0].amount + " PKR")
+    })
+    ipc.send('get-monthly-expense', tillDate)
+    ipc.once('monthly-expense', (event, monthlyExpense) => {
+        $("#MonthlyExpense").html(monthlyExpense[0].amount + " PKR")
+    })
 }
 
 
 
 // Initialize Datatables
 function initializeTables() {
-$(document).ready(function () {
-    // Revenue Report Table
-    revenueTable=$('#revenueReport').DataTable({
-        
-        data: revenueData,
-        "columns": [
-            {
-                data: "KitchenSale"
-            },
-            {
-                data: "DrinksSale"
-            },
-            {
-                data: "CigarettesSale"
-            },
-            {
-                data: "MiscSale"
-            },
-            {
-                data: "OtherInventory"
-            },
-            {
-                data: "TableSale"
-            },
-            {
-                data: "CreditClear"
-            }
-        ]
-    })
+    $(document).ready(function () {
+        // Revenue Report Table
+        revenueTable = $('#revenueReport').DataTable({
 
-    // Expense Report Table
-    expenseTable=$('#expenseReport').DataTable({
-        
-        data: expenseData,
-        "columns": [
-            {
-                data: "KitchenExpense"
-            },
-            {
-                data: "CreditAmount"
-            },
-            {
-                data: "RemainingAmount"
-            },
-            {
-                data: "ClubExpense"
-            },
-            {
-                data: "OutExpense"
-            }
-        ]
-    })
-});
+            data: revenueData,
+            "columns": [
+                {
+                    data: "KitchenSale"
+                },
+                {
+                    data: "DrinksSale"
+                },
+                {
+                    data: "CigarettesSale"
+                },
+                {
+                    data: "MiscSale"
+                },
+                {
+                    data: "OtherInventory"
+                },
+                {
+                    data: "TableSale"
+                },
+                {
+                    data: "CreditClear"
+                }
+            ]
+        })
+
+        // Expense Report Table
+        expenseTable = $('#expenseReport').DataTable({
+
+            data: expenseData,
+            "columns": [
+                {
+                    data: "KitchenExpense"
+                },
+                {
+                    data: "CreditAmount"
+                },
+                {
+                    data: "RemainingAmount"
+                },
+                {
+                    data: "ClubExpense"
+                },
+                {
+                    data: "OutExpense"
+                },
+                {
+                    data: "Discount"
+                }
+
+            ]
+        })
+    });
 
 }
+

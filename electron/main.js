@@ -7,8 +7,9 @@ const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 const connections = require("./DataBaseOperations/connections.js");
 
+//Create Database
+// connections.createTables();
 
-connections.createTables();
 global.win = null;
 global.sharedObj = {
     tableNumber: null,
@@ -156,6 +157,28 @@ ipc.on('get-expense', function (event) {
     });
 })
 
+//Get Unpaid
+ipc.on('get-unpaid', function (event) {
+    connections.getUnpaid().then(rows => {
+        event.sender.send("unpaid", rows);
+    });
+})
+
+//Get net kitchen
+ipc.on('get-net-kitchen', function (event,tillDate) {
+    connections.getNetKitchen(tillDate).then(rows => {
+        event.sender.send("net-kitchen", rows);
+    });
+})
+
+//Get monthly expense
+ipc.on('get-monthly-expense', function (event,tillDate) {
+    connections.getMonthlyExpense(tillDate).then(rows => {
+        event.sender.send("monthly-expense", rows);
+    });
+})
+
+
 //Get Expense Category
 ipc.on('get-expense-category', function (event) {
     connections.getExpenseCategory().then(rows => {
@@ -211,13 +234,13 @@ ipc.on('add-order-others', function (event, gameId, customerId, categoryName, it
 })
 
 //Pay Bill
-ipc.on('pay-bill', function (event, status, creditAmount, customerId, ...billIdArray) {
+ipc.on('pay-bill', function (event,cash,card,ep,discount, status, creditAmount, customerId, ...billIdArray) {
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.payBill(currentDate, status, creditAmount, customerId, ...billIdArray);
+    connections.payBill(currentDate,cash,card,ep,discount, status, creditAmount, customerId, ...billIdArray);
 })
 
 //Clear Credit
@@ -389,6 +412,13 @@ ipc.on('get-report-data', function (event,selectedDate) {
 ipc.on('get-daily-expense-report', function (event,selectedDate) {
     connections.getDailyExpenseReportData(selectedDate).then(rows => {
         event.sender.send("daily-expense-report", rows);
+    });
+})
+
+//Get daily payment method
+ipc.on('get-payment-method', function (event,selectedDate) {
+    connections.getPaymentMethod(selectedDate).then(rows => {
+        event.sender.send("payment-method", rows);
     });
 })
 

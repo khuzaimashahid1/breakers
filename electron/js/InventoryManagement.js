@@ -315,10 +315,6 @@ function addStock()
     }
 }
 
-function populateSummary()
-{
-    //populate summary tabs for kitchen, drinks and cigarettes
-}
 
 //Initialize Listeners
 function initializeListeners()

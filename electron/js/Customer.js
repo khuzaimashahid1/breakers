@@ -1,12 +1,17 @@
+if(!customerListener)
+{
+    var customerListener=ipc.on('Reload',(event, message) => {
+      console.log("HEllo from customer")
+      getCustomers()
+      })  
+    
+}
 //Imports and Declarations
 require('datatables.net-dt')();
 var creditorTable,customersTable,creditClearTable,creditClearArray=[],creditorsArray=[],customersArray=[];
 
 //Function Calls for intialization
 initializeTables();
-ipc.once('Reload', (event, message) => {
-  getCustomers()
-})
 
 //Switching Customer Management Type
 function openLink(evt, animName) {

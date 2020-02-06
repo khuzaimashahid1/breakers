@@ -85,8 +85,22 @@ module.exports.createTables = () => {
       .run('CREATE Table IF NOT EXISTS Closing(closingId INTEGER PRIMARY KEY AUTOINCREMENT, closingAmount int,createDate text,updateDate text,closingAccountId int,FOREIGN KEY(closingAccountId) REFERENCES Account(accountId))')
       .run('CREATE TABLE IF NOT EXISTS Employee(employeeId INTEGER PRIMARY KEY AUTOINCREMENT,employeeName text, employeePhone text, employeeAddress text, employeeCNIC text,employeeDesignation text, employeeSalary int, employeeAdvance int DEFAULT 0, createDate text,updateDate text)')
       .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
-      .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
-  });
+      .run('CREATE TABLE IF NOT EXISTS Payment(paymentId INTEGER PRIMARY KEY AUTOINCREMENT,createDate text,cash int DEFAULT 0,card int DEFAULT 0,easypaisa int DEFAULT 0,discount int DEFAULT 0)') 
+      .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,paymentId int,FOREIGN KEY(paymentId) REFERENCES Payment(paymentId),FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
+      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Cigarettes","2020-02-06")')
+      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Drinks","2020-02-06")')
+      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Other Inventory","2020-02-06")')
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Other Inventory","2020-02-06")')
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Drinks","2020-02-06")')
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Cigarettes","2020-02-06")')
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Kitchen","2020-02-06");')
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Games","2020-02-06")')
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Misc","2020-02-06")')
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Club Expense","2020-02-06")')
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Out Expense","2020-02-06")')
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Monthly Expense","2020-02-06")')
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Kitchen Expense","2020-02-06")')
+    });
 
   db.close((err) => {
     if (err) {
@@ -455,7 +469,7 @@ module.exports.generateBill = async (customerId) => {
   sql1 = 'SELECT Bill.billId,Bill.amount,Game.gameType,Revenue.revenueDescription,Game.startTime,Game.tableNo from Bill JOIN Revenue USING (revenueId) JOIN Game USING (gameId) WHERE Revenue.revenueName ="Games Sale" AND Bill.status="unpaid" and Bill.customerId=' + customerId;
   sql2 = 'SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Bill JOIN Revenue USING (revenueId)  JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId) LEFT JOIN Game on Game.gameId=Revenue.gameId WHERE Bill.customerId=' + customerId + ' and Bill.status="unpaid" UNION ALL SELECT Bill.billId,Game.tableNo,Bill.amount,Inventory.itemName,InventoryManagement.quantity,Revenue.gameId from Game  LEFT JOIN (Revenue JOIN Bill USING (revenueId) JOIN InventoryManagement USING (inventoryManagementId) JOIN Inventory USING (inventoryId)) using (gameId) WHERE Game.gameId IS NULL and Bill.status="unpaid" and Bill.customerId=' + customerId;
   sql3 = 'Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Bill JOIN Revenue using(revenueId) LEFT JOIN Game using(gameId) WHERE Bill.customerId=' + customerId + ' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and Bill.status="unpaid" UNION ALL Select Bill.billId,Bill.amount,Revenue.revenueDescription,Game.tableNo FROM Game LEFT JOIN Revenue using(gameId) JOIN Bill using(revenueId) WHERE Bill.customerId=' + customerId + ' and(revenueName="Misc Sale" or revenueName="Kitchen Sale") and(Revenue.gameId IS NULL) and Bill.status="unpaid"'
-  sql4='SELECT billId,amount as billAmount FROM Bill where customerId='+customerId+' AND revenueId IS NULL'
+  sql4='SELECT billId,amount as billAmount FROM Bill where customerId='+customerId+' AND revenueId IS NULL AND Bill.status="unpaid"'
   var tab1 = await selectStatementMultipleRowsTogether(db, sql1).then(rows => {
     return rows;
   })
@@ -481,7 +495,7 @@ module.exports.generateBill = async (customerId) => {
 
 
 //Pay Bill
-module.exports.payBill = (currentDate, status, creditAmount, customerId, ...billIdArray) => {
+module.exports.payBill = async(currentDate,cash,card,ep,discount, status, creditAmount, customerId, ...billIdArray) => {
   var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -489,11 +503,15 @@ module.exports.payBill = (currentDate, status, creditAmount, customerId, ...bill
     console.log('Connected to the breakers database.');
   });
 
+  db.serialize(() => {
+    db.run('INSERT INTO Payment(createDate,cash,card,easypaisa,discount) values (?,?,?,?,?)', [currentDate,cash,card,ep,discount])
+    //Set Status in Bill
+    for (let i = 0; i < billIdArray.length; i++) {
+    db.run('UPDATE Bill SET status=?,updateDate=?,paymentId=(SELECT Max(paymentId) FROM Payment) WHERE billId=?', [status, currentDate, billIdArray[i]])
+    }
+     
+  })
 
-  //Set Status in Bill
-  for (let i = 0; i < billIdArray.length; i++) {
-    db.run('UPDATE Bill SET status=?,updateDate=? WHERE billId=?', [status, currentDate, billIdArray[i]])
-  }
 
   //If Partial paid add into creditAmount and CreditManagement
   if (status === "Partial Paid") {
@@ -917,6 +935,89 @@ module.exports.getExpense = async () => {
 }
 
 
+//Get Unpaid
+module.exports.getUnpaid = async () => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  sql = 'SELECT sum(bill.amount) as amount, Customer.customerName as name  from bill join Customer USING(customerid) Where bill.status="unpaid" GROUP By Customer.customerName';
+
+
+  var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
+    return rows;
+  })
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function (resolve, reject) {
+    resolve(rows);
+  });
+}
+
+
+//Get Net Kitchen
+module.exports.getNetKitchen = async (tillDate) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  sql = 'Select (SELECT sum(revenueAmount) as amount FROM Revenue JOIN RevenueCategory USING(revenueCategoryId) WHERE Revenue.createDate Like "'+tillDate+'-__" AND Revenue.revenueName="Kitchen Sale") - (SELECT sum(expenseAmount) as amount FROM Expense JOIN ExpenseCategory USING(expenseCategoryId) WHERE Expense.createDate Like "'+tillDate+'-__" AND ExpenseCategory.expenseCategoryName="Kitchen Expense") as amount';
+
+
+  var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
+    return rows;
+  })
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function (resolve, reject) {
+    resolve(rows);
+  });
+}
+
+
+//Get Monthly Expense
+module.exports.getMonthlyExpense = async (tillDate) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  sql = 'SELECT sum(expenseAmount) as amount FROM Expense JOIN ExpenseCategory USING(expenseCategoryId) WHERE Expense.createDate Like "'+tillDate+'-__" AND ExpenseCategory.expenseCategoryName="Monthly Expense"';
+
+
+  var rows = await selectStatementMultipleRowsTogether(db, sql).then(rows => {
+    return rows;
+  })
+
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function (resolve, reject) {
+    resolve(rows);
+  });
+}
+
 
 //Get Inventory Category
 module.exports.getInventoryCategory = async () => {
@@ -1125,6 +1226,35 @@ module.exports.getDailyExpenseReportData = async (selectedDate) => {
   console.log("selectedDate"+selectedDate)
   
   sql='SELECT sum(Expense.expenseAmount) as amount, ExpenseCategory.expenseCategoryName as expenseName From Expense Join ExpenseCategory USING(expenseCategoryId) Where Expense.createDate="'+selectedDate+'" GROUP By ExpenseCategory.expenseCategoryName';
+  
+  var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
+      {
+        return rows;
+      })
+  
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+  return new Promise(function(resolve, reject) {
+    resolve(rows);
+   });
+}
+
+//Get Payment Method
+module.exports.getPaymentMethod = async (selectedDate) => {
+  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the breakers database.');
+  });
+
+  console.log("selectedDate"+selectedDate)
+  
+  sql='SELECT sum(cash) as cash,sum(card) as card,sum(easypaisa) as easypaisa,sum(discount) as discount FROM Payment WHERE createDate="'+selectedDate+'"';
   
   var rows=await selectStatementMultipleRowsTogether(db,sql).then(rows=>
       {
