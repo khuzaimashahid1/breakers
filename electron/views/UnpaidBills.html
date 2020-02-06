@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../CSS/AccountsManagement.css">
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../CSS/index.css">
+    <link rel="stylesheet" href="../CSS/tabsStyleSheet.css">
+</head>
+
+<body>
+
+    <div >
+
+        <div 
+          id="Fade" 
+          class="w3-container city w3-animate-zoom" 
+          style="
+            background-color: white;
+            opacity: 0.8;">
+
+            <h1 style="
+            width: 100%;
+            text-align: center;">Unpaid Bills</h1>
+            <!-- BELOW IS THE DATA TABLE FOR EXPENSE DETAILS -->
+            <table id="Unpaid" class="display" style="width:100%;  overflow: auto;">
+              <thead>
+                <tr>
+                  <th >Name</th>
+                  <th >Amount</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Amount</th>
+                </tr>
+              </tfoot>
+            </table>
+            </div>
+        </div>
+
+  
+      
+
+       
+    <script src="../js/UnpaidBills.js"></script>
+    <!-- <script src="../js/Customer.js"></script> -->
+
+</body>
+
+</html>

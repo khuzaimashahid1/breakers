@@ -304,14 +304,17 @@ function addStock()
 {
     let itemName=$("select#addItemSelector").children("option:selected").html();
     let quantity=$('#itemStockQuantity').val();
-    ipc.send('update-stock',itemName,quantity)
-    clearFields('addItemStock')
+    let purchasePrice=$("#purchasePrice").val();
+    if(itemName!=""&&quantity!=""&&purchasePrice!="")
+    {
+        ipc.send('update-stock',itemName,quantity,purchasePrice);
+        clearFields('addItemStock');
+    }
+    else
+    {   
+    }
 }
 
-function populateSummary()
-{
-    //populate summary tabs for kitchen, drinks and cigarettes
-}
 
 //Initialize Listeners
 function initializeListeners()

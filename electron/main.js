@@ -26,6 +26,7 @@ function createWindow() {
         webPreferences: {
             nativeWindowOpen: true,
             nodeIntegration: true,
+            devTools: false
         }
     });
     win.maximize();
@@ -150,6 +151,13 @@ ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseA
 
 })
 
+//Backup
+ipc.on('backup',function (event)
+{
+    connections.backup();
+    showSuccessDialog("Database backup Created!")
+})
+
 
 //Get Expense
 ipc.on('get-expense', function (event) {
@@ -157,6 +165,28 @@ ipc.on('get-expense', function (event) {
         event.sender.send("expense", rows);
     });
 })
+
+//Get Unpaid
+ipc.on('get-unpaid', function (event) {
+    connections.getUnpaid().then(rows => {
+        event.sender.send("unpaid", rows);
+    });
+})
+
+//Get net kitchen
+ipc.on('get-net-kitchen', function (event,tillDate) {
+    connections.getNetKitchen(tillDate).then(rows => {
+        event.sender.send("net-kitchen", rows);
+    });
+})
+
+//Get monthly expense
+ipc.on('get-monthly-expense', function (event,tillDate) {
+    connections.getMonthlyExpense(tillDate).then(rows => {
+        event.sender.send("monthly-expense", rows);
+    });
+})
+
 
 //Get Expense Category
 ipc.on('get-expense-category', function (event) {
@@ -336,13 +366,13 @@ ipc.on('add-new-inventory-item', function(event,newItemName,newItemPrice,newItem
 })
 
 //Update Stovk
-ipc.on('update-stock', function(event,itemName,quantity){
+ipc.on('update-stock', function(event,itemName,quantity,purchasePrice){
     const today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
-    connections.updateStock(currentDate,itemName,quantity).then(result => {
+    connections.updateStock(currentDate,itemName,quantity,purchasePrice).then(result => {
         if (result === true) {
             // event.sender.send('Reload Inventory','New Item Added');
             showSuccessDialog("Inventory Updated")
@@ -393,6 +423,13 @@ ipc.on('get-report-data', function (event,selectedDate) {
 ipc.on('get-daily-expense-report', function (event,selectedDate) {
     connections.getDailyExpenseReportData(selectedDate).then(rows => {
         event.sender.send("daily-expense-report", rows);
+    });
+})
+
+//Get daily payment method
+ipc.on('get-payment-method', function (event,selectedDate) {
+    connections.getPaymentMethod(selectedDate).then(rows => {
+        event.sender.send("payment-method", rows);
     });
 })
 

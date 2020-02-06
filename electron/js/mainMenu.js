@@ -22,7 +22,8 @@ function openStartGame(){
             fullscreen:false,
             webPreferences: {
                 nativeWindowOpen: true,
-                nodeIntegration: true
+                nodeIntegration: true,
+                devTools: false
                 
             }
         });
@@ -45,7 +46,8 @@ function openEndGame(){
             width:800,
             webPreferences: {
                 nativeWindowOpen: true,
-                nodeIntegration: true
+                nodeIntegration: true,
+                devTools: false
                 
             }
         });
@@ -67,7 +69,8 @@ function openTableSummary(){
             fullscreen:false,
             webPreferences: {
                 nativeWindowOpen: true,
-                nodeIntegration: true
+                nodeIntegration: true,
+                devTools: false
                 
             }
         });
