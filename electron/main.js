@@ -8,7 +8,7 @@ const dialog = electron.dialog;
 const connections = require("./DataBaseOperations/connections.js");
 
 //Create Database
-// connections.createTables();
+connections.createTables();
 
 global.win = null;
 global.sharedObj = {
@@ -26,6 +26,7 @@ function createWindow() {
         webPreferences: {
             nativeWindowOpen: true,
             nodeIntegration: true,
+            devTools: false
         }
     });
     win.maximize();
@@ -144,9 +145,17 @@ ipc.on('add-expense', function (event, expenseName, expenseDescription, expenseA
     connections.addExpense(expenseName,expenseDescription,expenseAmount,createDate,expenseCategoryId).then(result => {
         if (result === true) {
             showSuccessDialog("Expense Added")
+            event.sender.send('Reload Expense','Reload Expense Please')
         }
     });
 
+})
+
+//Backup
+ipc.on('backup',function (event)
+{
+    connections.backup();
+    showSuccessDialog("Database backup Created!")
 })
 
 
@@ -221,6 +230,7 @@ ipc.on('add-order', function (event, selectedItem, gameId, customerId, quantity,
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
     connections.addOrder(currentDate, currentDate, selectedItem, gameId, customerId, quantity, amount);
+    event.sender.send('Reload Table','Reload Table PLease')
 })
 
 //Add Order Others
@@ -231,6 +241,7 @@ ipc.on('add-order-others', function (event, gameId, customerId, categoryName, it
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
     connections.addOrderOthers(currentDate, gameId, customerId, categoryName, itemName, amount);
+    event.sender.send('Reload Table','Reload Table PLease')
 })
 
 //Pay Bill

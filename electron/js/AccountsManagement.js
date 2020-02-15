@@ -6,7 +6,7 @@ var expenseTable, revenueTable, expenseArray = [], revenueArray = [];
 initializeTables();
 getExpenseCategory();
 
-ipc.once('Reload', (event, message) => {
+ipc.once('Reload Expense', (event, message) => {
     getExpense();
     getExpenseCategory();
     getRevenue();

@@ -3,20 +3,23 @@ const electron = require('electron');
 let ipc = electron.ipcRenderer;
 const players = remote.getGlobal('sharedObj').currentPlayers;
 window.$ = window.jQuery = require('jquery');
+require('datatables.net-dt')();
 let tableNumber = remote.getGlobal('sharedObj').tableNumber
 let currentGame = remote.getGlobal('sharedObj').games[tableNumber - 1];
 let currentPlayerId;
-let currentPlayers = []
-let drinkStock, cigaretteStock;
-var table = document.getElementById("gameExpense");
+let currentPlayers = [] 
+var table,data=[] ;
 
+initializeTable();
 initializeListeners();
 getInventoryCategory();
 getCurrentPlayers();
 populatePlayers();
-getTableData();
-console.log(players)
-console.log(currentPlayers)
+ipc.once('Reload Table',(event,message)=>
+{
+    getTableData();
+})
+
 //Function For Getting Current Players
 function getCurrentPlayers() {
     Object.values(currentGame).forEach(function (value, index) {
@@ -224,21 +227,15 @@ function initializeListeners() {
 
 //Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
 function getTableData() {
+    data=[]
     ipc.send('get-table-data', currentGame.gameId)
     ipc.once('table-data', (event, tableData) => {
         for (let i = 0; i < tableData.length; i++) {
-            var row = table.insertRow(1);
-            var orderItem = row.insertCell(0);
-            var orderType = row.insertCell(1);
-            var orderAmunt = row.insertCell(2);
-            var customerName = row.insertCell(3);
-            orderItem.innerHTML = tableData[i].orderItem;
-            orderType.innerHTML = tableData[i].orderDescription;
-            orderAmunt.innerHTML = tableData[i].orderAmount;
-            customerName.innerHTML = tableData[i].customerName;
+            data.push(tableData[i])
         }
-        console.log(tableData);
+        table.clear().rows.add(data).draw();
     })
+    
 }
 
 //Drinks Order
@@ -250,7 +247,7 @@ function drinksOrder() {
     let gameId = currentGame.gameId;
     let quantity = $("#DrinkQuantity").val()
     ipc.send('add-order', inventoryId, gameId, currentPlayerId, quantity, price)
-    getTableData();
+    
 }
 
 //Cigarettes Order
@@ -262,7 +259,7 @@ function cigarettesOrder() {
     let gameId = currentGame.gameId;
     let quantity = $("#CigaretteQuantity").val()
     ipc.send('add-order', inventoryId, gameId, currentPlayerId, quantity, price)
-    getTableData();
+    
 }
 
 //Inventory Order
@@ -304,7 +301,7 @@ function kitchenOrder()
     let gameId=currentGame.gameId;
     ipc.send('add-order-others',gameId,currentPlayerId,"Kitchen",kitchenItem,kitchenPrice)
     clearFields('kitchen');
-    getTableData();      
+       
 }
 
 //Kitchen Order
@@ -315,7 +312,7 @@ function miscOrder()
     let gameId=currentGame.gameId;
     ipc.send('add-order-others',gameId,currentPlayerId,"Misc",miscItem,miscPrice)
     clearFields('misc')
-    getTableData();      
+          
 }
 
 //Inventory Order
@@ -440,3 +437,32 @@ function nextGame() {
 }
 
 
+//Getting Inventory
+function initializeTable()
+{
+    $(document).ready(function () {
+      table=$('#gameExpense').DataTable({
+        "bFilter": false,
+        "bInfo": false,
+        "bPaginate": false,
+        data: data,
+        "columns": [
+            {
+                data: "orderItem"
+            },
+            {
+                data: "orderDescription"
+            },
+            {
+                data: "orderAmount"
+            },
+            {
+                data: "customerName"
+            }
+    
+        ]
+    })
+    getTableData()
+    });
+    
+}

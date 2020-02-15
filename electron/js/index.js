@@ -19,4 +19,8 @@ var indexListener=ipc.on('Reload', (event, message) => {
   currentPlayers = remote.getGlobal('sharedObj').currentPlayers; //Players who are currently in game
 })
 }
+function backup()
+{
+  ipc.send('backup')
+}
 

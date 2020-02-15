@@ -1,57 +1,19 @@
 var sqlite3 = require('sqlite3').verbose();
 var util = require('util')
 
-
-
-module.exports.openConnectionReadWrite = (db) => {
-  db = new sqlite3.Database('../db/breakers.db', sqlite3.OPEN_READWRITE, (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log('Connected to the chinook database.');
-    return db;
-  });
-}
-
-
-module.exports.selectStatementSignleRow = (db, sql, params) => {
-  db.get(sql, params, (err, row) => {
-    if (err) {
-      return console.error(err.message);
-    }
-    return row
-      ? console.log(row.id, row.name)
-      : console.log(`No playlist found with the id ${playlistId}`);
-
-  });
-}
-
-module.exports.selectStatementMultipleRowsSeperately = (db, sql, params) => {
-
-  db.each(sql, params, (err, row) => {
-    if (err) {
-      throw err;
-    }
-    console.log(`${row.firstName} ${row.lastName} - ${row.email}`);
-  });
-
-}
-
-
-//open Database
-module.exports.openDB = () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+//Backup
+module.exports.backup = () => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
     console.log('Connected to the breakers database.');
-    return db;
   });
-}
-
-//Close Databse
-module.exports.closeDB = () => {
-  var db = new sqlite3.Database('./db/breakers.db');
+  
+  var backup=db.backup("backup.db")
+  backup.step(-1)
+  backup.finish()
+  
   db.close((err) => {
     if (err) {
       return console.error(err.message);
@@ -60,14 +22,16 @@ module.exports.closeDB = () => {
   });
 }
 
+
 //Create Tables
 module.exports.createTables = () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
     console.log('Connected to the breakers database.');
   });
+  
 
   db.serialize(() => {
     // Queries scheduled here will be serialized.
@@ -87,20 +51,24 @@ module.exports.createTables = () => {
       .run('CREATE TABLE IF NOT EXISTS Salary(salaryId INTEGER PRIMARY KEY AUTOINCREMENT,salaryMonth text, salaryAmount int, createDate text,updateDate text,employeeId int,FOREIGN KEY(employeeId) REFERENCES Employee(employeeId))')
       .run('CREATE TABLE IF NOT EXISTS Payment(paymentId INTEGER PRIMARY KEY AUTOINCREMENT,createDate text,cash int DEFAULT 0,card int DEFAULT 0,easypaisa int DEFAULT 0,discount int DEFAULT 0)') 
       .run('CREATE TABLE IF NOT EXISTS Bill(billId INTEGER PRIMARY KEY AUTOINCREMENT,amount int,createDate text,updateDate text,status text,customerId int,revenueId int,paymentId int,FOREIGN KEY(paymentId) REFERENCES Payment(paymentId),FOREIGN KEY(customerId) REFERENCES Customer(customerId),FOREIGN KEY(revenueId) REFERENCES Revenue(revenueId))')
-      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Cigarettes","2020-02-06")')
-      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Drinks","2020-02-06")')
-      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Other Inventory","2020-02-06")')
-      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Other Inventory","2020-02-06")')
-      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Drinks","2020-02-06")')
-      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Cigarettes","2020-02-06")')
-      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Kitchen","2020-02-06");')
-      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Games","2020-02-06")')
-      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Misc","2020-02-06")')
-      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Club Expense","2020-02-06")')
-      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Out Expense","2020-02-06")')
-      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Monthly Expense","2020-02-06")')
-      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Kitchen Expense","2020-02-06")')
+      
     });
+    db.serialize(()=>
+    {
+      db.run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Cigarettes","2020-02-06")',err=> {})
+      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Drinks","2020-02-06")',err=>{})
+      .run('Insert into InventoryCategory (inventoryCategoryName,createDate) values ("Other Inventory","2020-02-06")',err=>{})
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Other Inventory","2020-02-06")',err=>{})
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Drinks","2020-02-06")',err=>{})
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Cigarettes","2020-02-06")',err=>{})
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Kitchen","2020-02-06");',err=>{})
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Games","2020-02-06")',err=>{})
+      .run('Insert into RevenueCategory (revenueCategoryName,createDate) values ("Misc","2020-02-06")',err=>{})
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Club Expense","2020-02-06")',err=>{})
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Out Expense","2020-02-06")',err=>{})
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Monthly Expense","2020-02-06")',err=>{})
+      .run('Insert into ExpenseCategory (expenseCategoryName,createDate) values ("Kitchen Expense","2020-02-06")',err=>{})
+    })
 
   db.close((err) => {
     if (err) {
@@ -123,7 +91,7 @@ function selectStatementMultipleRowsTogether(db, sql) {
 
 //Get Customers
 module.exports.getCustomers = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -152,7 +120,7 @@ module.exports.getCustomers = async () => {
 
 //Get Creditors
 module.exports.getCreditors = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -180,7 +148,7 @@ module.exports.getCreditors = async () => {
 
 //Get table Data (Drinks, Cigarettes, Kitchen, Miscellaneous)
 module.exports.getTableData = async (gameId) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -207,7 +175,7 @@ module.exports.getTableData = async (gameId) => {
 
 //Get Creditors
 module.exports.getSalary = async (employeeId) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -236,7 +204,7 @@ module.exports.getSalary = async (employeeId) => {
 
 //Get Cred Clear History
 module.exports.getCreditHistory = async (customerId) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -264,7 +232,7 @@ module.exports.getCreditHistory = async (customerId) => {
 
 //Clear Credit
 module.exports.clearCredit = (currentDate, customerId, clearedAmount) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -289,7 +257,7 @@ module.exports.clearCredit = (currentDate, customerId, clearedAmount) => {
 
 //Get All Employees
 module.exports.getEmployees = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -317,7 +285,7 @@ module.exports.getEmployees = async () => {
 
 //Get All Inventory Items based on inventoryCategoryId
 module.exports.getInventory = async (inventoryCategoryId) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -344,7 +312,7 @@ module.exports.getInventory = async (inventoryCategoryId) => {
 
 //Get All Drinks in Stock
 module.exports.getDrinks = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -372,7 +340,7 @@ module.exports.getDrinks = async () => {
 
 //Start Game
 module.exports.startGame = (tableNumber, status, gameType, id1, id2, id3, id4, id5, id6, id7, id8, id9, id10, startTime, createDate) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -399,13 +367,13 @@ module.exports.startGame = (tableNumber, status, gameType, id1, id2, id3, id4, i
 
 //Check Ongoing Games on All Tables
 module.exports.getOngoingGames = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
     console.log('Connected to the breakers database.');
   });
-
+  
   sql1 = 'SELECT * FROM Game WHERE tableNo=1 AND status=\'ongoing\'';
   sql2 = 'SELECT * FROM Game WHERE tableNo=2 AND status=\'ongoing\'';
   sql3 = 'SELECT * FROM Game WHERE tableNo=3 AND status=\'ongoing\'';
@@ -459,7 +427,7 @@ module.exports.getOngoingGames = async () => {
 
 //Generate Bill
 module.exports.generateBill = async (customerId) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -496,7 +464,7 @@ module.exports.generateBill = async (customerId) => {
 
 //Pay Bill
 module.exports.payBill = async(currentDate,cash,card,ep,discount, status, creditAmount, customerId, ...billIdArray) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -533,7 +501,7 @@ module.exports.payBill = async(currentDate,cash,card,ep,discount, status, credit
 
 //Unique Constraint Failed (errno:19)
 module.exports.runDuplicateInsertQuery = () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -558,7 +526,7 @@ module.exports.runDuplicateInsertQuery = () => {
 
 //End Game
 module.exports.endGame = (createDate, updateDate, gameId, amount, loserId1, loserId2, endTime) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -614,7 +582,7 @@ module.exports.endGame = (createDate, updateDate, gameId, amount, loserId1, lose
 
 //Add Order For inventory Items
 module.exports.addFinal = (createDate, winnerAmount,winnerId1,winnerId2,loserId1,loserId2) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -652,7 +620,7 @@ else
 
 //Add Order For inventory Items
 module.exports.addOrder = (createDate, updateDate, selectedItem, gameId, customerId, quantity, amount) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -678,7 +646,7 @@ module.exports.addOrder = (createDate, updateDate, selectedItem, gameId, custome
 
 //Add Order for others
 module.exports.addOrderOthers = (createDate, gameId, customerId, categoryName, itemName, amount) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -701,7 +669,7 @@ module.exports.addOrderOthers = (createDate, gameId, customerId, categoryName, i
 
 //Add Employee
 module.exports.addEmployee = (employeeName, employeeDesignation, employeeCNIC, employeeAddress, employeePhone, employeeBasicPay, createDate) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -728,7 +696,7 @@ module.exports.addEmployee = (employeeName, employeeDesignation, employeeCNIC, e
 
 //Add Advance of Employee
 module.exports.addAdvanceEmployee = (currentDate, employeeId, advanceAmount) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -759,7 +727,7 @@ module.exports.addAdvanceEmployee = (currentDate, employeeId, advanceAmount) => 
 
 //Add Salary of Employee
 module.exports.paySalaryEmployee = (employeeId, salaryMonth, salaryAmount, salaryNote, advanceDeductionAmount, createDate) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -797,7 +765,7 @@ module.exports.paySalaryEmployee = (employeeId, salaryMonth, salaryAmount, salar
 
 //Add Customer
 module.exports.addCustomer = (customerName, customerAddress, customerPhone, createDate) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -823,7 +791,7 @@ module.exports.addCustomer = (customerName, customerAddress, customerPhone, crea
 
 //Add InventoryItem
 module.exports.addInventoryItem = (currentDate, newItemName, newItemPrice, newItemQuantity, inventoryCategorId,newItemPurchasePrice) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -855,7 +823,7 @@ module.exports.addInventoryItem = (currentDate, newItemName, newItemPrice, newIt
 
 //Add Expense
 module.exports.addExpense = (expenseName, expenseDescription, expenseAmount, createDate, expenseCategoryId) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -880,8 +848,8 @@ module.exports.addExpense = (expenseName, expenseDescription, expenseAmount, cre
 }
 
 //Update Stock
-module.exports.updateStock = (currentDate, itemName, quantity, purchasePrice) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+module.exports.updateStock = (currentDate, itemName, quantity) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -909,7 +877,7 @@ module.exports.updateStock = (currentDate, itemName, quantity, purchasePrice) =>
 
 //Get Expense
 module.exports.getExpense = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1021,7 +989,7 @@ module.exports.getMonthlyExpense = async (tillDate) => {
 
 //Get Inventory Category
 module.exports.getInventoryCategory = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1049,7 +1017,7 @@ module.exports.getInventoryCategory = async () => {
 
 //Get Expense Category
 module.exports.getExpenseCategory = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1077,7 +1045,7 @@ module.exports.getExpenseCategory = async () => {
 
 //Get Revenue
 module.exports.getRevenue = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1105,7 +1073,7 @@ module.exports.getRevenue = async () => {
 
 //Get Inventory Summary
 module.exports.getInventoryTable = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1132,7 +1100,7 @@ module.exports.getInventoryTable = async () => {
 
 //Get Kitchen Summary
 module.exports.getKitchenTable = async () => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1160,7 +1128,7 @@ module.exports.getKitchenTable = async () => {
 
 //Get Report Data
 module.exports.getReportData = async (selectedDate) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1189,7 +1157,7 @@ module.exports.getReportData = async (selectedDate) => {
 
 //Get Tables Summary
 module.exports.getTablesSummary = async (tableNo) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1216,7 +1184,7 @@ module.exports.getTablesSummary = async (tableNo) => {
 
 //Get Daily Expense Report Data
 module.exports.getDailyExpenseReportData = async (selectedDate) => {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1276,7 +1244,7 @@ module.exports.getPaymentMethod = async (selectedDate) => {
 //Get Daily Credit Data for Expense Report 
 module.exports.getDailyCreditExpenseReportData =  async(selectedDate) =>
 {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
@@ -1308,7 +1276,7 @@ module.exports.getDailyCreditExpenseReportData =  async(selectedDate) =>
 //Get Daily Remaining Data for Expense Report 
 module.exports.getDailyRemainingExpenseReportData =  async(selectedDate) =>
 {
-  var db = new sqlite3.Database('./db/breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+  var db = new sqlite3.Database('breakers.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
