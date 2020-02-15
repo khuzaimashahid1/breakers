@@ -135,19 +135,19 @@
           <div id="gamePayment" class="w3-container city" style="display:block">
               <div class="main-block-modal">
                   <form class="info">   
-                    <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="totalBill1" type="number" placeholder="Total Bill" readonly>
+                    <input required style="width: 100%; margin-left: 20%; margin-right: 20%;"  id="totalBill1" type="number" placeholder="Total Bill" readonly>
                       <br />
                     
-                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="paymentByCash" type="number" placeholder="Payment By Cash" value="0">
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" onkeypress="inputChange();" id="paymentByCash" type="number" placeholder="Payment By Cash" value="">
                       <br />
                      
-                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="paymentByCard" type="number"  placeholder="Payment By Card" value="0">
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" onkeypress="inputChange();" id="paymentByCard" type="number"  placeholder="Payment By Card" value="">
                       <br />
                       
-                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="paymentByEasyPaisa" type="number" placeholder="Payment By Easypaisa" value="0">
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" onkeypress="inputChange();" id="paymentByEasyPaisa" type="number" placeholder="Payment By Easypaisa" value="">
                       <br />
                      
-                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" id="discount" type="number" placeholder="Discount" value="0">
+                      <input required style="width: 100%; margin-left: 20%; margin-right: 20%;" onkeypress="inputChange();" id="discount" type="number" placeholder="Discount" value="">
                       <br />
 
                       <button class="btnModal" type="button" onclick="amountReceived();">Pay</button>

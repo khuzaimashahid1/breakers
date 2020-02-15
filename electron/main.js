@@ -25,8 +25,7 @@ function createWindow() {
         fullscreen: false,
         webPreferences: {
             nativeWindowOpen: true,
-            nodeIntegration: true,
-            devTools: false
+            nodeIntegration: true
         }
     });
     win.maximize();
@@ -90,7 +89,6 @@ ipc.on('add-employee',function(event, employeeName, employeeDesignation, employe
             }
             
         });
-    
 })
 
 //Add Employee
@@ -252,6 +250,7 @@ ipc.on('pay-bill', function (event,cash,card,ep,discount, status, creditAmount, 
     var yyyy = today.getFullYear();
     const currentDate = yyyy + '-' + mm + '-' + dd;
     connections.payBill(currentDate,cash,card,ep,discount, status, creditAmount, customerId, ...billIdArray);
+    showSuccessDialog("Payment Done")
 })
 
 //Clear Credit

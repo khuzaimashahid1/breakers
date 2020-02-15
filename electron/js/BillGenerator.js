@@ -1,4 +1,6 @@
 require('datatables.net-dt')();
+var modal = document.getElementById("myModal");
+var mainBody= document.getElementById("Fade");
 var billData=[],billIdArray=[],datatable,totalBill=0;
 function renderSuggestions()
 {
@@ -189,27 +191,39 @@ function getId(name)
 
 function amountReceived()
 {
+    modal.style.display="none";
+    mainBody.style.display="block";
     let cash=parseInt($('#paymentByCash').val());
     let card=parseInt($('#paymentByCard').val())
     let ep=parseInt($('#paymentByEasyPaisa').val())
     let discount=parseInt($('#discount').val())
+    console.log(cash)
+    if(cash==='')
+    {
+        cash=0
+    }
+    else if(card==='')
+    {
+        card=0
+    }
+    else if(ep==='')
+    {
+        ep=0
+    }
+    else if(discount==='')
+    {
+        discount=0
+    }
     let bill=totalBill-discount;
-    console.log(totalBill)
-    console.log(bill)
     let received=cash+card+ep;
     let remaining=bill-received;
-    console.log(received)
-    console.log(remaining)
-    
     if(remaining==0)
     {
         ipc.send('pay-bill',cash,card,ep,discount,"paid",0,currentPlayerId,...billIdArray)
-        
     }
     else
     {
         remaining=bill-received;
         ipc.send('pay-bill',cash,card,ep,discount,"Partial Paid",remaining,currentPlayerId,...billIdArray)
-        
     }
 }
