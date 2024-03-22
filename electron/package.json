@@ -15,7 +15,7 @@
         "bootstrap": "^4.4.1",
         "datatables.net": "^1.10.20",
         "datatables.net-dt": "^1.10.20",
-        "electron-builder": "^22.2.0",
+        "electron-builder": "^24.13.3",
         "jquery": "^3.4.1",
         "popper.js": "^1.16.1",
         "sqlite3": "^4.1.0"
